@@ -3,7 +3,7 @@
 // setup the bomberman sprite
 Bomberman::Bomberman(){
   fuseLength=1;
-  qobj=gluNewQuadric();  
+  qobj=gluNewQuadric();
   gluQuadricNormals(qobj,GLU_SMOOTH);
 }
 
@@ -112,7 +112,7 @@ void Bomberman::drawLeg(){
 // draw bomb -- main bomb bulb sphere (black), nozzle up cylinder and disk (black), fuse wire cylinder (white-like), spark/explosion (red/ orange)
 void Bomberman::drawBomb(){
   glColor3f(.05,.05,.05);
-  glutSolidSphere(1.8,32,32);     
+  glutSolidSphere(1.8,32,32);
   glPushMatrix();
     glTranslatef(0,2,0);
     glRotatef(90,1,0,0);
@@ -205,7 +205,7 @@ void Bomberman::drawMan(){
 }
 
 // display list of man -- not necesary since it isn't static
-void Bomberman::generateBombermanDL(){
+void Bomberman::drawFairy(){
   bombermanDL=glGenLists(1);
   glNewList(bombermanDL,GL_COMPILE);
       drawMan();

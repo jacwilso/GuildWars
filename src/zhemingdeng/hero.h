@@ -56,7 +56,7 @@ public:
 
 	void drawBezierLine(Point, Point);
 	void drawBody();
-	void drawCharacter();
+	void drawHero();
 	void drawFairy();
 	void drawHead();
 	void drawLines();
@@ -66,7 +66,7 @@ public:
 	void drawWheels();
 	Point evaluateBezierCurve(Point, Point, Point, Point, float);
 	void renderBezierCurve(Point p0, Point p1, Point p2, Point p3, int resolution)
-	
+
 };
 
 #endif //

@@ -14,7 +14,7 @@
 
 #include <cmath>
 
-class FairyEric {
+class FairyEric : public Hero {
 private:
 	// Private Global Variables
 	float fairyEricPositionX = 0;
@@ -29,7 +29,7 @@ public:
 	 * Constructor
 	 */
 	FairyEric();
-	
+
 	//Shapes
 	void drawCircle();
 
@@ -49,11 +49,13 @@ public:
 	/*
 	 * Draws the entire Character
 	 */
-	void drawFairyEric();
+	void drawFairy();
 	/*
 	 * Draws a foot
 	 * This includes the legs and foot
 	 */
+
+
 	void drawFeet();
 	/*
 	 * Draws the body:

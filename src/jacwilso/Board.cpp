@@ -46,7 +46,7 @@ void Board::drawStompPad(){
   glColor3ub(22,135,83);
   glPushMatrix();
     glRotatef(90,1,0,0);
-    gluCylinder(qobj,.8,.8,.1,32,1); // cylinder 
+    gluCylinder(qobj,.8,.8,.1,32,1); // cylinder
     gluDisk(qobj,0,.8,32,1); // cap to cylinder
   glPopMatrix();
 }
@@ -78,7 +78,7 @@ void Board::drawHolder(){
   glPopMatrix();
 }
 
-// HOVER PAD -- pads on bottom of board 
+// HOVER PAD -- pads on bottom of board
 void Board::drawHoverPad(){
   glPushMatrix();
     glRotatef(90,1,0,0);
@@ -101,14 +101,14 @@ void Board::drawHoverPad(){
 void Board::drawHover(){
   glPushMatrix();
     glColor3f(0,0,1); // blue
-    glRotatef(90,1,0,0); 
-    gluDisk(qobj,.5,.7,32,1); // disk/ ring 
+    glRotatef(90,1,0,0);
+    gluDisk(qobj,.5,.7,32,1); // disk/ ring
   glPopMatrix();
 }
 
 // BOARD STREAK -- a transparent version of the board, which is left behind to act as a streak
 void Board::drawStreak(){
-  // identical to the rectangle 
+  // identical to the rectangle
   glEnable(GL_BLEND); // enable blending
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // the use of the alpha in the color function
   glColor4f(1,1,1,.3); // white and very transparent
@@ -140,7 +140,7 @@ void Board::drawHoverBoard(){
     drawHoverPad(); // add the back hoverpad
   glPopMatrix();
   glPushMatrix();
-    glTranslatef(-2.4,-.1,0); 
+    glTranslatef(-2.4,-.1,0);
     drawHoverPad(); // add the front hoverpad
   glPopMatrix();
   glPushMatrix();
@@ -183,12 +183,12 @@ void Board::setVars(float lookAtX,float lookAtY,float lookAtZ,float objTheta,flo
 
 // generateObjectDL() /////////////////////////////////////////////////////
 //
-//  This function creates a display list with the code to draw the hoverboard 
-//      and the streak that follows the board. This list is called multiple     
+//  This function creates a display list with the code to draw the hoverboard
+//      and the streak that follows the board. This list is called multiple
 //      times throughout the render to change positions.
 //
 ////////////////////////////////////////////////////////////////////////////////
-void Board::generateObjectDL(){
+void Board::drawHero(){
     objectDL=glGenLists(1);
     glNewList(objectDL, GL_COMPILE);
       glPushMatrix();
@@ -198,11 +198,11 @@ void Board::generateObjectDL(){
           glRotatef(-35,0,0,1);
           glTranslatef(0,2.3,0);
         }
-        if(bankLeft){ // if the board is turning right, have the board look like it is banking left 
+        if(bankLeft){ // if the board is turning right, have the board look like it is banking left
           glRotatef(-25,1,0,0);
           glTranslatef(0,.4,0);
         }
-        if(bankRight){ // if the board is turning left, have the board look like it is banking right 
+        if(bankRight){ // if the board is turning left, have the board look like it is banking right
           glRotatef(25,1,0,0);
           glTranslatef(0,.4,0);
         }

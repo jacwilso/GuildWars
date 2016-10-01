@@ -11,21 +11,23 @@
 	#include <GL/glu.h>
 #endif
 
-class Bomberman{
+class Bomberman : publci Hero{
   private:
     float fuseLength; // the fuse length of the bomb wire
 
     void drawEye(); // draw one eye
     void drawEyeBrow(); // draw one eyebrow
     void drawHead(); // draw the head w/ hood
-   
+
     void drawTorso(); // draw the torso and belt
     void drawArm(); // draw one arm and hand
     void drawLeg(); // draw one leg and foot
-    
+
     void drawBomb(); // draw the bomb
 
     void drawMan(); // combine all the features together
+
+
   public:
     Bomberman(); // constructor
     ~Bomberman(){gluDeleteQuadric(qobj);} // destructor -- leaking memory
@@ -35,10 +37,10 @@ class Bomberman{
     void subFuse() // subtract 1/100 from the fuse length
     {fuseLength-=.01;}
 
-    GLuint bombermanDL; 
-    
+    GLuint bombermanDL;
+
     static GLUquadric* qobj;
-    void generateBombermanDL(); // gen list -- not necesary but like the structure
+    void drawFairy(); // gen list -- not necesary but like the structure
 };
 
 #endif
