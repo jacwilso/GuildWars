@@ -15,60 +15,39 @@
 
 class Hero{
   private:
-    float heroPosX;
-    float heroPosY;
-    float heroPosZ;
-		float heroTheta;
-		float heroPhi;
-    Bezier heroBezier;
-    float fairyPosX;
-		float fairyPosY;
-		float fairyPosZ;
-		float fairyTheta;
-		float fairyPhi;
-		Bezier fairyBezier;
-
+    float heroPosX, heroPosY, heroPosZ,
+      heroTheta, heroPhi;
 
   public:
-		/*
-		 * Constructor
-		 */
-		Hero();
-		//Constructor for Hero(float posX,float poxY,float posZ,float theta, float phi, Beizer beizer)
-		Hero(float,float,float,float,float,heroBezier);
+	/*
+	 * Constructor
+	 */
+	Hero();
+	//Constructor for Hero(float posX,float poxY,float posZ,float theta, float phi, Beizer beizer)
+	Hero(float,float,float,float,float,heroBezier);
 
-		//Getters
-		//For Heros
-		float getHeroPositionX();
-		float getHeroPositionY();
-		float getHeroPositionZ();
-		float getHeroTheta();
-		float getHeroPhi();
-		float getHeroBezier();
-		//For Fairy
-		float getFairyPositionX();
-		float getFairyPositionY();
-		float getFairyPositionZ();
-		float getFairyTheta();
-		float getFairyPhi();
-		float getFairyBezier();
+	//Getters
+	//For Heros
+	float getHeroPositionX()
+        {return heroPosX;}
+	float getHeroPositionY()
+        {return heroPosY;}
+	float getHeroPositionZ()
+        {return heroPosZ;}
+	float getHeroTheta()
+        {return heroTheta;}
+	float getHeroPhi()
+        {return heroPhi;}
 
-		//Setters
-		//For Heros
-		void setHeroPositionX(float posX);
-		void setHeroPositionY(float posY);
-		void setHeroPositionZ(float posZ);
-    void setHeroTheta(float theta);
-		void setHeroPhi(float phi);
-    void setHeroBezier(Bezier bezier);
-		//For FairyEric
-		void setFairyPositionX(float posX);
-		void setFairyPositionY(float posY);
-		void setFairyPositionZ(float posZ);
-		void setFairyTheta(float theta);
-		void setFairyPhi(float phi);
-		void setFairyBezier(Bezier bezier);
+	//Setters
+	//For Heros
+	void setHeroPos(float posX,float poxY,float posZ,float theta,float phi)
+        {heroPosX=posX; heroPosY=posY; heroPosZ=posZ;
+         heroTheta=theta; heroPhi=phi;}
 
     //Drawing Functions
-    void drawHero();
-    void drawFairy();
+    virtual void drawHero();
+    virtual void animate();
+};
+
+#endif
