@@ -13,7 +13,6 @@
 #endif
 
 #include "FairyEric.h"
-#include "Bezier.h"
 
 class EricCartman{
 private:
@@ -26,8 +25,6 @@ private:
 	// Angle is specified for foot and hand swing angle. Change variable name later.
 	float swingAngle = 0;	
 	float ericHeadBobAngle = 0;
-	FairyEric fairyEric;
-	Bezier bezierCurve;
 
 	int BezierPointVectorIndex = 0;
 	bool showControlCage = true;
@@ -49,7 +46,6 @@ public:
 	float getEricPositionTheta();
 	float getSwingAngle();
 	float getEricHeadBobAngle();
-	Bezier getBezierCurve();
 
 	// Setters
 	void setEricPositionX(float item);
@@ -58,7 +54,6 @@ public:
 	void setEricPositionTheta(float item);
 	void setSwingAngle(float item);
 	void setEricHeadBobAngle(float item);
-	void setBezierCurve(Bezier item);	
 
 	// Drawing Functions
 	/*

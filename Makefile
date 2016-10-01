@@ -21,9 +21,13 @@
 ## compile against.
 ########################################
 
-TARGET = a4
-SOURCES = $(wildcard *.cpp)
-OBJECTS = $(SOURCES:.cpp=.o)
+TARGET = GuildWars
+#SOURCES = $(wildcard *.cpp)
+#OBJECTS = $(SOURCES:.cpp=.o)
+
+SOURCES = $(shell find src -name '*.cpp')
+OBJECTS = $(SOURCES:src/%.cpp=bin/%.o)
+DEPS = $(SOURCES:src/%.cpp=bin/%.d)
 
 LOCAL_INC_PATH = /Users/jpaone/Desktop/include
 LOCAL_LIB_PATH = /Users/jpaone/Desktop/lib
@@ -126,7 +130,18 @@ depend:
 $(TARGET): $(OBJECTS) 
 	$(CXX) $(CFLAGS) $(INCPATH) -o $@ $^ $(LIBPATH) $(LIBS)
 
+#ensures the bin directory is created
+$(SOURCES): | bin
+
+
+bin:
+		mkdir -p $(shell find src -type d | sed "s/src/bin/")
+
+bin/%.o: src/%.cpp
+		$(CXX) $(COMMONFLAGS) $< -c -o $@
 
 # DEPENDENCIES
-main.o: main.cpp
-EricCartman.o: EricCartman.cpp
+#Auto dependency management.
+-include $(DEPS)
+#main.o: main.cpp
+#EricCartman.o: EricCartman.cpp

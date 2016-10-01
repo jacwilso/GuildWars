@@ -74,9 +74,6 @@ float EricCartman::getSwingAngle(){
 float EricCartman::getEricHeadBobAngle(){
 	return ericHeadBobAngle;
 }
-Bezier EricCartman::getBezierCurve(){
-	return bezierCurve;
-}
 
 
 // Setters
@@ -98,9 +95,6 @@ void EricCartman::setSwingAngle(float item){
 void EricCartman::setEricHeadBobAngle(float item){
 	ericHeadBobAngle = item;
 }
-void EricCartman::setBezierCurve(Bezier item){
-	bezierCurve = item;
-}
 
 void EricCartman::drawEric(){
 	glPushMatrix();
@@ -117,29 +111,6 @@ void EricCartman::drawBody(){
 
 	// Draw the Fairy
 	
-	glPushMatrix();
-	{
-		glTranslatef(-10,3,0);
-		glTranslatef(bezierCurve.getBezierPoints()[BezierPointVectorIndex].getX(),
-			bezierCurve.getBezierPoints()[BezierPointVectorIndex].getY(),
-			bezierCurve.getBezierPoints()[BezierPointVectorIndex].getZ());
-		glScalef(0.3,0.3,0.3);
-		fairyEric.drawFairyEric();
-	}
-	glPopMatrix();
-
-	glPushMatrix();
-	{
-		glTranslatef(-10,3,0);
-		if(showControlCage == true){
-			bezierCurve.drawControlPoints();
-			bezierCurve.connectControlPoints();
-		}
-
-		if(showBezierCurve == true)
-			bezierCurve.drawBezierCurve();
-	}
-	glPopMatrix();
 
 
 	// Draw the line and buttons
@@ -422,10 +393,6 @@ void EricCartman::turnEricRight(){
 
 void EricCartman::bobHead(){
 	setEricHeadBobAngle(getEricHeadBobAngle() + 10);
-}
-
-void EricCartman::MoveFairyEric(){
-	BezierPointVectorIndex = (BezierPointVectorIndex +1)% bezierCurve.getBezierPoints().size();
 }
 
 void EricCartman::toggleControlCage(){
