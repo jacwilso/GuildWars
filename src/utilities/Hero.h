@@ -17,14 +17,15 @@ class Hero{
   private:
     float heroPosX, heroPosY, heroPosZ,
       heroTheta, heroPhi;
+    bool move;
 
   public:
 	/*
 	 * Constructor
 	 */
 	Hero();
-	//Constructor for Hero(float posX,float poxY,float posZ,float theta, float phi, Beizer beizer)
-	Hero(float,float,float,float,float,heroBezier);
+	//Constructor for Hero(float posX,float poxY,float posZ,float theta, float phi)
+	Hero(float,float,float,float,float);
 
 	//Getters
 	//For Heros

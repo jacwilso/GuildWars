@@ -16,8 +16,8 @@
 class Board : public Hero{
   private:
     const static int STREAKS=25; // # of streaks to follow the board
-    float hoverPos,objTheta,lookAtX,lookAtY,lookAtZ; // the hover animation position, board angle, the x,y, and z position of the board
-    bool stomp,turn,bankLeft,bankRight; // whether the board is moving, turning, or turning while moving
+    float hoverPos; // the hover animation position, board angle, the x,y, and z position of the board
+    bool hover,stomp,turn,bankLeft,bankRight; // whether the board is moving, turning, or turning while moving
     float streak[STREAKS][3]; // the array of positions for the streaks
     int streakNum; // the streak number
 
@@ -35,7 +35,9 @@ class Board : public Hero{
 
     static GLUquadric* qobj; // static only need one per object
     GLuint objectDL; // for object environment
-    void setVars(float lookAtX,float lookAtY,float lookAtZ,float objTheta,float hoverPos,bool stomp,bool turn,bool bankLeft,bool bankRight,float streak[STREAKS][3],int streakNum); // settting all the variables
+    void setVars(float hoverPos,bool stomp,bool turn,bool bankLeft,bool bankRight,float streak[STREAKS][3],int streakNum); // settting all the variables
+
+    void animate();
     void drawHero(); // generate in a list -- not needed to be in a list but I like the structure
 };
 
