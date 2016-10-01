@@ -3,17 +3,17 @@
 using namespace std;
 
 Donkey::Donkey() {
-	charPosX = 0;
-	charPosZ = 0;
-	charRotateAngle = 0;
+	heroPosX = 0;
+	heroPosZ = 0;
+	heroRotateAngle = 0;
 	index = 0;
 	tailRotateAngle = 0;
 }
 
-Donkey::Donkey(float posX, float posY, int charAngle, int idx, float tailAngle) {
-	charPosX = posx;
-	charPosZ = posz;
-	charRotateAngle = charAngle;
+Donkey::Donkey(float posX, float posY, int heroAngle, int idx, float tailAngle) {
+	heroPosX = posx;
+	heroPosZ = posz;
+	heroRotateAngle = heroAngle;
 	index = idx;
 	tailRotateAngle = tailAngle;
 }
@@ -32,12 +32,12 @@ void Donkey::drawHead() {
 	head = gluNewQuadric();
 	gluCylinder(head, 0.4, 0.6, 2, 16, 16);
 }
+
 void Donkey::drawWheels() {
 	glColor3f(255, 0, 255);
 	GLUquadricObj *quadratic;
 	quadratic = gluNewQuadric();
 	gluCylinder(quadratic, 0.5, 0.5, 4, 16, 16);
-
 }
 
 void Donkey::drawNeck() {
@@ -55,14 +55,12 @@ void Donkey::drawNeck() {
 }
 
 void Donkey::drawBody() {
-
 	glColor3f(255, 255, 255);
 	glutSolidCube(2.0);
 }
 
 void Donkey::drawSphere() {
 	for (int i = 0;i < numOfConPoints;i++) {
-
 		glPushMatrix();
 		glTranslatef(controlPoints.at(i).getX(), controlPoints.at(i).getY(), controlPoints.at(i).getZ());
 		glutSolidSphere(0.15, 16, 16);
@@ -83,78 +81,14 @@ void Donkey::drawLines() {
 	}
 }
 
-void Donkey::drawBezierLine(Point p1, Point p2) {
-	glColor3f(0, 0, 255);
-	glBegin(GL_LINES);
-	glVertex3f(p1.getX(), p1.getY(), p1.getZ());
-	glVertex3f(p2.getX(), p2.getY(), p2.getZ());
-	glEnd();
-}
-
-// evaluateBezierCurve() ////////////////////////////////////////////////////////
-//
-// Computes a location along a Bezier Curve. 
-//
-////////////////////////////////////////////////////////////////////////////////
-Point Donkey::evaluateBezierCurve(Point p0, Point p1, Point p2, Point p3, float t) {
-	// TODO #08: Compute a point along a Bezier curve
-
-	float px = pow((1 - t), 3)*p0.getX() + 3 * t*pow((1 - t), 2)*p1.getX() +
-		3 * (1 - t)*pow(t, 2)*p2.getX() + pow(t, 3)*p3.getX();
-	float py = pow((1 - t), 3)*p0.getY() + 3 * t*pow((1 - t), 2)*p1.getY() +
-		3 * (1 - t)*pow(t, 2)*p2.getY() + pow(t, 3)*p3.getY();
-	float pz = pow((1 - t), 3)*p0.getZ() + 3 * t*pow((1 - t), 2)*p1.getZ() +
-		3 * (1 - t)*pow(t, 2)*p2.getZ() + pow(t, 3)*p3.getZ();
-	Point* p = new Point(px, py, pz);
-	return *p;
-}
-
-// renderBezierCurve() //////////////////////////////////////////////////////////
-//
-// Responsible for drawing a Bezier Curve as defined by four control points.
-//  Breaks the curve into n segments as specified by the resolution. 
-//
-////////////////////////////////////////////////////////////////////////////////
-void Donkey::renderBezierCurve(Point p0, Point p1, Point p2, Point p3, int resolution) {
-	// TODO #07: Draw a Bezier curve
-	Point old = p0;
-	bezierPoints.push_back(p0);
-	Point last = p0;
-	for (float t = 0.0; t <= resolution;t += 0.1) {
-		Point p = evaluateBezierCurve(p0, p1, p2, p3, t);
-
-		//push bezier curve points into vector
-		bezierPoints.push_back(p);
-
-		//draw line between two bezier points
-		drawBezierLine(old, p);
-		old = p;
-		last = p;
-	}
-	//
-	bezierPoints.push_back(p3);
-	//make up the last segment
-	drawBezierLine(last, p3);
-}
-
-void Donkey::drawFairy() {
-
-	//glPushMatrix();
-	glColor3f(0.28, 0.85, 0.12);
-	glTranslatef(bezierPoints.at(index).getX(), bezierPoints.at(index).getY(), bezierPoints.at(index).getZ());
-	glutSolidSphere(0.25, 16, 16);
-	//glPopMatrix();
-}
-
-
 void Donkey::drawHero() {
-	glTranslatef(charPosX, 0, charPosZ);
+	glTranslatef(heroPosX, 0, heroPosZ);
 	//glTranslatef(20, 0, 20);
-	glRotatef(charRotateAngle, 0, 1, 0);
+	glRotatef(heroRotateAngle, 0, 1, 0);
 	glColor3f(0.9, 0.45, 0.1);
 	//glutSolidTorus(2,5,10,4);
 
-	//drawing two cubes as character's body
+	//drawing two cubes as heroacter's body
 	glPushMatrix();
 	glTranslatef(0, 2, 0);
 	drawBody();
@@ -192,37 +126,6 @@ void Donkey::drawHero() {
 	glRotatef(-40 + tailRotateAngle, 1, 0, 0);
 	drawTail();
 	glPopMatrix();
-
-	//draw bezier curve components
-
-	if (controlCageOn == true) {
-		//draw sphere
-		glPushMatrix();
-		glColor3f(0.5, 0.8, 0.4);
-		drawSphere();
-		glPopMatrix();
-
-		// TODO #06: Connect our control points
-		glPushMatrix();
-		drawLines();
-		glPopMatrix();
-	}
-
-	// TODO #07: Draw the Bezier Curve!
-	if (bezierCurveOn == true) {
-		glPushMatrix();
-		if (numOfConPoints <= 4) {
-			renderBezierCurve(controlPoints.at(0), controlPoints.at(1), controlPoints.at(2), controlPoints.at(3), 1);
-		}
-		else {
-			renderBezierCurve(controlPoints.at(0), controlPoints.at(1), controlPoints.at(2), controlPoints.at(3), 1);
-			renderBezierCurve(controlPoints.at(3), controlPoints.at(4), controlPoints.at(5), controlPoints.at(6), 1);
-		}
-		glPopMatrix();
-	}
-
-	//Draw the fairy
-	glPushMatrix();
-	drawFairy();
-	glPopMatrix();
 }
+
+void Donkey::animate(){}
