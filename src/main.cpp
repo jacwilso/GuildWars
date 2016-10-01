@@ -36,24 +36,8 @@ float dirX, dirY, dirZ;                     // camera DIRECTION in cartesian coo
 bool isPip = false;
 bool ctrlIsPressed = false;
 
-GLuint environmentDL;                       // display list for the 'city'
 
 int pipMode = 1;
-
-void generateEnvironmentDL() {
-	environmentDL = glGenLists( 1 );
-
-	// Tell openGL to begin displaying lists
-	glNewList( environmentDL, GL_COMPILE );
-	// Draw the figures
-	glPushMatrix(); {
-		//drawEnvironment();
-	}; glPopMatrix();
-	// Tell openGL to end displayiung lists
-	glEndList();
-
-}
-
 
 
 void recomputeOrientation() {
