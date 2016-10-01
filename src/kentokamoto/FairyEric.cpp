@@ -53,7 +53,7 @@ void FairyEric::setFairyEricPositionTheta(float item){
 /*
 * Draws the entire Character
 */
-void FairyEric::drawFairyEric(){
+void FairyEric::drawFairy(){
 	glPushMatrix();
 	{
 		glTranslatef(fairyEricPositionX, fairyEricPositionY, fairyEricPositionZ);
@@ -63,6 +63,7 @@ void FairyEric::drawFairyEric(){
 	}
 	glPopMatrix();
 }
+
 /*
  * Draws a foot
  * This includes the legs and foot
@@ -75,8 +76,8 @@ void FairyEric::drawFairyEric(){
  		GLUquadricObj *leg;
  		leg = gluNewQuadric();
  		gluQuadricDrawStyle(leg, GLU_FILL);
- 		gluCylinder(leg, 1.7,1.5,2,100,100);	
- 		gluDeleteQuadric(leg);	
+ 		gluCylinder(leg, 1.7,1.5,2,100,100);
+ 		gluDeleteQuadric(leg);
  	}
  	glPopMatrix();
 
@@ -108,7 +109,7 @@ void FairyEric::drawFairyEric(){
  		glPushMatrix();
  		glScalef(1.5,1,1.5);
  		glutSolidSphere(3,50,50);
- 		glPopMatrix();	
+ 		glPopMatrix();
 
  	}
  	glPopMatrix();
@@ -156,7 +157,7 @@ void FairyEric::drawFairyEric(){
  }
  void FairyEric::drawWing(){
  	glPushMatrix();
- 	{	
+ 	{
  		glDisable(GL_LIGHTING);
  		glPushMatrix();
  		glColor3f(1,1,1);
@@ -188,8 +189,8 @@ void FairyEric::drawFairyEric(){
  	GLUquadricObj *arm;
  	arm = gluNewQuadric();
  	gluQuadricDrawStyle(arm, GLU_FILL);
- 	gluCylinder(arm, 0.8,1,2.5,100,100);	
- 	gluDeleteQuadric(arm);	
+ 	gluCylinder(arm, 0.8,1,2.5,100,100);
+ 	gluDeleteQuadric(arm);
  	glPopMatrix();
 
  	glPushMatrix();
@@ -222,7 +223,7 @@ void FairyEric::drawFairyEric(){
 
 	// Draw the Fairy Hat
 	glPushMatrix();
-	{	
+	{
 		glColor3ub(255,105,180);
 		glRotatef(20,0,0,1);
 		glRotatef(-90,1,0,0);

@@ -2,9 +2,9 @@
 
 // setup the bomberman sprite
 Bomberman::Bomberman(){
-	fuseLength=1;
-	qobj=gluNewQuadric();  
-	gluQuadricNormals(qobj,GLU_SMOOTH);
+  fuseLength=1;
+  qobj=gluNewQuadric();
+  gluQuadricNormals(qobj,GLU_SMOOTH);
 }
 
 // draw the eye -- vertical cylinder
@@ -111,18 +111,17 @@ void Bomberman::drawLeg(){
 
 // draw bomb -- main bomb bulb sphere (black), nozzle up cylinder and disk (black), fuse wire cylinder (white-like), spark/explosion (red/ orange)
 void Bomberman::drawBomb(){
-	glColor3f(.05,.05,.05);
-	glutSolidSphere(1.8,32,32);     
-	glPushMatrix();
-	glTranslatef(0,2,0);
-	glRotatef(90,1,0,0);
-	gluCylinder(qobj,.7,.8,1.2,32,1);
-	glPushMatrix();
-	glRotatef(180,1,0,0);
-	gluDisk(qobj,0,.7,32,1);
-	glPopMatrix();
-	glPopMatrix();
-
+  glColor3f(.05,.05,.05);
+  glutSolidSphere(1.8,32,32);
+  glPushMatrix();
+    glTranslatef(0,2,0);
+    glRotatef(90,1,0,0);
+    gluCylinder(qobj,.7,.8,1.2,32,1);
+    glPushMatrix();
+      glRotatef(180,1,0,0);
+      gluDisk(qobj,0,.7,32,1);
+    glPopMatrix();
+  glPopMatrix();
 	glColor3f(.9,.9,.9);
 	glPushMatrix();
 	glTranslatef(0,2,0);
@@ -205,9 +204,9 @@ void Bomberman::drawMan(){
 }
 
 // display list of man -- not necesary since it isn't static
-void Bomberman::generateBombermanDL(){
-	bombermanDL=glGenLists(1);
-	glNewList(bombermanDL,GL_COMPILE);
-	drawMan();
-	glEndList();
+void Bomberman::drawFairy(){
+  bombermanDL=glGenLists(1);
+  glNewList(bombermanDL,GL_COMPILE);
+      drawMan();
+  glEndList();
 }

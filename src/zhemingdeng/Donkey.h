@@ -1,17 +1,7 @@
-#ifndef HERO_H
-#define HERO_H
+#ifndef DONKEY_H
+#define DONKEY_H
 
-#ifdef __APPLE__			// if compiling on Mac OS
-#include <GLUT/glut.h>
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#else					// else compiling on Linux OS
-#include <GL/glut.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
-#endif
-
-class hero {
+class Donkey : public Hero{
 
 
 public:
@@ -51,8 +41,8 @@ public:
 		charPosX = posX;
 	}
 
-	void setCharPosY(float posZ) {
-		charPosZ = posZ;
+	void setCharPosY(float posY) {
+		charPosY = posY;
 	}
 	void setCharRotateAngle(int angle) {
 		charRotateAngle = angle;
@@ -64,30 +54,18 @@ public:
 		charRotateAngle = angle;
 	}
 
-	//void drawBezierLine(Point, Point);
+	void drawBezierLine(Point, Point);
 	void drawBody();
-<<<<<<< HEAD
-	void drawHero();
 	void drawFairy();
-=======
-	void drawCharacter();
-	//void drawFairy();
->>>>>>> b531709a03491e8efd990c70f33c74b9743291d2
 	void drawHead();
-	// void drawLines();
+	void drawLines();
 	void drawNeck();
-	// void drawSphere();
+	void drawSphere();
 	void drawTail();
 	void drawWheels();
-<<<<<<< HEAD
 	Point evaluateBezierCurve(Point, Point, Point, Point, float);
 	void renderBezierCurve(Point p0, Point p1, Point p2, Point p3, int resolution)
-
-=======
-	//Point evaluateBezierCurve(Point, Point, Point, Point, float);
-	//void renderBezierCurve(Point p0, Point p1, Point p2, Point p3, int resolution)
-	
->>>>>>> b531709a03491e8efd990c70f33c74b9743291d2
+  void drawHero();
 };
 
 #endif //

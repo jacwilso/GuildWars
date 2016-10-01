@@ -14,7 +14,7 @@
 
 #include "FairyEric.h"
 
-class EricCartman{
+class EricCartman : public Hero{
 private:
 	// Private Global Variables
 	float ericPositionX = 0;
@@ -23,7 +23,7 @@ private:
 	float ericPositionTheta = 0;
 
 	// Angle is specified for foot and hand swing angle. Change variable name later.
-	float swingAngle = 0;	
+	float swingAngle = 0;
 	float ericHeadBobAngle = 0;
 
 	int BezierPointVectorIndex = 0;
@@ -35,7 +35,7 @@ public:
 	 * Constructor
 	 */
 	EricCartman();
-	
+
 	//Shapes
 	void drawCircle();
 
@@ -58,8 +58,11 @@ public:
 	// Drawing Functions
 	/*
 	 * Draws the entire Character
+	 * We can call the drawHero() insead of this method
 	 */
-	void drawEric();
+	void drawHero();
+
+
 	/*
 	 * Draws a foot
 	 * This includes the legs and foot
@@ -113,10 +116,8 @@ public:
 	 */
 	void toggleControlCage();
 	void toggleBezierCurve();
+
+
 };
 
-#endif	
-
-
-
-
+#endif

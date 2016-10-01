@@ -96,7 +96,7 @@ void EricCartman::setEricHeadBobAngle(float item){
 	ericHeadBobAngle = item;
 }
 
-void EricCartman::drawEric(){
+void EricCartman::drawHero(){
 	glPushMatrix();
 	{
 		glTranslatef(getEricPositionX(), 0.8*getEricPositionY(), getEricPositionZ());
@@ -107,10 +107,12 @@ void EricCartman::drawEric(){
 	glPopMatrix();
 
 }
+
+
 void EricCartman::drawBody(){
 
 	// Draw the Fairy
-	
+
 
 
 	// Draw the line and buttons
@@ -126,7 +128,7 @@ void EricCartman::drawBody(){
 	glScalef(1.5,1,1.5);
 	glBegin(GL_LINE_STRIP);
 	for(float i = 45; i > -20; i-= 0.1){
-		glVertex3f(3*cos(i*PI/180), 3*sin(i*PI/180),0);	
+		glVertex3f(3*cos(i*PI/180), 3*sin(i*PI/180),0);
 	}
 	glEnd();
 	glPopMatrix();
@@ -137,7 +139,7 @@ void EricCartman::drawBody(){
 	glScalef(1.5,1,1.5);
 	glBegin(GL_LINE_STRIP);
 	for(float i = 35; i > 30; i-= 0.2){
-		glVertex3f(3*cos(i*PI/180), 3*sin(i*PI/180),0.5);	
+		glVertex3f(3*cos(i*PI/180), 3*sin(i*PI/180),0.5);
 	}
 	glEnd();
 	glPopMatrix();
@@ -149,7 +151,7 @@ void EricCartman::drawBody(){
 	glScalef(1.5,1,1.5);
 	glBegin(GL_LINE_STRIP);
 	for(float i = 20; i > 15; i-= 0.2){
-		glVertex3f(3*cos(i*PI/180), 3*sin(i*PI/180),0.5);	
+		glVertex3f(3*cos(i*PI/180), 3*sin(i*PI/180),0.5);
 	}
 	glEnd();
 	glPopMatrix();
@@ -160,12 +162,12 @@ void EricCartman::drawBody(){
 	glScalef(1.5,1,1.5);
 	glBegin(GL_LINE_STRIP);
 	for(float i = 0; i > -5; i-= 0.2){
-		glVertex3f(3*cos(i*PI/180), 3*sin(i*PI/180),0.5);	
+		glVertex3f(3*cos(i*PI/180), 3*sin(i*PI/180),0.5);
 	}
 	glEnd();
 	glPopMatrix();
 	glLineWidth(1);
-	
+
 	// Draw the feet
 	glPushMatrix();
 	glRotatef(20*sin(getSwingAngle()*RAD),0,0,1);	// Rotate for walking
@@ -209,8 +211,8 @@ void EricCartman::drawFeet(){
 	GLUquadricObj *leg;
 	leg = gluNewQuadric();
 	gluQuadricDrawStyle(leg, GLU_FILL);
-	gluCylinder(leg, 1.7,1.5,2,100,100);	
-	gluDeleteQuadric(leg);	
+	gluCylinder(leg, 1.7,1.5,2,100,100);
+	gluDeleteQuadric(leg);
 	glPopMatrix();
 
 	glPushMatrix();
@@ -229,8 +231,8 @@ void EricCartman::drawHands(){
 	GLUquadricObj *arm;
 	arm = gluNewQuadric();
 	gluQuadricDrawStyle(arm, GLU_FILL);
-	gluCylinder(arm, 0.8,1,2.5,100,100);	
-	gluDeleteQuadric(arm);	
+	gluCylinder(arm, 0.8,1,2.5,100,100);
+	gluDeleteQuadric(arm);
 	glPopMatrix();
 
 	glPushMatrix();
