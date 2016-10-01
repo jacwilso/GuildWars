@@ -58,7 +58,7 @@ void resizeWindow(int w, int h) {
 
 
 void mouseCallback(int button, int state, int thisX, int thisY) {
-// update the left mouse button states, if applicable
+	// update the left mouse button states, if applicable
 	if(button == GLUT_LEFT_BUTTON){
 		leftMouseButton = state;
 		if(leftMouseButton == GLUT_DOWN){
@@ -113,7 +113,7 @@ void mouseMotion(int x, int y) {
 
 	glutPostRedisplay();	    // redraw our scene from our new camera POV
 }
-}
+
 
 void normalKeysDown(unsigned char key, int x, int y) {
         keyState[key]=true;
@@ -230,7 +230,7 @@ int main(int argc, char **argv) {
 
 	// give the camera a scenic starting point.
 	pipTheta = M_PI/1.25;
-	pipPhi = M_PI*0.7;;
+	pipPhi = M_PI*0.7;
 
 	// register callback functions...
 	glutSetKeyRepeat(GLUT_KEY_REPEAT_ON);
