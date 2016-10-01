@@ -21,7 +21,18 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
-#include <map.h>
+#include <map>
+
+// Created Classes
+#include "utilities/Environment.h"
+#include "jacwilso/Board.h"
+#include "jacwilso/Bomberman.h"
+
+
+// Namespaces
+
+using namespace std;
+
 // GLOBAL VARIABLES ////////////////////////////////////////////////////////////
 static size_t windowWidth  = 640;
 static size_t windowHeight = 480;
@@ -39,7 +50,17 @@ GLuint environmentDL;                       // display list for the 'city'
 
 int pipMode = 1;
 
-Map<unsigned char,bool> keyState;
+map<unsigned char,bool> keyState;
+
+Environment env;
+GLUquadric* Environment::qobj;
+
+Board board;
+GLUquadric* Board::qobj;
+
+Bomberman bomberman;
+GLUquadric* Bomberman::qobj;
+/********************* Functions ****************************/
 
 void resizeWindow(int w, int h) {
 	aspectRatio = w / (float)h;
@@ -59,22 +80,6 @@ void resizeWindow(int w, int h) {
 
 void mouseCallback(int button, int state, int thisX, int thisY) {
 	// update the left mouse button states, if applicable
-	if(button == GLUT_LEFT_BUTTON){
-		leftMouseButton = state;
-		if(leftMouseButton == GLUT_DOWN){
-			ctrlIsPressed = glutGetModifiers() == GLUT_ACTIVE_CTRL? true : false;
-
-			if(thisX > windowWidth/3 && thisY > windowHeight/3){
-				isPip = false;
-				mouseX = thisX;
-				mouseY = thisY;
-			}else {
-				isPip = true;
-				pipMouseX = thisX;
-				pipMouseY = thisY;
-			}
-		}
-	}
 
 }
 void myMenu( int value ) {
@@ -98,18 +103,7 @@ void createMenus() {
 }
 
 
-
-
 void mouseMotion(int x, int y) {
-	if(leftMouseButton == GLUT_DOWN) {
-		if(isPip){
-			pipTheta = pipTheta - (x - pipMouseX) * 0.005;
-			pipPhi = fmin(fmax((pipPhi + (y - pipMouseY) * 0.005),0.01),M_PI);
-			pipMouseX = x;
-			pipMouseY = y;	
-		}else{
-		}
-	}
 
 	glutPostRedisplay();	    // redraw our scene from our new camera POV
 }
@@ -156,7 +150,6 @@ void SpecialKeys(int key, int x, int y)
 // Timer function
 void myTimer( int value ){
 
-
 	glutPostRedisplay();
 	glutTimerFunc( 1000/60, myTimer, 0);
 }
@@ -186,7 +179,7 @@ void initScene()  {
 	glShadeModel(GL_FLAT);
 
 	srand( time(NULL) );	// seed our random number generator
-	generateEnvironmentDL();
+	env.generateEnvironmentDL();
 }
 
 // renderScene() ///////////////////////////////////////////////////////////////

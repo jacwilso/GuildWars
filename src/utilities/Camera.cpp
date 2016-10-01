@@ -53,60 +53,72 @@ void Camera::setCameraRad(float item){
 }
 
 
-void Camera::ThirdPersonPOV(EricCartman& eric){
-	gluLookAt( -15*cos(eric.getEricPositionTheta()*(M_PI/180)) + eric.getEricPositionX(), 
-			eric.getEricPositionY() + 3.3,
-			15*sin(eric.getEricPositionTheta()*(M_PI/180)) + eric.getEricPositionZ(),
-			eric.getEricPositionX(),
-			eric.getEricPositionY(),
-			eric.getEricPositionZ(),
+void Camera::ThirdPersonPOV(float x, float y, float z, float thetaInRad){
+	gluLookAt( -15*cos(thetaInRad*(M_PI/180)) + z, 
+			y + Y_OFFSET,
+			15*sin(thetaInRad*(M_PI/180)) + z,
+			x,
+			y,
+			z,
 			0,1,0);
 }
-void Camera::FirstPersonPOV(EricCartman& eric){
-	gluLookAt( eric.getEricPositionX() + 4.2*cos(eric.getEricPositionTheta()*(M_PI/180)), 
-			3.3 + eric.getEricPositionY() + 0.2*sin(eric.getEricHeadBobAngle()*M_PI/180), 
-			eric.getEricPositionZ() - 4.2*sin(eric.getEricPositionTheta()*(M_PI/180)),
-			20*cos(eric.getEricPositionTheta()*(M_PI/180)) + eric.getEricPositionX(), 
-			3.3 + eric.getEricPositionY(),
-			-20*sin(eric.getEricPositionTheta()*(M_PI/180)) +eric.getEricPositionZ(),
+void Camera::FirstPersonPOV(float x, float y, float z, float thetaInRad){
+	gluLookAt( x + 4.2*cos(thetaInRad*(M_PI/180)), 
+			Y_OFFSET + y, 
+			z - 4.2*sin(thetaInRad*(M_PI/180)),
+			20*cos(thetaInRad*(M_PI/180)) + x, 
+			3.3 + y,
+			-20*sin(thetaInRad*(M_PI/180)) +z,
 			0,1,0);
 }
-void Camera::ReversePOV(EricCartman& eric){
-gluLookAt( 15*cos(eric.getEricPositionTheta()*(M_PI/180)) + eric.getEricPositionX(),
-			eric.getEricPositionY() ,
-			-15*sin(eric.getEricPositionTheta()*(M_PI/180)) + eric.getEricPositionZ(),
-			eric.getEricPositionX(), 
-			eric.getEricPositionY(),
-			eric.getEricPositionZ(),
+void Camera::ReversePOV(float x, float y, float z, float thetaInRad){
+gluLookAt( 15*cos(thetaInRad*(M_PI/180)) + x,
+			y + Y_OFFSET,
+			-15*sin(thetaInRad*(M_PI/180)) + z,
+			x, 
+			y,
+			z,
 			0,1,0);
 }
-void Camera::SkyCam (EricCartman& eric){
-gluLookAt( -cos(eric.getEricPositionTheta()*(M_PI/180)) + eric.getEricPositionX(),
-			eric.getEricPositionY() + 30, 
-			sin(eric.getEricPositionTheta()*(M_PI/180)) + eric.getEricPositionZ(),
-			eric.getEricPositionX(), 
-			eric.getEricPositionY(),
-			eric.getEricPositionZ(),
+void Camera::SkyCam (float x, float y, float z, float thetaInRad){
+gluLookAt( -cos(thetaInRad*(M_PI/180)) + x,
+			y + SKYCAM_HEIGHT, 
+			sin(thetaInRad*(M_PI/180)) + z,
+			x, 
+			y,
+			z,
 			0,1,0);
 }
-void Camera::MovableFirstPersonPOV(EricCartman& eric){
-			gluLookAt( eric.getEricPositionX() + 4.2*cos(eric.getEricPositionTheta()*(M_PI/180)),
-			3.3 + eric.getEricPositionY() + 0.2*sin(eric.getEricHeadBobAngle()*M_PI/180),  
-			eric.getEricPositionZ() - 4.2*sin(eric.getEricPositionTheta()*(M_PI/180)),
-			pipDirX + 20*cos(eric.getEricPositionTheta()*(M_PI/180)) + eric.getEricPositionX(), 
-			pipDirY + 3.3 + eric.getEricPositionY(), 
-			pipDirZ - 20*sin(eric.getEricPositionTheta()*(M_PI/180)) +eric.getEricPositionZ(),
+void Camera::MovableFirstPersonPOV(float x, float y, float z, float thetaInRad){
+			gluLookAt( x + 4.2*cos(thetaInRad*(M_PI/180)),
+			Y_OFFSET + y,  
+			z - 4.2*sin(thetaInRad*(M_PI/180)),
+			pipDirX + 20*cos(thetaInRad*(M_PI/180)) + x, 
+			pipDirY + 3.3 + y, 
+			pipDirZ - 20*sin(thetaInRad*(M_PI/180)) +z,
 			0,1,0);
 }
 
-void Camera::ArcBall(EricCartman& eric){
+void Camera::ArcBall(float x, float y, float z){
 	gluLookAt(
-		dirZ*cameraRad + eric.getEricPositionX(),
-		dirY*cameraRad + eric.getEricPositionY(), 
-		dirX*cameraRad+ eric.getEricPositionZ(),
-		eric.getEricPositionX(),
-		eric.getEricPositionY(),
-		eric.getEricPositionZ(),
+		dirZ*cameraRad + x,
+		dirY*cameraRad + y, 
+		dirX*cameraRad + z,
+		x,
+		y,
+		z,
 		0,1,0);
-
 }
+
+void Camera::FreeCam(){
+	gluLookAt(
+		cameraX,
+		cameraY,
+		cameraZ,
+		dirX + cameraX,
+		dirY + cameraY, 
+		dirZ + cameraZ,
+		0,1,0);
+}
+
+
