@@ -2,13 +2,13 @@
 #define OBJECT_H
 
 #ifdef __APPLE__			// if compiling on Mac OS
-	#include <GLUT/glut.h>
-	#include <OpenGL/gl.h>
-	#include <OpenGL/glu.h>
+#include <GLUT/glut.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
 #else					// else compiling on Linux OS
-	#include <GL/glut.h>
-	#include <GL/gl.h>
-	#include <GL/glu.h>
+#include <GL/glut.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
 #endif
 
 class Board : public Hero{

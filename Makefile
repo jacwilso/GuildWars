@@ -22,20 +22,19 @@
 ########################################
 
 TARGET = GuildWars
-#SOURCES = $(wildcard *.cpp)
-#OBJECTS = $(SOURCES:.cpp=.o)
 
 SOURCES = $(shell find src -name '*.cpp')
 OBJECTS = $(SOURCES:src/%.cpp=bin/%.o)
 DEPS = $(SOURCES:src/%.cpp=bin/%.d)
 
-LOCAL_INC_PATH = /Users/jpaone/Desktop/include
-LOCAL_LIB_PATH = /Users/jpaone/Desktop/lib
-LOCAL_BIN_PATH = /Users/jpaone/Desktop/bin
+LOCAL_INC_PATH = /opt/local/include
+LOCAL_LIB_PATH = /opt/local/lib
+LOCAL_BIN_PATH = /opt/local/bin
 
 BUILDING_IN_LAB = 1
 
 USING_OPENGL = 1
+USING_OPENAL = 1
 
 #########################################################################################
 #########################################################################################
@@ -97,6 +96,33 @@ ifeq ($(USING_OPENGL), 1)
 endif
 
 #############################
+## SETUP OpenAL & ALUT
+#############################
+
+# if we are using OpenAL & GLUT in this program
+ifeq ($(USING_OPENAL), 1)
+    # Windows builds
+    ifeq ($(OS), Windows_NT)
+        INCPATH += -I$(LAB_INC_PATH)
+        LIBPATH += -L$(LAB_LIB_PATH)
+        LIBS += -lalut.dll -lOpenAL32.dll
+
+    # Mac builds
+    else ifeq ($(shell uname), Darwin)
+        INCPATH += -I$(LOCAL_INC_PATH)
+        LIBPATH += -L$(LOCAL_LIB_PATH)
+        LIBS += -framework OpenAL
+
+    # Linux and all other builds
+    else
+        INCPATH += -I$(LOCAL_INC_PATH)
+        LIBPATH += -L$(LOCAL_LIB_PATH)
+        LIBS += -lalut -lopenal
+    endif
+endif
+
+
+#############################
 ## COMPILATION INSTRUCTIONS 
 #############################
 
@@ -138,10 +164,21 @@ bin:
 		mkdir -p $(shell find src -type d | sed "s/src/bin/")
 
 bin/%.o: src/%.cpp
-		$(CXX) $(COMMONFLAGS) $< -c -o $@
+	$(CXX) $(CFLAGS) $(INCPATH) $< -c -o $@
+
+ # if we are using OpenAL, then we need to copy the runtime
+    # files to our executable directory...and only if we are on
+    # Windows.  The other OSes should be set up globally.
+    ifeq ($(USING_OPENAL), 1 )
+        # Windows builds
+        ifeq ($(OS), Windows_NT)
+            cp $(LAB_BIN_PATH)/OpenAL32.dll .
+            cp $(LAB_BIN_PATH)/libalut.dll .
+        endif
+    endif
+
+
 
 # DEPENDENCIES
 #Auto dependency management.
 -include $(DEPS)
-#main.o: main.cpp
-#EricCartman.o: EricCartman.cpp

@@ -2,9 +2,9 @@
 #define SOUND_H
 
 #ifdef __APPLE__			// if compiling on Mac OS
-    #include <ALUT/alut.h>  // OpenAL Headers
-    #include <OpenAL/al.h>
-    #include <OpenAL/alc.h>
+    #include <AL/alut.h>  // OpenAL Headers
+    #include <AL/al.h>
+    #include <AL/alc.h>
 #else                       // else compiling on Linux OS
     #include <AL/alut.h>    // OpenAL Headers
     #include <AL/al.h>
@@ -14,7 +14,7 @@
 #include <stdio.h>
 
 class Sound{
-  private:
+private:
     #define NUM_BUFFERS 2 // number of buffers
     #define NUM_SOURCES 2 // number of sources
 
@@ -24,7 +24,7 @@ class Sound{
     ALuint buffers[ NUM_BUFFERS ];
     
     void PrintOpenALInfo(); // print the information
-  public:
+public:
 
     ALuint sources[ NUM_SOURCES ]; // wavs in source array
     

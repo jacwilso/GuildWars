@@ -1,5 +1,5 @@
 #include "hero.h"
-#include "Point.h"
+#include "../utilities/Point.h"
 using namespace std;
 
 hero::hero() {
@@ -10,9 +10,9 @@ hero::hero() {
 	tailRotateAngle = 0;
 }
 
-hero::hero(float posX, float posY, int charAngle, int idx, float tailAngle) {
-	charPosX = posx;
-	charPosZ = posz;
+hero::hero(float posX, float posZ, int charAngle, int idx, float tailAngle) {
+	charPosX = posX;
+	charPosZ = posZ;
 	charRotateAngle = charAngle;
 	index = idx;
 	tailRotateAngle = tailAngle;
@@ -60,54 +60,54 @@ void hero::drawBody() {
 	glutSolidCube(2.0);
 }
 
-void hero::drawSphere() {
-	for (int i = 0;i < numOfConPoints;i++) {
+// void hero::drawSphere() {
+// 	for (int i = 0;i < numOfConPoints;i++) {
 
-		glPushMatrix();
-		glTranslatef(controlPoints.at(i).getX(), controlPoints.at(i).getY(), controlPoints.at(i).getZ());
-		glutSolidSphere(0.15, 16, 16);
-		glPopMatrix();
-	}
-}
+// 		glPushMatrix();
+// 		glTranslatef(controlPoints.at(i).getX(), controlPoints.at(i).getY(), controlPoints.at(i).getZ());
+// 		glutSolidSphere(0.15, 16, 16);
+// 		glPopMatrix();
+// 	}
+// }
 
-void hero::drawLines() {
-	for (int i = 0;i < numOfConPoints - 1;i++) {
-		glLineWidth(3.0);
-		glColor3f(255, 255, 0);
-		glBegin(GL_LINES);
-		glPushMatrix();
-		glVertex3f(controlPoints.at(i).getX(), controlPoints.at(i).getY(), controlPoints.at(i).getZ());
-		glVertex3f(controlPoints.at(i + 1).getX(), controlPoints.at(i + 1).getY(), controlPoints.at(i + 1).getZ());
-		glPopMatrix();
-		glEnd();
-	}
-}
+// void hero::drawLines() {
+// 	for (int i = 0;i < numOfConPoints - 1;i++) {
+// 		glLineWidth(3.0);
+// 		glColor3f(255, 255, 0);
+// 		glBegin(GL_LINES);
+// 		glPushMatrix();
+// 		glVertex3f(controlPoints.at(i).getX(), controlPoints.at(i).getY(), controlPoints.at(i).getZ());
+// 		glVertex3f(controlPoints.at(i + 1).getX(), controlPoints.at(i + 1).getY(), controlPoints.at(i + 1).getZ());
+// 		glPopMatrix();
+// 		glEnd();
+// 	}
+// }
 
-void hero::drawBezierLine(Point p1, Point p2) {
-	glColor3f(0, 0, 255);
-	glBegin(GL_LINES);
-	glVertex3f(p1.getX(), p1.getY(), p1.getZ());
-	glVertex3f(p2.getX(), p2.getY(), p2.getZ());
-	glEnd();
-}
+// void hero::drawBezierLine(Point p1, Point p2) {
+// 	glColor3f(0, 0, 255);
+// 	glBegin(GL_LINES);
+// 	glVertex3f(p1.getX(), p1.getY(), p1.getZ());
+// 	glVertex3f(p2.getX(), p2.getY(), p2.getZ());
+// 	glEnd();
+// }
 
 // evaluateBezierCurve() ////////////////////////////////////////////////////////
 //
 // Computes a location along a Bezier Curve. 
 //
 ////////////////////////////////////////////////////////////////////////////////
-Point hero::evaluateBezierCurve(Point p0, Point p1, Point p2, Point p3, float t) {
-	// TODO #08: Compute a point along a Bezier curve
+// Point hero::evaluateBezierCurve(Point p0, Point p1, Point p2, Point p3, float t) {
+// 	// TODO #08: Compute a point along a Bezier curve
 
-	float px = pow((1 - t), 3)*p0.getX() + 3 * t*pow((1 - t), 2)*p1.getX() +
-		3 * (1 - t)*pow(t, 2)*p2.getX() + pow(t, 3)*p3.getX();
-	float py = pow((1 - t), 3)*p0.getY() + 3 * t*pow((1 - t), 2)*p1.getY() +
-		3 * (1 - t)*pow(t, 2)*p2.getY() + pow(t, 3)*p3.getY();
-	float pz = pow((1 - t), 3)*p0.getZ() + 3 * t*pow((1 - t), 2)*p1.getZ() +
-		3 * (1 - t)*pow(t, 2)*p2.getZ() + pow(t, 3)*p3.getZ();
-	Point* p = new Point(px, py, pz);
-	return *p;
-}
+// 	float px = pow((1 - t), 3)*p0.getX() + 3 * t*pow((1 - t), 2)*p1.getX() +
+// 		3 * (1 - t)*pow(t, 2)*p2.getX() + pow(t, 3)*p3.getX();
+// 	float py = pow((1 - t), 3)*p0.getY() + 3 * t*pow((1 - t), 2)*p1.getY() +
+// 		3 * (1 - t)*pow(t, 2)*p2.getY() + pow(t, 3)*p3.getY();
+// 	float pz = pow((1 - t), 3)*p0.getZ() + 3 * t*pow((1 - t), 2)*p1.getZ() +
+// 		3 * (1 - t)*pow(t, 2)*p2.getZ() + pow(t, 3)*p3.getZ();
+// 	Point* p = new Point(px, py, pz);
+// 	return *p;
+// }
 
 // renderBezierCurve() //////////////////////////////////////////////////////////
 //
@@ -115,36 +115,36 @@ Point hero::evaluateBezierCurve(Point p0, Point p1, Point p2, Point p3, float t)
 //  Breaks the curve into n segments as specified by the resolution. 
 //
 ////////////////////////////////////////////////////////////////////////////////
-void hero::renderBezierCurve(Point p0, Point p1, Point p2, Point p3, int resolution) {
-	// TODO #07: Draw a Bezier curve
-	Point old = p0;
-	bezierPoints.push_back(p0);
-	Point last = p0;
-	for (float t = 0.0; t <= resolution;t += 0.1) {
-		Point p = evaluateBezierCurve(p0, p1, p2, p3, t);
+// void hero::renderBezierCurve(Point p0, Point p1, Point p2, Point p3, int resolution) {
+// 	// TODO #07: Draw a Bezier curve
+// 	Point old = p0;
+// 	bezierPoints.push_back(p0);
+// 	Point last = p0;
+// 	for (float t = 0.0; t <= resolution;t += 0.1) {
+// 		Point p = evaluateBezierCurve(p0, p1, p2, p3, t);
 
-		//push bezier curve points into vector
-		bezierPoints.push_back(p);
+// 		//push bezier curve points into vector
+// 		bezierPoints.push_back(p);
 
-		//draw line between two bezier points
-		drawBezierLine(old, p);
-		old = p;
-		last = p;
-	}
-	//
-	bezierPoints.push_back(p3);
-	//make up the last segment
-	drawBezierLine(last, p3);
-}
+// 		//draw line between two bezier points
+// 		drawBezierLine(old, p);
+// 		old = p;
+// 		last = p;
+// 	}
+// 	//
+// 	bezierPoints.push_back(p3);
+// 	//make up the last segment
+// 	drawBezierLine(last, p3);
+// }
 
-void hero::drawFairy() {
+// void hero::drawFairy() {
 
-	//glPushMatrix();
-	glColor3f(0.28, 0.85, 0.12);
-	glTranslatef(bezierPoints.at(index).getX(), bezierPoints.at(index).getY(), bezierPoints.at(index).getZ());
-	glutSolidSphere(0.25, 16, 16);
-	//glPopMatrix();
-}
+// 	//glPushMatrix();
+// 	glColor3f(0.28, 0.85, 0.12);
+// 	glTranslatef(bezierPoints.at(index).getX(), bezierPoints.at(index).getY(), bezierPoints.at(index).getZ());
+// 	glutSolidSphere(0.25, 16, 16);
+// 	//glPopMatrix();
+// }
 
 
 void hero::drawCharacter() {
@@ -195,34 +195,34 @@ void hero::drawCharacter() {
 
 	//draw bezier curve components
 
-	if (controlCageOn == true) {
-		//draw sphere
-		glPushMatrix();
-		glColor3f(0.5, 0.8, 0.4);
-		drawSphere();
-		glPopMatrix();
+	// if (controlCageOn == true) {
+	// 	//draw sphere
+	// 	glPushMatrix();
+	// 	glColor3f(0.5, 0.8, 0.4);
+	// 	drawSphere();
+	// 	glPopMatrix();
 
-		// TODO #06: Connect our control points
-		glPushMatrix();
-		drawLines();
-		glPopMatrix();
-	}
+	// 	// TODO #06: Connect our control points
+	// 	glPushMatrix();
+	// 	drawLines();
+	// 	glPopMatrix();
+	// }
 
-	// TODO #07: Draw the Bezier Curve!
-	if (bezierCurveOn == true) {
-		glPushMatrix();
-		if (numOfConPoints <= 4) {
-			renderBezierCurve(controlPoints.at(0), controlPoints.at(1), controlPoints.at(2), controlPoints.at(3), 1);
-		}
-		else {
-			renderBezierCurve(controlPoints.at(0), controlPoints.at(1), controlPoints.at(2), controlPoints.at(3), 1);
-			renderBezierCurve(controlPoints.at(3), controlPoints.at(4), controlPoints.at(5), controlPoints.at(6), 1);
-		}
-		glPopMatrix();
-	}
+	// // TODO #07: Draw the Bezier Curve!
+	// if (bezierCurveOn == true) {
+	// 	glPushMatrix();
+	// 	if (numOfConPoints <= 4) {
+	// 		renderBezierCurve(controlPoints.at(0), controlPoints.at(1), controlPoints.at(2), controlPoints.at(3), 1);
+	// 	}
+	// 	else {
+	// 		renderBezierCurve(controlPoints.at(0), controlPoints.at(1), controlPoints.at(2), controlPoints.at(3), 1);
+	// 		renderBezierCurve(controlPoints.at(3), controlPoints.at(4), controlPoints.at(5), controlPoints.at(6), 1);
+	// 	}
+	// 	glPopMatrix();
+	// }
 
 	//Draw the fairy
-	glPushMatrix();
-	drawFairy();
-	glPopMatrix();
+	// glPushMatrix();
+	// drawFairy();
+	// glPopMatrix();
 }
