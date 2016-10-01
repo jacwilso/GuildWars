@@ -42,7 +42,7 @@ class Hero{
 
 	//Setters
 	//For Heros
-	void setHeroPos(float posX,float poxY,float posZ,float theta,float phi)
+	void setHeroPos(float posX,float posY,float posZ,float theta,float phi)
         {heroPosX=posX; heroPosY=posY; heroPosZ=posZ;
          heroTheta=theta; heroPhi=phi;}
 
