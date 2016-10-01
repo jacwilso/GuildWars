@@ -240,17 +240,3 @@ void Environment::drawTrees(){
 
 }
 
-void generateEnvironmentDL() {
-	environmentDL = glGenLists( 1 );
-
-	// Tell openGL to begin displaying lists
-	glNewList( environmentDL, GL_COMPILE );
-	// Draw the figures
-	glPushMatrix(); {
-		//drawEnvironment();
-	}; glPopMatrix();
-	// Tell openGL to end displayiung lists
-	glEndList();
-
-}
-
