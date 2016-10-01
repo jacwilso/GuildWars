@@ -15,7 +15,7 @@
 #include <cmath>
 class Environment{
 private:
-	const float DEG_RAD = 3.14159/180;
+	const static float DEG_RAD = 3.14159/180;
 public:
 	Environment();
 	void generateEnvironmentDL();
