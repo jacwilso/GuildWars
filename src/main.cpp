@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
+#include <map.h>
 // GLOBAL VARIABLES ////////////////////////////////////////////////////////////
 static size_t windowWidth  = 640;
 static size_t windowHeight = 480;
@@ -29,9 +30,7 @@ static float aspectRatio;
 GLint leftMouseButton; 		   	    // status of the mouse buttons
 int mouseX = 0, mouseY = 0;                 // last known X and Y of the mouse
 int pipMouseX = 0, pipMouseY = 0;			// Save for Picture in Picture section
-float cameraTheta , cameraPhi;               // camera DIRECTION in spherical coordinates
 float pipTheta, pipPhi;		// Theta and Phi values for PIP
-float dirX, dirY, dirZ;                     // camera DIRECTION in cartesian coordinates
 
 bool isPip = false;
 bool ctrlIsPressed = false;
@@ -40,25 +39,7 @@ GLuint environmentDL;                       // display list for the 'city'
 
 int pipMode = 1;
 
-void generateEnvironmentDL() {
-	environmentDL = glGenLists( 1 );
-
-	// Tell openGL to begin displaying lists
-	glNewList( environmentDL, GL_COMPILE );
-	// Draw the figures
-	glPushMatrix(); {
-		//drawEnvironment();
-	}; glPopMatrix();
-	// Tell openGL to end displayiung lists
-	glEndList();
-
-}
-
-
-
-void recomputeOrientation() {
-
-}
+Map<unsigned char,bool> keyState;
 
 void resizeWindow(int w, int h) {
 	aspectRatio = w / (float)h;
@@ -113,8 +94,6 @@ void myMenu( int value ) {
 void createMenus() {
 	glutCreateMenu( myMenu );
 	glutAddMenuEntry( "Quit", 0 );
-	glutAddMenuEntry("Display/Hide Control Cage", 1);
-	glutAddMenuEntry("Display/Hide Bézier Curve", 2);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
@@ -129,14 +108,6 @@ void mouseMotion(int x, int y) {
 			pipMouseX = x;
 			pipMouseY = y;	
 		}else{
-			if(ctrlIsPressed){
-				float displacement = 0.01*(y-mouseY);
-			}else{
-				cameraTheta = cameraTheta - (x-mouseX) * 0.005;
-				cameraPhi = fmin(fmax((cameraPhi + (y - mouseY) * 0.005),0.01),M_PI);
-				mouseX = x;
-				mouseY = y;
-			recomputeOrientation();     // update camera (x,y,z) based on (radius,theta,phi)
 		}
 	}
 
@@ -145,6 +116,7 @@ void mouseMotion(int x, int y) {
 }
 
 void normalKeysDown(unsigned char key, int x, int y) {
+        keyState[key]=true;
 	if(key <= 57 && key >= 48){
 		pipMode = (int)key - 48;
 	}
@@ -154,11 +126,13 @@ void normalKeysDown(unsigned char key, int x, int y) {
 	}else if( key == 'w'){
 	}else if( key == 's'){
 	}else if(key == 'a'){
-		cameraTheta += 5;
 	}else if(key == 'd'){
-		cameraTheta -= 5;
 	}
 	glutPostRedisplay();		// redraw our scene from our new camera POV
+}
+
+void normalKeysUp(unsigned char key, int x, int y){
+  keyState[key]=false;
 }
 
 // Special key being pressed like arrowkeys
@@ -168,14 +142,12 @@ void SpecialKeys(int key, int x, int y)
 	switch (key)
 	{
 		case GLUT_KEY_LEFT:
-
 		break;
 		case GLUT_KEY_RIGHT:
 		break;
 		case GLUT_KEY_UP:
 		break;
 		case GLUT_KEY_DOWN:
-
 		break;
 	}
 	glutPostRedisplay();
@@ -235,9 +207,6 @@ void renderScene(void)  {
 	glMatrixMode(GL_MODELVIEW);              //make sure we aren't changing the projection matrix!
 	glLoadIdentity();
 
-
-	glCallList( environmentDL );
-
 	// Viewport 2
 	//PictureInPicture();
 
@@ -260,12 +229,8 @@ int main(int argc, char **argv) {
 	glutCreateWindow("GuildWars");
 
 	// give the camera a scenic starting point.
-	cameraTheta = M_PI/1.25;
-	cameraPhi = M_PI*0.7;
-
 	pipTheta = M_PI/1.25;
 	pipPhi = M_PI*0.7;;
-	recomputeOrientation();
 
 	// register callback functions...
 	glutSetKeyRepeat(GLUT_KEY_REPEAT_ON);
