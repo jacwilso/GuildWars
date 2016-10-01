@@ -18,9 +18,6 @@
 class EricCartman : public Hero{
 private:
 	// Private Global Variables
-	float ericPositionX = 0;
-	float ericPositionY = 4;
-	float ericPositionZ = 0;
 	float ericPositionTheta = 0;
 
 	// Angle is specified for foot and hand swing angle. Change variable name later.
@@ -41,18 +38,10 @@ public:
 	void drawCircle();
 
 	// Getters
-	float getEricPositionX();
-	float getEricPositionY();
-	float getEricPositionZ();
-	float getEricPositionTheta();
 	float getSwingAngle();
 	float getEricHeadBobAngle();
 
 	// Setters
-	void setEricPositionX(float item);
-	void setEricPositionY(float item);
-	void setEricPositionZ(float item);
-	void setEricPositionTheta(float item);
 	void setSwingAngle(float item);
 	void setEricHeadBobAngle(float item);
 
@@ -62,7 +51,6 @@ public:
 	 * We can call the drawHero() insead of this method
 	 */
 	void drawHero();
-
 
 	/*
 	 * Draws a foot
@@ -105,7 +93,7 @@ public:
 	/*
 	 * Responsible for Bobbing Eric's head up and down.
 	 */
-	void bobHead();
+	void animate();
 
 	/*
 	 * Move the Bezier Index up one
