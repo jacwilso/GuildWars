@@ -204,9 +204,14 @@ void Bomberman::drawMan(){
 }
 
 // display list of man -- not necesary since it isn't static
-void Bomberman::drawFairy(){
+void Bomberman::drawHero(){
   bombermanDL=glGenLists(1);
   glNewList(bombermanDL,GL_COMPILE);
       drawMan();
   glEndList();
+}
+
+void Bomberman::animate(){
+ if(fuseLength<0) setFuse(1);
+ subFuse();
 }

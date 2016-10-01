@@ -13,7 +13,7 @@
 
 #include "../utilities/Hero.h"
 
-class Bomberman : publci Hero{
+class Bomberman : public Hero{
   private:
     float fuseLength; // the fuse length of the bomb wire
 
@@ -42,7 +42,7 @@ class Bomberman : publci Hero{
     GLuint bombermanDL;
 
     static GLUquadric* qobj;
-    void drawFairy(); // gen list -- not necesary but like the structure
+    void drawHero(); // gen list -- not necesary but like the structure
 };
 
 #endif
