@@ -11,6 +11,8 @@
 #include <GL/glu.h>
 #endif
 
+#include "../utilities/Hero.h"
+
 class Bomberman : publci Hero{
   private:
     float fuseLength; // the fuse length of the bomb wire

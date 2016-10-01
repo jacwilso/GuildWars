@@ -11,6 +11,8 @@
 #include <GL/glu.h>
 #endif
 
+#include "../utilities/Hero.h"
+
 class Board : public Hero{
   private:
     const static int STREAKS=25; // # of streaks to follow the board

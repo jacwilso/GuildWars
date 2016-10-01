@@ -1,6 +1,8 @@
 #ifndef DONKEY_H
 #define DONKEY_H
 
+#include "../utilities/Hero.h"
+
 class Donkey : public Hero{
 
 

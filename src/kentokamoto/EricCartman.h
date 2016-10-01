@@ -13,6 +13,7 @@
 #endif
 
 #include "FairyEric.h"
+#include "../utilities/Hero.h"
 
 class EricCartman : public Hero{
 private:
