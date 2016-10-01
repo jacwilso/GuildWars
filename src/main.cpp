@@ -46,10 +46,10 @@ float pipTheta, pipPhi;		// Theta and Phi values for PIP
 bool isPip = false;
 bool ctrlIsPressed = false;
 
-GLuint environmentDL;                       // display list for the 'city'
 
 int pipMode = 1;
 
+<<<<<<< HEAD
 map<unsigned char,bool> keyState;
 
 Environment env;
@@ -61,6 +61,16 @@ GLUquadric* Board::qobj;
 Bomberman bomberman;
 GLUquadric* Bomberman::qobj;
 /********************* Functions ****************************/
+=======
+<<<<<<< HEAD
+Map<unsigned char,bool> keyState;
+=======
+
+void recomputeOrientation() {
+
+}
+>>>>>>> 73cc2c6a8dc9c11e987022c08db4f53822bbe8f8
+>>>>>>> caf1ee37c940fa84bff4f8dcde0a8b9daea05d31
 
 void resizeWindow(int w, int h) {
 	aspectRatio = w / (float)h;

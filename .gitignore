@@ -1,3 +1,8 @@
 .DS_Store
+<<<<<<< HEAD
 bin/*
 *.swp
+=======
+*.swp
+bin/
+>>>>>>> caf1ee37c940fa84bff4f8dcde0a8b9daea05d31
