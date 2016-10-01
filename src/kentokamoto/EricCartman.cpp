@@ -56,18 +56,6 @@ void EricCartman::drawCircle(){
 }
 
 // Getters
-float EricCartman::getEricPositionX(){
-	return ericPositionX;
-}
-float EricCartman::getEricPositionY(){
-	return ericPositionY;
-}
-float EricCartman::getEricPositionZ(){
-	return ericPositionZ;
-}
-float EricCartman::getEricPositionTheta(){
-	return ericPositionTheta;
-}
 float EricCartman::getSwingAngle(){
 	return swingAngle;
 }
@@ -77,18 +65,6 @@ float EricCartman::getEricHeadBobAngle(){
 
 
 // Setters
-void EricCartman::setEricPositionX(float item){
-	ericPositionX = item;
-}
-void EricCartman::setEricPositionY(float item){
-	ericPositionY = item;
-}
-void EricCartman::setEricPositionZ(float item){
-	ericPositionZ = item;
-}
-void EricCartman::setEricPositionTheta(float item){
-	ericPositionTheta = item;
-}
 void EricCartman::setSwingAngle(float item){
 	swingAngle = item;
 }
@@ -99,8 +75,8 @@ void EricCartman::setEricHeadBobAngle(float item){
 void EricCartman::drawHero(){
 	glPushMatrix();
 	{
-		glTranslatef(getEricPositionX(), 0.8*getEricPositionY(), getEricPositionZ());
-		glRotatef(ericPositionTheta, 0,1,0);
+		glTranslatef(heroPosX, heroPosY, heroPosZ);
+		glRotatef(heroTheta, 0,1,0);
 		glScalef(0.8,0.8,0.8);
 		drawBody();
 	}
@@ -328,72 +304,50 @@ void EricCartman::drawHead(){
 }
 
 void EricCartman::moveEricForward(){
-	setEricPositionX( getEricPositionX() + cos(ericPositionTheta*RAD) );
-	setEricPositionZ( getEricPositionZ() - sin(ericPositionTheta*RAD) );
+	heroPosX += cos(ericPositionTheta*RAD);
+	heroPosZ -= sin(ericPositionTheta*RAD);
 	setSwingAngle(getSwingAngle() + 20);
 
 
 	// Set an invisible wall at borders of grid
-	if(getEricPositionX() > 100){
-		setEricPositionX(100);
-	}else if(getEricPositionX() < -100){
-		setEricPositionX(-100);
+	if(getHeroPositionX() > 100){
+		heroPosX = 100;
+	}else if(getHeroPositionX() < -100){
+		heroPosX = -100;
 	}
-	if(getEricPositionZ() > 100){
-		setEricPositionZ(100);
-	}else if(getEricPositionZ() < -100){
-		setEricPositionZ(-100);
-	}
-
-	// Collision detection with sidewalk
-	if( (getEricPositionX() >= 30 && getEricPositionX() <= 40) || (getEricPositionZ() >= 30 && getEricPositionZ() <= 40) ){
-		// Bug slight bug at intersections
-		setEricPositionY(5);
-	}else if ((getEricPositionX() >= 70 && getEricPositionX() <= 80) || (getEricPositionZ() >= 70 && getEricPositionZ() <= 80) ) {
-		setEricPositionY(5);
-	}else{
-		setEricPositionY(4);
+	if(getHeroPositionZ() > 100){
+		heroPosZ = 100;
+	}else if(getHeroPositionZ() < -100){
+		heroPosZ = -100;
 	}
 }
 void EricCartman::moveEricBackward(){
-	setEricPositionX(getEricPositionX() - cos(getEricPositionTheta()*RAD));
-	setEricPositionX(getEricPositionX() + sin(getEricPositionTheta()*RAD));
+	heroPosX -= cos(ericPositionTheta*RAD);
+	heroPosZ += sin(ericPositionTheta*RAD);
 	setSwingAngle(getSwingAngle() - 20);
 
 
 	// Set an invisible wall at borders of grid
-	if(getEricPositionX() > 100){
-		setEricPositionX(100);
-	}else if(getEricPositionX() < -100){
-		setEricPositionX(-100);
+	if(getHeroPositionX() > 100){
+		heroPosX = 100;
+	}else if(getHeroPositionX() < -100){
+		heroPosX = -100;
 	}
-
-	if(getEricPositionZ() > 100){
-		setEricPositionZ(100);
-	}else if(getEricPositionZ() < -100){
-		setEricPositionZ(-100);
-
-	}
-
-	// Collision Detection with sidewalk
-	if( (getEricPositionX() >= 30 && getEricPositionX() <= 40) || (getEricPositionZ() >= 30 && getEricPositionZ() <= 40) ){
-		// Slight bug at intersections
-		setEricPositionY(5);
-	}else if ((getEricPositionX() >= 70 && getEricPositionX() <= 80) || (getEricPositionZ() >= 70 && getEricPositionZ() <= 80) ) {
-		setEricPositionY(5);
-	}else{
-		setEricPositionY(4);
+	if(getHeroPositionZ() > 100){
+		heroPosZ = 100;
+	}else if(getHeroPositionZ() < -100){
+		heroPosZ = -100;
 	}
 }
 void EricCartman::turnEricLeft(){
-	setEricPositionTheta(getEricPositionTheta() + 5);
+	heroTheta += 5;
 
 }
 void EricCartman::turnEricRight(){
-	setEricPositionTheta(getEricPositionTheta() - 5);
+	heroTheta -= 5;
 }
 
-void EricCartman::bobHead(){
+void EricCartman::animate(){
 	setEricHeadBobAngle(getEricHeadBobAngle() + 10);
 }
 
