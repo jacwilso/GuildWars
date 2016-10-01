@@ -36,6 +36,8 @@ class Bezier{
 
     void bezierConnect(Bezier bez); // connect anothe bezier curve to the current curve
     Point trackCurve(int pos); // track the point along the curve
+    
+    void operator=(Bezier bez);
 };
 
 #endif

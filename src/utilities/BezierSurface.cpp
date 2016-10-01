@@ -37,18 +37,35 @@ void BezierSurface::createSurface(
   bez.push_back(Bezier(p4,p5,p6,p7));
 }
 
-Bezier BezierSurface::evaluateSurface(float t){
-  vector<Point> tmp;
-  for(int i=0; i<4; i++)
-    tmp.push_back(bez[i].evaluateCurve(0,t));
-  return Bezier(tmp[0],tmp[1],tmp[2],tmp[3]);
+Point BezierSurface::evaluateSurface(float u,float v){
+  return (
+    pow(1-v,3)*bez[0].evaluateCurve(0,u)+
+    3*pow(1-v,2)*v*bez[1].evaluateCurve(0,u)+
+    3*pow(v,2)*(1-v)*bez[2].evaluateCurve(0,u)+
+    pow(v,3)*bez[3].evaluateCurve(0,u));
+
 }
 
 void BezierSurface::renderSurface(){
   renderPoints();
-  for(int i=0; i<4; i++)
-  bez[i].renderCurve();
- for(int i=0; i<RESOLUTION; i++)
-    evaluateSurface(i/RESOLUTION).renderCurve();
-  
+  glDisable(GL_LIGHTING);
+  glColor3f(0,0,1.0f);
+  glLineWidth(3.0f);
+  for(int u=0; u<RESOLUTION; u++){
+  glBegin(GL_LINE_STRIP);
+    for(int v=0; v<RESOLUTION; v++){
+      Point temp=evaluateSurface((float)(u)/RESOLUTION,(float)(v)/RESOLUTION); 
+      glVertex3f(temp.getX(),temp.getY(),temp.getZ());
+    } 
+  glEnd();
+  }
+  for(int v=0; v<RESOLUTION; v++){
+  glBegin(GL_LINE_STRIP);
+    for(int u=0; u<RESOLUTION; u++){
+      Point temp=evaluateSurface((float)(u)/RESOLUTION,(float)(v)/RESOLUTION); 
+      glVertex3f(temp.getX(),temp.getY(),temp.getZ());
+    } 
+  glEnd();
+  }
+  glEnable(GL_LIGHTING);
 }

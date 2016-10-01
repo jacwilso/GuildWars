@@ -43,7 +43,7 @@ class BezierSurface{
        bez[i].renderCage();
     }
 
-    Bezier evaluateSurface(float t);
+    Point evaluateSurface(float u,float v);
     void renderSurface();
 };
 

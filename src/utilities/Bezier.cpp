@@ -64,3 +64,9 @@ void Bezier::bezierConnect(Bezier bez){
 Point Bezier::trackCurve(int pos){
   return evaluateCurve(4*(pos/RESOLUTION),(float)(pos%RESOLUTION)/RESOLUTION);
 }
+
+void Bezier::operator=(Bezier bez){
+  p.clear();
+  for(int i=0; i<bez.p.size(); i++)
+    p.push_back(bez.p[i]);
+}
