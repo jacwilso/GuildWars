@@ -7,8 +7,8 @@ Board::Board(){
 	}
 
 	// initial parameters
-	hoverPos=0; objTheta=0; lookAtX=0; lookAtY=0; lookAtZ=0;
-	stomp=false; turn=false; bankLeft=false; bankRight=false;
+	hoverPos=0; heroTheta=0; heroPosX=0; heroPosY=0; heroPosZ=0;
+	stomp=true; turn=false; bankLeft=false; bankRight=false; hover=true;
 	streakNum=0;
 }
 
@@ -165,11 +165,11 @@ void Board::drawHoverBoard(){
   glPopMatrix();
 }
 
-void Board::setVars(float lookAtX,float lookAtY,float lookAtZ,float objTheta,float hoverPos,bool stomp,bool turn,bool bankLeft,bool bankRight,float streak[STREAKS][3],int streakNum){
-	this->lookAtX=lookAtX;
-	this->lookAtY=lookAtY;
-	this->lookAtZ=lookAtZ;
-	this->objTheta=objTheta;
+/*void Board::setVars(float heroPosX,float heroPosY,float heroPosZ,float heroTheta,float hoverPos,bool stomp,bool turn,bool bankLeft,bool bankRight,float streak[STREAKS][3],int streakNum){
+	this->heroPosX=heroPosX;
+	this->heroPosY=heroPosY;
+	this->heroPosZ=heroPosZ;
+	this->heroTheta=heroTheta;
 	this->hoverPos=hoverPos;
 	this->stomp=stomp;
 	this->turn=turn;
@@ -179,7 +179,7 @@ void Board::setVars(float lookAtX,float lookAtY,float lookAtZ,float objTheta,flo
 	for(int i=0; i<STREAKS; i++)
 		for(int j=0; j<3; j++)
 			this->streak[i][j]=streak[i][j];
-}
+}*/
 
 // generateObjectDL() /////////////////////////////////////////////////////
 //
@@ -192,8 +192,8 @@ void Board::drawHero(){
     objectDL=glGenLists(1);
     glNewList(objectDL, GL_COMPILE);
       glPushMatrix();
-        glTranslatef(lookAtX,lookAtY,lookAtZ); // translate to the center of the arc ball
-        glRotatef(objTheta,0,1,0); // the direction of the board
+        glTranslatef(heroPosX,heroPosY,heroPosZ); // translate to the center of the arc ball
+        glRotatef(heroTheta,0,1,0); // the direction of the board
         if(turn){ // if the board is turning in the XZ plane (and not moving), prop the board upwards (like someone is stamping on the back of the board)
           glRotatef(-35,0,0,1);
           glTranslatef(0,2.3,0);
@@ -210,10 +210,28 @@ void Board::drawHero(){
       glPopMatrix();
     for(int i=0; i<STREAKS; i++){ // the streak following the board
       glPushMatrix();
-        glTranslatef(streak[i][0],lookAtY,streak[i][1]); // translate to the prior locations of the board
+        glTranslatef(streak[i][0],heroPosY,streak[i][1]); // translate to the prior locations of the board
         glRotatef(streak[i][2],0,1,0); // rotate the board to the angle of the turn
         drawStreak(); // draw the streak of the board
       glPopMatrix();
     }
     glEndList();
+}
+
+void Board::animate(){
+  // STREAK
+  if(streakNum==STREAKS) streakNum=0; // earse the oldest elements in the array
+  streak[streakNum][0]=heroPosX; // add the current x, z, and angle orientation to the streak array
+  streak[streakNum][1]=heroPosZ;
+  streak[streakNum][2]=heroTheta;
+  streakNum++; // increment streak
+
+  // HOVER ANIMATION
+  if(hover && hoverPos<15) // move the hover disks up
+    hoverPos++; 
+  else if(hoverPos>0){ // move the hover disks down
+    hoverPos--;
+    hover=false;
+  }
+  else hover=true;
 }
