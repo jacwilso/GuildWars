@@ -18,12 +18,8 @@
 class EricCartman : public Hero{
 private:
 	// Angle is specified for foot and hand swing angle. Change variable name later.
-	float swingAngle = 0;
-	float ericHeadBobAngle = 0;
-
-	int BezierPointVectorIndex = 0;
-	bool showControlCage = true;
-	bool showBezierCurve = true;
+	float swingAngle;
+	float ericHeadBobAngle;
 
 public:
 	/*
