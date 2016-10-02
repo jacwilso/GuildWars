@@ -4,7 +4,6 @@
 const float PI = 3.14159;
 const float RAD = PI/180;
 
-FairyEric::FairyEric(){}
 
 // Basic Circle
 void FairyEric::drawCircle(){
@@ -21,43 +20,16 @@ void FairyEric::drawCircle(){
 }
 
 
-// Getters
-float FairyEric::getFairyEricPositionX(){
-	return fairyEricPositionX;
-}
-float FairyEric::getFairyEricPositionY(){
-	return fairyEricPositionY;
-}
-float FairyEric::getFairyEricPositionZ(){
-	return fairyEricPositionZ;
-}
-float FairyEric::getFairyEricPositionTheta(){
-	return fairyEricPositionTheta;
-}
-
-// Setters
-void FairyEric::setFairyEricPositionX(float item){
-	fairyEricPositionX = item;
-}
-void FairyEric::setFairyEricPositionY(float item){
-	fairyEricPositionY = item;
-}
-void FairyEric::setFairyEricPositionZ(float item){
-	fairyEricPositionZ = item;
-}
-void FairyEric::setFairyEricPositionTheta(float item){
-	fairyEricPositionTheta = item;
-}
 
 // Drawing Functions
 /*
 * Draws the entire Character
 */
-void FairyEric::drawFairy(){
+void FairyEric::drawHero(){
 	glPushMatrix();
 	{
-		glTranslatef(fairyEricPositionX, fairyEricPositionY, fairyEricPositionZ);
-		glRotatef(fairyEricPositionTheta, 0,1,0);
+		glTranslatef(heroPosX,heroPosY,heroPosZ);
+		glRotatef(heroTheta, 0,1,0);
 		glScalef(0.8,0.8,0.8);
 		drawBody();
 	}

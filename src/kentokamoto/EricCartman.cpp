@@ -7,7 +7,6 @@ using namespace std;
 
 const float PI = 3.14159;
 const float RAD = PI/180;
-EricCartman::EricCartman(){}
 
 
 void drawHemiSphere(float radx,float rady,float radz)
