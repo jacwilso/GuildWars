@@ -12,7 +12,7 @@
 #endif
 
 class Hero{
-  private:
+  protected:
     float heroPosX, heroPosY, heroPosZ,
       heroTheta, heroPhi;
     bool move;

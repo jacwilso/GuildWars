@@ -1,7 +1,7 @@
 #ifndef FAIRY_H
 #define FAIRY_H
 
-#include "../utilities/Hero.h"
+#include "../../NC_files/Hero.h"
 
 class Fairy : public Hero{
   private:

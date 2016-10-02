@@ -1,7 +1,7 @@
 #ifndef DONKEY_H
 #define DONKEY_H
 
-#include "../utilities/Hero.h"
+#include "../../NC_files/Hero.h"
 
 class Donkey : public Hero{
   private:

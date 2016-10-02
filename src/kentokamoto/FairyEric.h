@@ -13,50 +13,16 @@
 #endif
 
 #include <cmath>
-#include "../utilities/Hero.h"
+#include "../../NC_files/Hero.h"
 
 class FairyEric : public Hero {
-private:
-	// Private Global Variables
-	float fairyEricPositionX = 0;
-	float fairyEricPositionY = 4;
-	float fairyEricPositionZ = 0;
-	float fairyEricPositionTheta = 0;
-
-
-public:
-
-	/*
-	 * Constructor
-	 */
-	FairyEric();
-
+  private:
 	//Shapes
 	void drawCircle();
-
-	// Getters
-	float getFairyEricPositionX();
-	float getFairyEricPositionY();
-	float getFairyEricPositionZ();
-	float getFairyEricPositionTheta();
-
-	// Setters
-	void setFairyEricPositionX(float item);
-	void setFairyEricPositionY(float item);
-	void setFairyEricPositionZ(float item);
-	void setFairyEricPositionTheta(float item);
-
-// Drawing Functions
-	/*
-	 * Draws the entire Character
-	 */
-	void drawFairy();
 	/*
 	 * Draws a foot
 	 * This includes the legs and foot
 	 */
-
-
 	void drawFeet();
 	/*
 	 * Draws the body:
@@ -76,8 +42,12 @@ public:
 	 * Draws entire Head
 	 */
 	void drawHead();
-
-
+  public:
+// Drawing Functions
+	/*
+	 * Draws the entire Character
+	 */
+	void drawHero();
 };
 
 #endif

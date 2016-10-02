@@ -43,6 +43,7 @@ class Bomberman : public Hero{
 
     static GLUquadric* qobj;
     void drawHero(); // gen list -- not necesary but like the structure
+    void animate();
 };
 
 #endif
