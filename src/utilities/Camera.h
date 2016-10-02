@@ -13,25 +13,14 @@ class Camera
 {
 private:
 	int pipMode;
-	float pipDirX;
-	float pipDirY;
-	float pipDirZ;
+	float pipDirX,pipDirY,pipDirZ;
 
-	float dirX;
-	float dirY;
-	float dirZ;
+	float dirX,dirY,dirZ;
 
-    float cameraX;
-    float cameraY;
-    float cameraZ;
-	float cameraRad;
+    float cameraX,cameraY,cameraZ,cameraRad;
 
 // Constant Variables
-    const float X_OFFSET = 0;
-    const float Y_OFFSET = 3.3;
-    const float Z_OFFSET = 0;
-
-    const float SKYCAM_HEIGHT = 30;
+    const static float X_OFFSET = 0, Y_OFFSET = 3.3, Z_OFFSET = 0, SKYCAM_HEIGHT = 30;
 
 public:
     Camera() {

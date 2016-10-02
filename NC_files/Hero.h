@@ -11,8 +11,6 @@
 	#include <GL/glu.h>
 #endif
 
-#include "Bezier.h"
-
 class Hero{
   private:
     float heroPosX, heroPosY, heroPosZ,
