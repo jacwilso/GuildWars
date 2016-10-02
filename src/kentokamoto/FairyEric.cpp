@@ -19,8 +19,6 @@ void FairyEric::drawCircle(){
 	glPopMatrix();
 }
 
-
-
 // Drawing Functions
 /*
 * Draws the entire Character

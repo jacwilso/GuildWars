@@ -24,10 +24,14 @@
 #include <map>
 
 // Created Classes
-#include "utilities/*"
-#include "jacwilso/*"
-#include "kentokamoto/*"
-#include "zhemingdeng/*"
+#include "utilities/Camera.h"
+#include "utilities/Environment.h"
+#include "jacwilso/Board.h"
+#include "jacwilso/Bomberman.h"
+#include "kentokamoto/EricCartman.h"
+#include "kentokamoto/FairyEric.h"
+#include "zhemingdeng/Donkey.h"
+#include "zhemingdeng/Fairy.h"
 
 // Namespaces
 

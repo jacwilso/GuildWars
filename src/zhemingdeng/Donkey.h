@@ -10,9 +10,9 @@ class Donkey : public Hero{
 
 	void drawBody();
 	void drawHead();
-	void drawLines();
+	// void drawLines();
 	void drawNeck();
-	void drawSphere();
+	// void drawSphere();
 	void drawTail();
 	void drawWheels();
   public:
@@ -28,7 +28,7 @@ class Donkey : public Hero{
 	void setIndex(int i)
 	{index = i;}
 	void setTailRotateAngle(float angle)
-	{charRotateAngle = angle;}
+	{tailRotateAngle = angle;}
 
         void drawHero();
         void animate();

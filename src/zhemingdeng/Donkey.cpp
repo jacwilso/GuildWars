@@ -1,19 +1,20 @@
 #include "Donkey.h"
-#include "Point.h"
+#include "../utilities/Point.h"
 using namespace std;
 
 Donkey::Donkey() {
 	heroPosX = 0;
 	heroPosZ = 0;
-	heroRotateAngle = 0;
+	heroPosY = 0;
+	heroTheta = 0;
 	index = 0;
 	tailRotateAngle = 0;
 }
 
-Donkey::Donkey(float posX, float posY, int heroAngle, int idx, float tailAngle) {
-	heroPosX = posx;
-	heroPosZ = posz;
-	heroRotateAngle = heroAngle;
+Donkey::Donkey(float posX, float posZ, int heroAngle, int idx, float tailAngle) {
+	heroPosX = posX;
+	heroPosZ = posZ;
+	heroTheta = heroAngle;
 	index = idx;
 	tailRotateAngle = tailAngle;
 }
@@ -59,32 +60,32 @@ void Donkey::drawBody() {
 	glutSolidCube(2.0);
 }
 
-void Donkey::drawSphere() {
-	for (int i = 0;i < numOfConPoints;i++) {
-		glPushMatrix();
-		glTranslatef(controlPoints.at(i).getX(), controlPoints.at(i).getY(), controlPoints.at(i).getZ());
-		glutSolidSphere(0.15, 16, 16);
-		glPopMatrix();
-	}
-}
+// void Donkey::drawSphere() {
+// 	for (int i = 0;i < numOfConPoints;i++) {
+// 		glPushMatrix();
+// 		glTranslatef(controlPoints.at(i).getX(), controlPoints.at(i).getY(), controlPoints.at(i).getZ());
+// 		glutSolidSphere(0.15, 16, 16);
+// 		glPopMatrix();
+// 	}
+// }
 
-void Donkey::drawLines() {
-	for (int i = 0;i < numOfConPoints - 1;i++) {
-		glLineWidth(3.0);
-		glColor3f(255, 255, 0);
-		glBegin(GL_LINES);
-		glPushMatrix();
-		glVertex3f(controlPoints.at(i).getX(), controlPoints.at(i).getY(), controlPoints.at(i).getZ());
-		glVertex3f(controlPoints.at(i + 1).getX(), controlPoints.at(i + 1).getY(), controlPoints.at(i + 1).getZ());
-		glPopMatrix();
-		glEnd();
-	}
-}
+// void Donkey::drawLines() {
+// 	for (int i = 0;i < numOfConPoints - 1;i++) {
+// 		glLineWidth(3.0);
+// 		glColor3f(255, 255, 0);
+// 		glBegin(GL_LINES);
+// 		glPushMatrix();
+// 		glVertex3f(controlPoints.at(i).getX(), controlPoints.at(i).getY(), controlPoints.at(i).getZ());
+// 		glVertex3f(controlPoints.at(i + 1).getX(), controlPoints.at(i + 1).getY(), controlPoints.at(i + 1).getZ());
+// 		glPopMatrix();
+// 		glEnd();
+// 	}
+// }
 
 void Donkey::drawHero() {
 	glTranslatef(heroPosX, 0, heroPosZ);
 	//glTranslatef(20, 0, 20);
-	glRotatef(heroRotateAngle, 0, 1, 0);
+	glRotatef(heroTheta, 0, 1, 0);
 	glColor3f(0.9, 0.45, 0.1);
 	//glutSolidTorus(2,5,10,4);
 

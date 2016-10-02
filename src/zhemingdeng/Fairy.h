@@ -14,4 +14,6 @@ class Fairy : public Hero{
 	glutSolidSphere(0.25, 16, 16);
 	//glPopMatrix();
   }
-}
+};
+
+#endif
