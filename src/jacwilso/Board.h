@@ -11,7 +11,7 @@
 #include <GL/glu.h>
 #endif
 
-#include "../utilities/Hero.h"
+#include "../../NC_files/Hero.h"
 
 class Board : public Hero{
   private:

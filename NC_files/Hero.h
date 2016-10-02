@@ -11,7 +11,7 @@
 	#include <GL/glu.h>
 #endif
 
-#include "Bezier.h"
+#include "../src/utilities/Bezier.h"
 
 class Hero{
   private:
