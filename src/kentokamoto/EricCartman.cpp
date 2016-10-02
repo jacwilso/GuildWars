@@ -303,8 +303,8 @@ void EricCartman::drawHead(){
 }
 
 void EricCartman::moveEricForward(){
-	heroPosX += cos(ericPositionTheta*RAD);
-	heroPosZ -= sin(ericPositionTheta*RAD);
+	heroPosX += cos(heroTheta*RAD);
+	heroPosZ -= sin(heroTheta*RAD);
 	setSwingAngle(getSwingAngle() + 20);
 
 
@@ -321,8 +321,8 @@ void EricCartman::moveEricForward(){
 	}
 }
 void EricCartman::moveEricBackward(){
-	heroPosX -= cos(ericPositionTheta*RAD);
-	heroPosZ += sin(ericPositionTheta*RAD);
+	heroPosX -= cos(heroTheta*RAD);
+	heroPosZ += sin(heroTheta*RAD);
 	setSwingAngle(getSwingAngle() - 20);
 
 
