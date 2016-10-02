@@ -17,9 +17,6 @@
 
 class EricCartman : public Hero{
 private:
-	// Private Global Variables
-	float ericPositionTheta = 0;
-
 	// Angle is specified for foot and hand swing angle. Change variable name later.
 	float swingAngle = 0;
 	float ericHeadBobAngle = 0;
