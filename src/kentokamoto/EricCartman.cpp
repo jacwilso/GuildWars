@@ -15,8 +15,8 @@ EricCartman::EricCartman(){
 
 void drawHemiSphere(float radx,float rady,float radz)
 {
-	float i,j,k;
-	float x,y,z,t1x,t1y,t1z,t2x,t2y,t2z;
+	float i,j;
+	float t1x,t1y,t1z,t2x,t2y,t2z;
 
 	float side = 4;
 	glBegin(GL_QUADS);
@@ -352,11 +352,4 @@ void EricCartman::turnEricRight(){
 
 void EricCartman::animate(){
 	setEricHeadBobAngle(getEricHeadBobAngle() + 10);
-}
-
-void EricCartman::toggleControlCage(){
-	showControlCage = !showControlCage;
-}
-void EricCartman::toggleBezierCurve(){
-	showBezierCurve = !showBezierCurve;
 }
