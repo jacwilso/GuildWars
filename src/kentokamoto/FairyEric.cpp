@@ -244,3 +244,7 @@ void FairyEric::drawHero(){
 	glPopMatrix();
 	glEnable( GL_LIGHTING );
  }
+
+void FairyEric::animate(){
+
+}

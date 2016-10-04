@@ -48,6 +48,7 @@ class FairyEric : public Hero {
 	 * Draws the entire Character
 	 */
 	void drawHero();
+	void animate();
 };
 
 #endif

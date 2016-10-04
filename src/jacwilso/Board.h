@@ -31,7 +31,7 @@ class Board : public Hero{
     void drawHoverBoard(); // combines all the pieces into the board
   public:
     Board(); // constructor initializing starting position
-    ~Board(){gluDeleteQuadric(qobj);} // destructor
+    virtual ~Board(){gluDeleteQuadric(qobj);} // destructor
 
     static GLUquadric* qobj; // static only need one per object
     GLuint objectDL; // for object environment

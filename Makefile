@@ -87,7 +87,8 @@ ifeq ($(USING_OPENGL), 1)
 
     # Mac builds
     else ifeq ($(shell uname), Darwin)
-        LIBS += -framework GLUT -framework OpenGL
+        CFLAGS += -stdlib=libstdc++
+	LIBS += -framework GLUT -framework OpenGL
 
     # Linux and all other builds
     else
@@ -137,25 +138,26 @@ clean:
 rebuild: clean all
 		./$(TARGET)
 
-depend:
-	rm -f Makefile.bak
-	mv Makefile Makefile.bak
-	sed '/^# DEPENDENCIES/,$$d' Makefile.bak > Makefile
-	echo '# DEPENDENCIES' >> Makefile
-	$(CXX) $(INCPATH) -MM *.cpp >> Makefile
+#depend:
+#	rm -f Makefile.bak
+#	mv Makefile Makefile.bak
+#	sed '/^# DEPENDENCIES/,$$d' Makefile.bak > Makefile
+#	echo '# DEPENDENCIES' >> Makefile
+#	$(CXX) $(INCPATH) -MM *.cpp >> Makefile
 
-.c.o: 	
-	$(CXX) $(CFLAGS) $(INCPATH) -c -o $@ $<
+#.c.o: 	
+#	$(CXX) $(CFLAGS) $(INCPATH) -c -o $@ $<
 
-.cc.o: 	
-	$(CXX) $(CFLAGS) $(INCPATH) -c -o $@ $<
+#.cc.o: 	
+#	$(CXX) $(CFLAGS) $(INCPATH) -c -o $@ $<
 
-.cpp.o: 	
-	$(CXX) $(CFLAGS) $(INCPATH) -c -o $@ $<
+#.cpp.o: 	
+#	$(CXX) $(CFLAGS) $(INCPATH) -c -o $@ $<
 
 $(TARGET): $(OBJECTS) 
 	$(CXX) $(CFLAGS) $(INCPATH) -o $@ $^ $(LIBPATH) $(LIBS)
 
+	#$(CXX) $(COMMONFLAGS) $^ -o $(NAME)
 #ensures the bin directory is created
 $(SOURCES): | bin
 
@@ -164,7 +166,7 @@ bin:
 		mkdir -p $(shell find src -type d | sed "s/src/bin/")
 
 bin/%.o: src/%.cpp
-	$(CXX) $(CFLAGS) $(INCPATH) $< -c -o $@
+	$(CXX) $(CFLAGS) $(INCPATH) $^ -c -o $@ $(LIBPATH) $(LIBS)
 
  # if we are using OpenAL, then we need to copy the runtime
     # files to our executable directory...and only if we are on
