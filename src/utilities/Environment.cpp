@@ -32,6 +32,7 @@ void Environment::drawGrid() {
 	glDisable( GL_LIGHTING );
 
 	glColor3f(1,1,1);
+	glLineWidth(1);
 	glBegin(GL_LINES);
 	for(int i = -100; i <= 100; i+=5){
 		glVertex3f( i, 0, -100);
