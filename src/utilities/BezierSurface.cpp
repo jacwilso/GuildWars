@@ -46,7 +46,7 @@ Point BezierSurface::evaluateSurface(float u,float v){
 
 }
 
-void BezierSurface::renderSurface(){
+void BezierSurface::renderGrid(){
   renderPoints();
   glDisable(GL_LIGHTING);
   glColor3f(0,0,1.0f);
@@ -68,4 +68,19 @@ void BezierSurface::renderSurface(){
   glEnd();
   }
   glEnable(GL_LIGHTING);
+}
+
+void BezierSurface::renderSurface(){
+  renderPoints();
+  glColor3f(1.0f,0,0);
+  glLineWidth(3.0f);
+  for(int u=0; u<RESOLUTION; u++){
+    for(int v=0; v<RESOLUTION; v++){
+
+  glBegin(GL_QUAD_STRIP);
+      Point temp=evaluateSurface((float)(u)/RESOLUTION,(float)(v)/RESOLUTION); 
+      glVertex3f(temp.getX(),temp.getY(),temp.getZ());
+    } 
+  glEnd();
+  }
 }

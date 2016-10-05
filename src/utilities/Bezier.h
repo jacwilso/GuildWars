@@ -11,8 +11,9 @@
 	#include <GL/glu.h>
 #endif
 #include <vector>
-
+#include <iostream>
 #include <math.h>
+#include <map>
 #include "Point.h"
 
 using namespace std;
@@ -21,15 +22,20 @@ class Bezier{
   private:
     const static int RESOLUTION=100; // resolution of the curve
     vector<Point> p; // vector of control points
-    Map<float,float> arcParam;
+    map<float,float> arcParam;
+    map<float,float> paramArc;
     void populateTable();
+    void popTab(float arc);
 
   public:
     Bezier(); // constructor of no points
+    
     Bezier(Point p0, Point p1, Point p2, Point p3); // constructor setting the points
     
     int resSize() // sets the resolution size of the curve since it can be >4
     {return RESOLUTION*p.size()/4;}
+    float arcSize()
+    {return paramArc[p.size()/4];}
 
     Point evaluateCurve(int bez,float t); // evaluate points along the bezier curve
     void renderCurve(); // render the curve by connecting the points
@@ -38,7 +44,7 @@ class Bezier{
 
     void bezierConnect(Bezier bez); // connect anothe bezier curve to the current curve
     Point parametricCurve(int pos); // track the point along the curve
-    Point arcLengthCurve(int arc);
+    Point arcLengthCurve(float arc);
 
     void operator=(Bezier bez);
 };

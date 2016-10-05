@@ -1,19 +1,22 @@
 #ifndef POINT_H
 #define POINT_H
 
+#include <math.h>
+
 class Point{
   private:
-    float x,y,z; // x, y, z coordinates
+    float x,y,z;
 
   public:
-    Point(); // default constructor
-    Point(float x,float y,float z); // paramaterized constructor
-    // get the private variables of the point
+    Point();
+    Point(float x,float y,float z);
+
     float getX();
     float getY();
     float getZ();
 
-    // operator overloading
+    float distance(Point p);
+
     void operator=(Point p);
     void operator+=(Point p);
     void operator-=(Point p);

@@ -1,20 +1,17 @@
 #include "Point.h"
 
-// default constructor
 Point::Point(){
   x=0;
   y=0;
   z=0;
 }
 
-// constructor with a point
 Point::Point(float x,float y,float z){
   this->x=x;
   this->y=y;
   this->z=z;
 }
 
-// return the x
 float Point::getX(){
   return x;
 }
@@ -27,7 +24,10 @@ float Point::getZ(){
   return z;
 }
 
-// operator overloader
+float Point::distance(Point p){
+  return pow(pow(x-p.getX(),2)+pow(y-p.getY(),2)+pow(z-p.getZ(),2),.5);
+}
+
 Point operator*(Point p,float f){
   return Point(p.getX()*f, p.getY()*f, p.getZ()*f);
 }
