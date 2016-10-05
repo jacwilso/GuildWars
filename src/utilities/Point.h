@@ -25,5 +25,6 @@ class Point{
 Point operator*(Point p,float f);
 Point operator*(float f,Point p);
 Point operator+(Point p1,Point p2);
+Point operator-(Point p1,Point p2);
 
 #endif

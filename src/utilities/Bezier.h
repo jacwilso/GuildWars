@@ -39,6 +39,8 @@ class Bezier{
     {return paramArc[p.size()/4];}
 
     Point evaluateCurve(int bez,float t); // evaluate points along the bezier curve
+    Point derivative(int bez,float t);
+
     void renderCurve(); // render the curve by connecting the points
     void renderPoints(); // render the control points
     void renderCage(); // render the cage connecting the control points

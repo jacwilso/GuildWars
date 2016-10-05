@@ -18,7 +18,9 @@
 class BezierSurface{
   private:
     const static int RESOLUTION=100; // resolution of the curve
+    const static int STEP=2;
     vector<Bezier> bez;
+    Point normal(int u,int v);
 
   public:
     BezierSurface();
@@ -46,6 +48,9 @@ class BezierSurface{
     Point evaluateSurface(float u,float v);
     void renderGrid();
     void renderSurface();
+
+    float rotationAngle(int u,int v);
+    Point rotationAxis(int u,int v);
 };
 
 #endif

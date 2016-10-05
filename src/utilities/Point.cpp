@@ -40,6 +40,10 @@ Point operator+(Point p1, Point p2){
   return Point(p1.getX()+p2.getX(), p1.getY()+p2.getY(), p1.getZ()+p2.getZ());
 }
 
+Point operator-(Point p1, Point p2){
+  return Point(p1.getX()-p2.getX(), p1.getY()-p2.getY(), p1.getZ()-p2.getZ());
+}
+
 void Point::operator+=(Point p){
   this->x+=p.getX();
   this->y+=p.getY();

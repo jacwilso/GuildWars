@@ -51,17 +51,17 @@ void BezierSurface::renderGrid(){
   glDisable(GL_LIGHTING);
   glColor3f(0,0,1.0f);
   glLineWidth(3.0f);
-  for(int u=0; u<RESOLUTION; u++){
+  for(int u=0; u<RESOLUTION; u+=STEP){
   glBegin(GL_LINE_STRIP);
-    for(int v=0; v<RESOLUTION; v++){
+    for(int v=0; v<RESOLUTION; v+=STEP){
       Point temp=evaluateSurface((float)(u)/RESOLUTION,(float)(v)/RESOLUTION); 
       glVertex3f(temp.getX(),temp.getY(),temp.getZ());
     } 
   glEnd();
   }
-  for(int v=0; v<RESOLUTION; v++){
+  for(int v=0; v<RESOLUTION; v+=STEP){
   glBegin(GL_LINE_STRIP);
-    for(int u=0; u<RESOLUTION; u++){
+    for(int u=0; u<RESOLUTION; u+=STEP){
       Point temp=evaluateSurface((float)(u)/RESOLUTION,(float)(v)/RESOLUTION); 
       glVertex3f(temp.getX(),temp.getY(),temp.getZ());
     } 
@@ -71,16 +71,56 @@ void BezierSurface::renderGrid(){
 }
 
 void BezierSurface::renderSurface(){
-  renderPoints();
+  Point temp;
   glColor3f(1.0f,0,0);
   glLineWidth(3.0f);
-  for(int u=0; u<RESOLUTION; u++){
-    for(int v=0; v<RESOLUTION; v++){
-
-  glBegin(GL_QUAD_STRIP);
-      Point temp=evaluateSurface((float)(u)/RESOLUTION,(float)(v)/RESOLUTION); 
-      glVertex3f(temp.getX(),temp.getY(),temp.getZ());
-    } 
-  glEnd();
+  for(int v=0; v<RESOLUTION-1; v+=STEP){
+    glBegin(GL_QUAD_STRIP);
+        temp=evaluateSurface(0,(float)(v)/RESOLUTION); 
+        glVertex3f(temp.getX(),temp.getY(),temp.getZ());
+        temp=evaluateSurface(0,(float)(v+STEP)/RESOLUTION); 
+        glVertex3f(temp.getX(),temp.getY(),temp.getZ());
+      for(int u=0; u<RESOLUTION-1; u+=STEP){
+        temp=evaluateSurface((float)(u+STEP)/RESOLUTION,(float)(v+STEP)/RESOLUTION); 
+        glVertex3f(temp.getX(),temp.getY(),temp.getZ());
+        temp=evaluateSurface((float)(u+STEP)/RESOLUTION,(float)(v)/RESOLUTION); 
+        glVertex3f(temp.getX(),temp.getY(),temp.getZ());
+      }
+    glEnd();
   }
+}
+
+Point BezierSurface::normal(int u,int v){
+  Point du=
+    pow(1-v,3)*bez[0].derivative(0,u)+
+    3*pow(1-v,2)*v*bez[1].derivative(0,u)+
+    3*pow(v,2)*(1-v)*bez[2].derivative(0,u)+
+    pow(v,3)*bez[3].derivative(0,u);
+  Point dv=
+    3*pow(1-v,2)*bez[0].evaluateCurve(0,u)+
+    6*(1-v)*v*bez[1].evaluateCurve(0,u)+
+      3*pow(1-v,2)*bez[1].evaluateCurve(0,u)+
+    6*v*(1-v)*bez[2].evaluateCurve(0,u)
+      -3*pow(v,2)*bez[2].evaluateCurve(0,u)+
+    3*pow(v,2)*bez[3].evaluateCurve(0,u);
+  float Nx,Ny,Nz,mag;
+  Nx=du.getY()*dv.getZ()-du.getZ()*dv.getY();
+  Ny=du.getZ()*dv.getX()-du.getX()*dv.getZ();
+  Nz=du.getX()*dv.getY()-du.getY()*dv.getX();
+  mag=pow(pow(Nx,2)+pow(Ny,2)+pow(Nz,2),2);
+  Nx/=mag; Ny/=mag; Nz/=mag;
+  return Point(Nx,Ny,Nz); 
+}
+
+float BezierSurface::rotationAngle(int u,int v){
+  Point N=normal(u,v);
+  return acos(N.getY())*float(180)/3.14159; 
+}
+
+Point BezierSurface::rotationAxis(int u,int v){
+  Point N=normal(u,v);
+  float Rx,Rz;
+  Rx=N.getY();
+  Rz=-N.getX();
+  return Point(Rx,0,Rz);
 }

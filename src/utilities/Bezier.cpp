@@ -15,6 +15,15 @@ Point Bezier::evaluateCurve(int bez,float t) {
   return pow(1-t,3)*p[bez]+3*pow(1-t,2)*t*p[bez+1]+3*(1-t)*pow(t,2)*p[bez+2]+pow(t,3)*p[bez+3];
 }
 
+Point Bezier::derivative(int bez,float t) {
+  return( 3*pow(1-t,2)*p[bez]+
+          6*(1-t)*t*p[bez+1]+
+            3*pow(1-t,2)*p[bez+1]+
+          6*(1-t)*t*p[bez+2]
+            -3*pow(t,2)*p[bez+2]+
+          3*pow(t,2)*p[bez+3]);
+}
+
 // render the curve -- same code as lab03
 void Bezier::renderCurve() {
   glDisable(GL_LIGHTING);
