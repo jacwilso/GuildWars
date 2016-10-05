@@ -44,6 +44,7 @@ class BezierSurface{
     }
 
     Point evaluateSurface(float u,float v);
+    void renderGrid();
     void renderSurface();
 };
 
