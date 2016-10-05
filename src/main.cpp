@@ -39,7 +39,7 @@ using namespace std;
 
 // GLOBAL VARIABLES ////////////////////////////////////////////////////////////
 static size_t windowWidth  = 640;
-static size_t windowHeight = 480;
+static size_t windowHeight = 720;
 static float aspectRatio;
 
 GLint leftMouseButton; 		   	    // status of the mouse buttons
@@ -63,7 +63,7 @@ GLUquadric* Board::qobj;
 Bomberman bomberman;
 GLUquadric* Bomberman::qobj;
 
-Camera cam;
+Camera cam, cam2, cam3;
 /********************* Functions ****************************/
 
 void recomputeOrientation() {
@@ -210,11 +210,11 @@ void initScene()  {
 	env.generateEnvironmentDL();
 }
 void View2(){
-	glViewport(0,0,windowWidth/2, windowHeight/2);
+	glViewport(0,0,windowWidth/2, windowHeight/2.5);
 
 
 		// Portions within the scissor can now be modified.
-		glScissor(0,0,windowWidth/2, windowHeight/2);
+		glScissor(0,0,windowWidth/2, windowHeight/2.5);
 		glEnable(GL_SCISSOR_TEST);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glDisable( GL_SCISSOR_TEST);
@@ -244,11 +244,11 @@ void View2(){
 }
 
 void View3(){
-	glViewport(windowWidth/2, 0, windowWidth, windowHeight/2);
+	glViewport(windowWidth/2, 0, windowWidth, windowHeight/2.5);
 
 
 		// Portions within the scissor can now be modified.
-		glScissor(windowWidth/2, 0, windowWidth, windowHeight/2);
+		glScissor(windowWidth/2, 0, windowWidth, windowHeight/2.5);
 		glEnable(GL_SCISSOR_TEST);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glDisable( GL_SCISSOR_TEST);
@@ -299,11 +299,11 @@ void renderScene(void)  {
 	glCallList( env.environmentDL );
 	// Viewport 2
 	View2();
-
+	cam2.FreeCam();
 	glCallList( env.environmentDL );
 	// Viewport 3
 	View3();
-
+	cam3.FreeCam();
 	glCallList( env.environmentDL );
 	//push the back buffer to the screen
 	glutSwapBuffers();
