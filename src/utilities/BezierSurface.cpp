@@ -107,7 +107,7 @@ Point BezierSurface::normal(int u,int v){
   Nx=du.getY()*dv.getZ()-du.getZ()*dv.getY();
   Ny=du.getZ()*dv.getX()-du.getX()*dv.getZ();
   Nz=du.getX()*dv.getY()-du.getY()*dv.getX();
-  mag=pow(pow(Nx,2)+pow(Ny,2)+pow(Nz,2),2);
+  mag=pow(pow(Nx,2)+pow(Ny,2)+pow(Nz,2),.5);
   Nx/=mag; Ny/=mag; Nz/=mag;
   return Point(Nx,Ny,Nz); 
 }
