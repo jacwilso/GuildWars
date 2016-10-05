@@ -12,62 +12,80 @@
 class Camera
 {
 private:
-	int pipMode;
-	float pipDirX,pipDirY,pipDirZ;
+	int viewMode;
 
 	float dirX,dirY,dirZ;
-
+    float cameraTheta, cameraPhi;
     float cameraX,cameraY,cameraZ,cameraRad;
 
 // Constant Variables
     const static float X_OFFSET = 0, Y_OFFSET = 3.3, Z_OFFSET = 0, SKYCAM_HEIGHT = 30;
 
 public:
-    Camera() {
-        pipMode = 0;
-        pipDirX = 0;
-        pipDirY = 0;
-        pipDirZ = 0;
+    Camera();
 
-        dirX = 0;
-        dirY = 0;
-        dirZ = 0;
+    /*
+     * Camera Movement: Forward
+     */
+    void moveForward();
 
-        cameraRad = 30;
-    };
+    /*
+     * Camera Movement: Backward
+     */
+    void moveBackward();
 
-        void ThirdPersonPOV(float x, float y, float z, float thetaInRad);
-        void FirstPersonPOV(float x, float y, float z, float thetaInRad);
-        void ReversePOV(float x, float y, float z, float thetaInRad);
-        void SkyCam (float x, float y, float z, float thetaInRad);
-        void MovableFirstPersonPOV(float x, float y, float z, float thetaInRad);
-        void ArcBall(float x, float y, float z);
-        void FreeCam();
+    /*
+     * Change camera angle
+     */
+    void recomputeOrientation();
+    /*
+     * Mode 0: FreeCam
+     */
+    void FreeCam();
 
-
-        void ZoomInArcball();
-        void ZoomOutArcball();
+    /*
+     * Mode 1: 3rd Person
+     */
+    void ThirdPersonPOV(float x, float y, float z, float thetaInRad); 
+    
+    /*
+     * Mode 2: 1st Person
+     */
+    void FirstPersonPOV(float x, float y, float z, float thetaInRad);
+    
+    /*
+     * Mode 3: Reverse 3rd Person
+     */
+    void ReversePOV(float x, float y, float z, float thetaInRad);
+    
+    /*
+     * Mode 4: SkyCam
+     */
+    void SkyCam (float x, float y, float z, float thetaInRad);
+    
+    /*
+     * Mode 6: ArcBall
+     */
+    void ArcBall(float x, float y, float z);
 
 
 
     // Getters
-        int getPipMode();
-        float getPipDirX();
-        float getPipDirY();
-        float getPipDirZ();
-        float getDirX();
-        float getDirY();
-        float getDirZ();
-        float getCameraRad();
+    int getViewMode();
+    float getCameraTheta();
+    float getCameraPhi();
+    float getDirX();
+    float getDirY();
+    float getDirZ();
+    float getCameraRad();
 
     // Setters
-        void setPipMode(int);
-        void setPipDirX(float);
-        void setPipDirY(float);
-        void setPipDirZ(float);
-        void setDirX(float item);
-        void setDirY(float item);
-        void setDirZ(float item);
-        void setCameraRad(float item);
+    void setViewMode(int);
+    void setCameraTheta(float);
+    void setCameraPhi(float);
+    void setDirX(float item);
+    void setDirY(float item);
+    void setDirZ(float item);
+    void setCameraRad(float item);
 
-    };
+};

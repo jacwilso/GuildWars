@@ -1,17 +1,35 @@
 #include "Camera.h"
 
+/*
+ * Constructor
+ */
+Camera::Camera(){
+	    viewMode = 0;
+
+
+        cameraTheta = -M_PI / 3.0f;
+        cameraPhi = M_PI / 2.8f;
+
+        dirX = -10;
+        dirY = -10;
+        dirZ = -10;
+        cameraX = 10;
+        cameraY = 10;
+        cameraZ = 10;
+        cameraRad = 30;
+}
+
+
+
 // Getters
-int Camera::getPipMode(){
-	return pipMode;
+int Camera::getViewMode(){
+	return viewMode;
 }
-float Camera::getPipDirX(){
-	return pipDirX;
-} 
-float Camera::getPipDirY(){
-	return pipDirY;
+float Camera::getCameraTheta(){
+	return cameraTheta;
 }
-float Camera::getPipDirZ(){
-	return pipDirZ;
+float Camera::getCameraPhi(){
+	return cameraPhi;
 }
 float Camera::getDirX(){
 	return dirX;
@@ -27,18 +45,16 @@ float Camera::getCameraRad(){
 }
 
 // Setters
-void Camera::setPipMode(int item){
-	pipMode = item;
+void Camera::setViewMode(int item){
+	viewMode = item;
 }
-void Camera::setPipDirX(float item){
-	pipDirX = item;
+void Camera::setCameraTheta(float item){
+	cameraTheta = item;
 }
-void Camera::setPipDirY(float item){
-	pipDirY = item;
+void Camera::setCameraPhi(float item){
+	cameraPhi = item;
 }
-void Camera::setPipDirZ(float item){
-	pipDirZ = item;
-}
+
 void Camera::setDirX(float item){
 	dirX = item;
 }	
@@ -50,6 +66,46 @@ void Camera::setDirZ(float item){
 }
 void Camera::setCameraRad(float item){
 	cameraRad = item;
+}
+
+void Camera::moveForward(){
+	switch(viewMode){
+		case 0: //Free Cam Mode
+			cameraX += dirX;
+			cameraY += dirY;
+			cameraZ += dirZ;
+			break;
+		case 6: //ArcBall Mode 
+			cameraRad += 2;
+			break;
+		default:
+			break;
+	}
+}
+
+void Camera::moveBackward(){
+	switch(viewMode){
+		case 0: //Free Cam Mode
+			cameraX -= dirX;
+			cameraY -= dirY;
+			cameraZ -= dirZ;
+			break;
+		case 6: //ArcBall Mode 
+			cameraRad -= 2;
+			break;
+		default:
+			break;
+	}
+}
+void Camera::recomputeOrientation(){
+	dirX = sin(cameraTheta)*sin(cameraPhi) ; 
+	dirY = -cos(cameraPhi);
+	dirZ = -cos(cameraTheta)*sin(cameraPhi);
+
+	float w = sqrt((dirX * dirX) + (dirY*dirY) + (dirZ*dirZ));
+	dirX = dirX/w;
+	dirY = dirY/w;
+	dirZ = dirZ/w;
 }
 
 
@@ -87,15 +143,6 @@ gluLookAt( -cos(thetaInRad*(M_PI/180)) + x,
 			x, 
 			y,
 			z,
-			0,1,0);
-}
-void Camera::MovableFirstPersonPOV(float x, float y, float z, float thetaInRad){
-			gluLookAt( x + 4.2*cos(thetaInRad*(M_PI/180)),
-			Y_OFFSET + y,  
-			z - 4.2*sin(thetaInRad*(M_PI/180)),
-			pipDirX + 20*cos(thetaInRad*(M_PI/180)) + x, 
-			pipDirY + 3.3 + y, 
-			pipDirZ - 20*sin(thetaInRad*(M_PI/180)) +z,
 			0,1,0);
 }
 

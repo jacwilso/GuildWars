@@ -17,9 +17,9 @@ void Sound::initializeOpenAL( int argc, char *argv[] ) {
 
 // WAV #1 -- NEED TO CHANGE ON PROGRAM BASIS
     #ifdef __APPLE__
-      alutLoadWAVFile((ALbyte*)"wavs/hover.wav",&format,&data,&size,&freq);
+      alutLoadWAVFile((ALbyte*)"SoundFiles/Bird_in_Rain.wav",&format,&data,&size,&freq);
     #else
-      alutLoadWAVFile((ALbyte*)"wavs/hover.wav",&format,&data,&size,&freq,&loop);
+      alutLoadWAVFile((ALbyte*)"SoundFiles/Bird_in_Rain.wav",&format,&data,&size,&freq,&loop);
     #endif
       alBufferData(buffers[0],format,data,size,freq);
     alutUnloadWAV(format,data,size,freq);
@@ -28,9 +28,9 @@ void Sound::initializeOpenAL( int argc, char *argv[] ) {
     positionSource(sources[0],0,0,0);
 // WAV #2 -- NEED TO CHANGE ON PROGRAM BASIS
     #ifdef __APPLE__
-      alutLoadWAVFile((ALbyte*)"wavs/bomb.wav",&format,&data,&size,&freq);
+      alutLoadWAVFile((ALbyte*)"SoundFiles/wilhelm_scream.wav",&format,&data,&size,&freq);
     #else
-      alutLoadWAVFile((ALbyte*)"wavs/bomb.wav",&format,&data,&size,&freq,&loop);
+      alutLoadWAVFile((ALbyte*)"SoundFiles/wilhelm_scream.wav",&format,&data,&size,&freq,&loop);
     #endif
       alBufferData(buffers[1],format,data,size,freq);
     alutUnloadWAV(format,data,size,freq);

@@ -62,6 +62,8 @@ GLUquadric* Board::qobj;
 
 Bomberman bomberman;
 GLUquadric* Bomberman::qobj;
+
+Camera cam;
 /********************* Functions ****************************/
 
 void recomputeOrientation() {
@@ -86,19 +88,26 @@ void resizeWindow(int w, int h) {
 
 void mouseCallback(int button, int state, int thisX, int thisY) {
 	// update the left mouse button states, if applicable
+	if(button == GLUT_LEFT_BUTTON){
+		leftMouseButton = state;
+		if(leftMouseButton == GLUT_DOWN){
+			mouseX = thisX;
+			mouseY = thisY;
+		}
+	}
 
 }
 void myMenu( int value ) {
 	switch (value){
 		case 0:
-			exit(0);
-			break;
+		exit(0);
+		break;
 		case 1:
-			break;
+		break;
 		case 2:
-			break;
+		break;
 		default:
-			break;
+		break;
 	}
 }
 
@@ -110,21 +119,34 @@ void createMenus() {
 
 
 void mouseMotion(int x, int y) {
+	if(leftMouseButton == GLUT_DOWN) {
+
+
+		cam.setCameraTheta(cam.getCameraTheta() - (x-mouseX) * 0.005);
+		cam.setCameraPhi(fmin(fmax((cam.getCameraPhi() + (y - mouseY) * 0.005),0.01),M_PI));
+		mouseX = x;
+		mouseY = y;
+		cam.recomputeOrientation();     // update camera (x,y,z) based on (radius,theta,phi)
+
+	}
+
 
 	glutPostRedisplay();	    // redraw our scene from our new camera POV
 }
 
 
 void normalKeysDown(unsigned char key, int x, int y) {
-        keyState[key]=true;
+	keyState[key]=true;
 	if(key <= 57 && key >= 48){
-		pipMode = (int)key - 48;
+		cam.setViewMode((int)key - 48);
 	}
 
 	if(key == 'q' || key == 'Q' || key == 27){
 		exit(0);
 	}else if( key == 'w'){
+		cam.moveForward();
 	}else if( key == 's'){
+		cam.moveBackward();
 	}else if(key == 'a'){
 	}else if(key == 'd'){
 	}
@@ -132,7 +154,7 @@ void normalKeysDown(unsigned char key, int x, int y) {
 }
 
 void normalKeysUp(unsigned char key, int x, int y){
-  keyState[key]=false;
+	keyState[key]=false;
 }
 
 // Special key being pressed like arrowkeys
@@ -205,7 +227,10 @@ void renderScene(void)  {
 	//update the modelview matrix based on the camera's position
 	glMatrixMode(GL_MODELVIEW);              //make sure we aren't changing the projection matrix!
 	glLoadIdentity();
-
+	cam.FreeCam();
+	
+	
+	glCallList( env.environmentDL );
 	// Viewport 2
 	//PictureInPicture();
 
