@@ -21,6 +21,8 @@ class Bezier{
   private:
     const static int RESOLUTION=100; // resolution of the curve
     vector<Point> p; // vector of control points
+    Map<float,float> arcParam;
+    void populateTable();
 
   public:
     Bezier(); // constructor of no points
@@ -35,8 +37,9 @@ class Bezier{
     void renderCage(); // render the cage connecting the control points
 
     void bezierConnect(Bezier bez); // connect anothe bezier curve to the current curve
-    Point trackCurve(int pos); // track the point along the curve
-    
+    Point parametricCurve(int pos); // track the point along the curve
+    Point arcLengthCurve(int arc);
+
     void operator=(Bezier bez);
 };
 
