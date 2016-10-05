@@ -209,7 +209,73 @@ void initScene()  {
 	srand( time(NULL) );	// seed our random number generator
 	env.generateEnvironmentDL();
 }
+void View2(){
+	glViewport(0,0,windowWidth/2, windowHeight/2);
 
+
+		// Portions within the scissor can now be modified.
+		glScissor(0,0,windowWidth/2, windowHeight/2);
+		glEnable(GL_SCISSOR_TEST);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glDisable( GL_SCISSOR_TEST);
+
+
+		glMatrixMode(GL_MODELVIEW);
+
+		glPushMatrix();
+		{
+			glLoadIdentity();
+			glMatrixMode(GL_PROJECTION);
+			glPushMatrix();
+			glLoadIdentity();
+			glColor3f(1,1,1);
+			glLineWidth(5);
+			glBegin(GL_LINE_LOOP);
+			glVertex3f(-1,-1,0);
+			glVertex3f(-1,1,0);
+			glVertex3f(1,1,0);
+			glVertex3f(1,-1,0);
+			glEnd();
+			glPopMatrix();
+			glMatrixMode(GL_MODELVIEW);
+		}
+		glPopMatrix();
+		glLoadIdentity();
+}
+
+void View3(){
+	glViewport(windowWidth/2, 0, windowWidth, windowHeight/2);
+
+
+		// Portions within the scissor can now be modified.
+		glScissor(windowWidth/2, 0, windowWidth, windowHeight/2);
+		glEnable(GL_SCISSOR_TEST);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glDisable( GL_SCISSOR_TEST);
+
+
+		glMatrixMode(GL_MODELVIEW);
+
+		glPushMatrix();
+		{
+			glLoadIdentity();
+			glMatrixMode(GL_PROJECTION);
+			glPushMatrix();
+			glLoadIdentity();
+			glColor3f(1,1,1);
+			glLineWidth(5);
+			glBegin(GL_LINE_LOOP);
+			glVertex3f(-1,-1,0);
+			glVertex3f(-1,1,0);
+			glVertex3f(1,1,0);
+			glVertex3f(1,-1,0);
+			glEnd();
+			glPopMatrix();
+			glMatrixMode(GL_MODELVIEW);
+		}
+		glPopMatrix();
+		glLoadIdentity();
+}
 // renderScene() ///////////////////////////////////////////////////////////////
 //
 //  GLUT callback for scene rendering. Sets up the modelview matrix, renders
@@ -232,8 +298,13 @@ void renderScene(void)  {
 	
 	glCallList( env.environmentDL );
 	// Viewport 2
-	//PictureInPicture();
+	View2();
 
+	glCallList( env.environmentDL );
+	// Viewport 3
+	View3();
+
+	glCallList( env.environmentDL );
 	//push the back buffer to the screen
 	glutSwapBuffers();
 }

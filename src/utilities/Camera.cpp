@@ -10,9 +10,7 @@ Camera::Camera(){
         cameraTheta = -M_PI / 3.0f;
         cameraPhi = M_PI / 2.8f;
 
-        dirX = -10;
-        dirY = -10;
-        dirZ = -10;
+        recomputeOrientation();
         cameraX = 10;
         cameraY = 10;
         cameraZ = 10;
