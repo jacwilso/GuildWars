@@ -62,6 +62,8 @@ GLUquadric* Board::qobj;
 
 Bomberman bomberman;
 GLUquadric* Bomberman::qobj;
+
+Camera cam;
 /********************* Functions ****************************/
 
 void recomputeOrientation() {
@@ -205,7 +207,10 @@ void renderScene(void)  {
 	//update the modelview matrix based on the camera's position
 	glMatrixMode(GL_MODELVIEW);              //make sure we aren't changing the projection matrix!
 	glLoadIdentity();
-
+	cam.FreeCam();
+	
+	
+	glCallList( env.environmentDL );
 	// Viewport 2
 	//PictureInPicture();
 

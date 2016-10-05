@@ -29,10 +29,13 @@ public:
         pipDirY = 0;
         pipDirZ = 0;
 
-        dirX = 0;
-        dirY = 0;
-        dirZ = 0;
+        dirX = -10;
+        dirY = -10;
+        dirZ = -10;
 
+	cameraX = 10;
+	cameraY = 10;
+	cameraZ = 10;
         cameraRad = 30;
     };
 

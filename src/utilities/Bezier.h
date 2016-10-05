@@ -11,7 +11,7 @@
 	#include <GL/glu.h>
 #endif
 #include <vector>
-
+#include <map>
 #include <math.h>
 #include "Point.h"
 
@@ -21,7 +21,7 @@ class Bezier{
   private:
     const static int RESOLUTION=100; // resolution of the curve
     vector<Point> p; // vector of control points
-    Map<float,float> arcParam;
+    map<float,float> arcParam;
     void populateTable();
 
   public:
@@ -39,7 +39,7 @@ class Bezier{
     void bezierConnect(Bezier bez); // connect anothe bezier curve to the current curve
     Point parametricCurve(int pos); // track the point along the curve
     Point arcLengthCurve(int arc);
-
+    Point trackCurve(int pos);
     void operator=(Bezier bez);
 };
 
