@@ -2,4 +2,4 @@
 bin/
 *.swp
 src/utilities/bezierDemo.cpp
-
+*.o

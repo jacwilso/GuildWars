@@ -97,8 +97,8 @@ Point BezierSurface::normal(int u,int v){
     3*pow(v,2)*(1-v)*bez[2].derivative(0,u)+
     pow(v,3)*bez[3].derivative(0,u);
   Point dv=
-    3*pow(1-v,2)*bez[0].evaluateCurve(0,u)+
-    6*(1-v)*v*bez[1].evaluateCurve(0,u)+
+    -3*pow(1-v,2)*bez[0].evaluateCurve(0,u)+
+    -6*(1-v)*v*bez[1].evaluateCurve(0,u)+
       3*pow(1-v,2)*bez[1].evaluateCurve(0,u)+
     6*v*(1-v)*bez[2].evaluateCurve(0,u)
       -3*pow(v,2)*bez[2].evaluateCurve(0,u)+
