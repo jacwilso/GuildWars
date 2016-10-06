@@ -16,8 +16,8 @@ Point Bezier::evaluateCurve(int bez,float t) {
 }
 
 Point Bezier::derivative(int bez,float t) {
-  return( 3*pow(1-t,2)*p[bez]+
-          6*(1-t)*t*p[bez+1]+
+  return( -3*pow(1-t,2)*p[bez]+
+          -6*(1-t)*t*p[bez+1]+
             3*pow(1-t,2)*p[bez+1]+
           6*(1-t)*t*p[bez+2]
             -3*pow(t,2)*p[bez+2]+

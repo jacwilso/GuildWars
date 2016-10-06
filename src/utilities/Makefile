@@ -24,9 +24,9 @@
 TARGET = run
 OBJECTS = bezierDemo.o Point.o Bezier.o BezierSurface.o
 
-LOCAL_INC_PATH = /Users/jpaone/Desktop/include
-LOCAL_LIB_PATH = /Users/jpaone/Desktop/lib
-LOCAL_BIN_PATH = /Users/jpaone/Desktop/bin
+LOCAL_INC_PATH = /opt/local/include
+LOCAL_LIB_PATH = /opt/local/lib
+LOCAL_BIN_PATH = /opt/local/bin
 
 BUILDING_IN_LAB = 1
 
