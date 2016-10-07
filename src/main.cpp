@@ -63,7 +63,8 @@ bool ctrlIsPressed = false;
 /*** FPS ***/
 int frameCount = 0, currentTime = 0, previousTime = 0;
 float fps = 0;
-void *font = GLUT_BITMAP_HELVETICA_18;
+void *RasFont = GLUT_BITMAP_HELVETICA_18;
+void *StrFont = GLUT_STROKE_ROMAN;
 char* cstr;
 
 int pipMode = 1;
@@ -128,7 +129,7 @@ void bitmapText(const char *string,float x,float y,float z){
   const char* c;
   glRasterPos3f(x,y,z);
   for(c=string; *c!='\0'; c++){
-    glutBitmapCharacter(font,*c);
+    glutBitmapCharacter(RasFont,*c);
   }
 }
 
@@ -176,7 +177,7 @@ void animationTrack(Hero& hero, Bezier curve, bool parametric){
     arc++;
     if(arc+1>curve.resSize()) arc=0;
   }
-  hero.setHeroPos(temp.getX(),0,temp.getZ(),0,0);
+  //hero.setHeroPos(temp.getX(),0,temp.getZ(),0,0);
 }
 
 void mouseCallback(int button, int state, int thisX, int thisY) {
@@ -405,10 +406,19 @@ void renderScene(void)  {
             if(i==0){
             //cout<<board.getHeroPositionZ()<<endl;
               glPushMatrix();
-                glTranslatef(board.getHeroPositionX(),board.getHeroPositionY(),board.getHeroPositionZ());
+                //glTranslatef(board.getHeroPositionX(),board.getHeroPositionY(),board.getHeroPositionZ());
                 glRotatef(board.getHeroTheta(),0,1,0);
                 glScalef(.25,.25,.25);
                 board.drawHero();
+                glDisable(GL_LIGHTING);
+                glPushMatrix();
+                  glTranslatef(-2,1,0);
+                  glScalef(.01,.01,.01);
+                  const char* c;
+                  for(c="jacwilso"; *c!='\0'; c++)
+                    glutStrokeCharacter(StrFont,*c);
+                glPopMatrix();
+                glEnable(GL_LIGHTING);
               glPopMatrix();
             }else{
               glPushMatrix();
