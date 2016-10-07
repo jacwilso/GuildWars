@@ -103,18 +103,24 @@ Point BezierSurface::normal(float u,float v){
 		6*v*(1-v)*bez[2].evaluateCurve(0,u)
 		-3*pow(v,2)*bez[2].evaluateCurve(0,u)+
 		3*pow(v,2)*bez[3].evaluateCurve(0,u);
+        //cout<<"DU "<<du.getX()<<" "<<du.getY()<<" "<<du.getZ()<<endl;
+        //cout<<"DV "<<dv.getX()<<" "<<dv.getY()<<" "<<dv.getZ()<<endl;
 	float Nx,Ny,Nz,mag;
 	Nx=du.getY()*dv.getZ()-du.getZ()*dv.getY();
 	Ny=du.getZ()*dv.getX()-du.getX()*dv.getZ();
 	Nz=du.getX()*dv.getY()-du.getY()*dv.getX();
+        //cout<<"N "<<Nx<<" "<<Ny<<" "<<Nz<<endl;
 	mag=pow(pow(Nx,2)+pow(Ny,2)+pow(Nz,2),.5);
+        //cout<<"MAG "<<mag<<endl;
 	Nx/=mag; Ny/=mag; Nz/=mag;
+        //cout<<"N "<<Nx<<" "<<Ny<<" "<<Nz<<endl;
 	return Point(Nx,Ny,Nz); 
 }
 
 float BezierSurface::rotationAngle(float u,float v){
-	Point N=normal(u,v);
-	return acos(N.getY())*float(180)/3.14159; 
+        Point N=normal(u,v);
+        //cout<<"ANGLE "<<acos(N.getY())*float(180)/3.14159<<endl; 
+        return acos(N.getY())*float(180)/3.14159;
 }
 
 float BezierSurface::rotationTheta(float u, float v) {
@@ -128,8 +134,13 @@ float BezierSurface::rotationPhi(float u, float v){
 }
 Point BezierSurface::rotationAxis(float u,float v){
 	Point N=normal(u,v);
-	float Rx,Rz;
-	Rx=N.getY();
-	Rz=-N.getX();
+	float Rx,Rz,mag;
+	Rx=-N.getZ();
+	Rz=N.getX();
+        //cout<<"R "<<Rx<<" "<<Rz<<endl;
+        mag=pow(pow(Rx,2)+pow(Rz,2),.5);
+        //cout<<"MAG "<<mag<<endl;
+        Rx/=mag; Rz/=mag;
+        //cout<<"R "<<Rx<<" "<<Rz<<endl;
 	return Point(Rx,0,Rz);
 }
