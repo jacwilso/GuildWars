@@ -28,11 +28,18 @@
 
 // Created Classes
 #include "utilities/Camera.h"
+#include "utilities/Sound.h"
 #include "utilities/Environment.h"
+#include "utilities/BezierSurface.h"
+#include "utilities/Bezier.h"
+#include "utilities/Point.h"
+
 #include "jacwilso/Board.h"
 #include "jacwilso/Bomberman.h"
+
 #include "kentokamoto/EricCartman.h"
 #include "kentokamoto/FairyEric.h"
+
 #include "zhemingdeng/Donkey.h"
 #include "zhemingdeng/Fairy.h"
 
@@ -62,6 +69,13 @@ char* cstr;
 int pipMode = 1;
 map<unsigned char,bool> keyState;
 
+/*** Bezier ***/
+const int RESOLUTION=100;
+vector<Point> controlPoints;
+BezierSurface surf;
+Bezier bez[2];
+
+/*** Models ***/
 Environment env;
 GLUquadric* Environment::qobj;
 
@@ -71,7 +85,10 @@ GLUquadric* Board::qobj;
 Bomberman bomberman;
 GLUquadric* Bomberman::qobj;
 
+/*** UTILITIES ***/
 Camera cam, cam2, cam3;
+Sound wav;
+ifstream file;
 /********************* Functions ****************************/
 
 void recomputeOrientation() {
@@ -241,7 +258,7 @@ void myTimer( int value ){
 	glutTimerFunc( 1000/60, myTimer, 0);
 }
 
-void initScene(std::ifstream& inFile)  {
+void initScene()  {
 	glEnable(GL_DEPTH_TEST);
 
 	//******************************************************************
@@ -266,7 +283,7 @@ void initScene(std::ifstream& inFile)  {
 	glShadeModel(GL_FLAT);
 
 	srand( time(NULL) );	// seed our random number generator
-	env.generateEnvironmentDL(inFile);
+	env.generateEnvironmentDL(file);
 }
 void View2(){
 	glViewport(0,0,windowWidth/2, windowHeight/2.5);
@@ -355,18 +372,70 @@ void renderScene(void)  {
 	cam.FreeCam();
 	
 	
+        //surf.renderGrid();
+        //surf.renderSurface();
 	glCallList( env.environmentDL );
 	// Viewport 2
 	View2();
 	cam2.FreeCam();
+        //surf.renderGrid();
+        //surf.renderSurface();
         drawFPS();
 	glCallList( env.environmentDL );
 	// Viewport 3
 	View3();
+        //surf.renderGrid();
+        //surf.renderSurface();
 	cam3.FreeCam();
 	glCallList( env.environmentDL );
 	//push the back buffer to the screen
 	glutSwapBuffers();
+}
+
+// loadControlPoints() /////////////////////////////////////////////////////////
+//
+//  Load our control points from file and store them in a global variable.
+//
+////////////////////////////////////////////////////////////////////////////////
+bool loadControlPoints( char* filename ) {
+  file.open(filename);
+  if(!file.is_open()){
+    cerr<<"ERROR. Could not find/ read file. Check spelling."<<endl;
+    return false;
+  }
+  int numPoints;
+  char c;
+  float tempX,tempY,tempZ;
+  vector<Point> tempP;
+  vector<Bezier> tempBez;
+ 
+  /*** READ SURFACE ***/
+  file>>numPoints; // number of points
+
+  for(int i=0; i<numPoints*16; i++){
+    file>>tempX>>c>>tempY>>c>>tempZ;
+    tempP.push_back(Point(tempX,tempY,tempZ)); // pushes each value into a point into a vector
+  }
+  for(int i=0; i<numPoints*4; i++)
+    tempBez.push_back(Bezier(tempP[4*i],tempP[4*i+1],tempP[4*i+2],tempP[4*i+3])); // pushes each set of 4 points into a bezier vector
+  for(int i=0; i<numPoints; i++)
+    surf.createSurface(tempBez[4*i],tempBez[4*i+1],tempBez[4*i+2],tempBez[4*i+3]);
+  
+  /*** READ TRACKS ***/
+  for(int k=0; k<2; k++){
+    tempP.clear();
+    file>>numPoints;
+    for(int i=0; i<numPoints; i++){
+      file>>tempX>>c>>tempY>>c>>tempZ;
+      tempP.push_back(Point(tempX,tempY,tempZ)); // pushes each value into a point into a vector
+    }
+    for(int i=0; i<numPoints-3; i+=3)
+      bez[k].bezierConnect(Bezier(tempP[i],tempP[i+1],tempP[i+2],tempP[i+3])); // pushes each set of 4 points into a bezier vector
+  }
+
+  /*** READ OBJECTS ***/
+  // Pass file to environment class
+  return true; // was able to read the file
 }
 
 // main() //////////////////////////////////////////////////////////////////////
@@ -380,12 +449,7 @@ int main(int argc, char **argv) {
 		cerr<<"Usage: "<<argv[0]<<" <CSV_NAME>"<<endl;
 		return 0;
 	}
-	ifstream inFile;
-	inFile.open(argv[1]);
-	if(inFile.is_open() == false){
-		cout << "Error: Couldn't open file: " << argv[1] << endl;
-		exit(1);
-	}
+        loadControlPoints(argv[1]);
 	// create a double-buffered GLUT window at (50,50) with predefined windowsize
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
@@ -411,7 +475,7 @@ int main(int argc, char **argv) {
 	// do some basic OpenGL setup
 	//env.placeObjectsInEnvironment(inFile);
 
-	initScene(inFile);
+	initScene();
 		
 	createMenus();
 	// and enter the GLUT loop, never to exit.
