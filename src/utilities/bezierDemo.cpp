@@ -257,7 +257,7 @@ void renderScene(void)  {
     surf.renderGrid();
     surf.renderSurface();
 
-    float u=(float)(56)/100,v=(float)(56)/100;
+    float u=(float)(0)/100,v=(float)(10)/100;
     Point temp=surf.evaluateSurface(u,v);
     Point axis=surf.rotationAxis(u,v);
     float surfAngle=surf.rotationAngle(u,v);
@@ -266,6 +266,8 @@ void renderScene(void)  {
     
     Point norm = surf.normal(u,v);
     //cout<<surfAngle<<endl;
+    glDisable( GL_LIGHTING );
+
     glPushMatrix();
       glColor3f(1,1,1);
     
@@ -278,7 +280,7 @@ void renderScene(void)  {
       //glScalef(.25,2,.25);
      glBegin(GL_LINES);
      	glVertex3f(0,0,0);   
-     	glVertex3f(0,-1,0);
+     	glVertex3f(0,1,0);
 	
 	glColor3f(1,0,0);
 	glVertex3f(0,0,0);
@@ -293,6 +295,7 @@ void renderScene(void)  {
       //glutSolidCube(1);
 
     glPopMatrix();
+    glEnable( GL_LIGHTING );
 
     glPushMatrix(); {
 	//drawGrid();
