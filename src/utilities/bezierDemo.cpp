@@ -274,7 +274,7 @@ void renderScene(void)  {
       //glRotatef(surfPhi, 0,1,0);
       //glRotatef(surfTheta,0,0,1);
       //glRotatef(surfAngle, 0,0,1);	
-      glutSolidSphere(0.1,20,20);
+      //glutSolidSphere(0.1,20,20);
       //glScalef(.25,2,.25);
      glBegin(GL_LINES);
      	glVertex3f(0,0,0);   

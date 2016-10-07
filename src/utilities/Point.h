@@ -2,7 +2,7 @@
 #define POINT_H
 
 #include <math.h>
-
+#include <iostream>
 class Point{
   private:
     float x,y,z;
@@ -26,5 +26,5 @@ Point operator*(Point p,float f);
 Point operator*(float f,Point p);
 Point operator+(Point p1,Point p2);
 Point operator-(Point p1,Point p2);
-
+//std::ostream& operator<<(std::ostream& os, Point p2);
 #endif

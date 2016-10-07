@@ -61,3 +61,10 @@ void Point::operator=(Point p){
   this->y=p.getY();
   this->z=p.getZ();
 }
+
+//std::ostream& Point::operator<<(std::ostream& os,Point p2){
+//	os << "x: " << p2.getX();
+//	os << " y: " << p2.getY();
+//	os << " z: " << p2.getZ();
+//	return os;
+//}
