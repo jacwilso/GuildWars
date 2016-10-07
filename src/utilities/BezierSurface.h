@@ -48,9 +48,11 @@ class BezierSurface{
     void renderGrid();
     void renderSurface();
 
-    Point normal(int u,int v);
-    float rotationAngle(int u,int v);
-    Point rotationAxis(int u,int v);
+    Point normal(float u,float v);
+    float rotationAngle(float u,float v);
+    float rotationPhi(float u, float v);
+    float rotationTheta(float u, float v);
+    Point rotationAxis(float u,float v);
 };
 
 #endif
