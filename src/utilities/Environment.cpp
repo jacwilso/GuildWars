@@ -4,22 +4,96 @@ Environment::Environment(){
 
 }
 
-void Environment::generateEnvironmentDL() {
+void Environment::generateEnvironmentDL(std::ifstream& inFile) {
 	environmentDL = glGenLists( 1 );
 
 	// Tell openGL to begin displaying lists
 	glNewList( environmentDL, GL_COMPILE );
 	// Draw the figures
 	glPushMatrix(); {
+		placeObjectsInEnvironment(inFile);
 		drawEnvironment();
 	}; glPopMatrix();
 	// Tell openGL to end displayiung lists
 	glEndList();
 }
 
+void Environment::placeObjectsInEnvironment(std::ifstream& inFile){
+	if(inFile.is_open() == false){
+		std::cout << "Couldn't read in File" << std::endl;
+		exit(1);
+	}
+
+	int numObjects = 0;
+	int objType = 0;
+	float objectX = 0, objectY = 0, objectZ = 0;
+	float orientX = 0, orientY = 0, orientZ = 0;
+	float objSize = 0;
+	char comments;
+	inFile >> numObjects;
+	for(int i = 0; i < numObjects ; i++){
+		std::string inValue;
+		std::cout << "Start" << i << std::endl;
+		getline(inFile, inValue, ',');
+		objType = atoi(inValue.c_str());
+		std::cout << objType << " ";
+		getline(inFile, inValue, ',');
+		objectX = atof(inValue.c_str());
+		std::cout << objectX << " ";
+		getline(inFile, inValue, ',');
+		objectY = atof(inValue.c_str());
+		std::cout << objectY << " ";
+		getline(inFile, inValue, ',');
+		objectZ = atof(inValue.c_str());
+		std::cout << objectZ << " ";
+		getline(inFile, inValue, ',');
+		orientX = atof(inValue.c_str());
+		std::cout << orientX << " ";
+		getline(inFile, inValue, ',');
+		orientY = atof(inValue.c_str());
+		std::cout << orientY << " ";
+		getline(inFile, inValue, ',');
+		orientZ = atof(inValue.c_str());
+		std::cout << orientZ << " ";
+		getline(inFile,inValue, '\n');
+		objSize = atof(inValue.c_str());
+		std::cout << objSize << std::endl;
+		// Debugging
+		
+		
+		
+		
+		
+
+		
+		
+		//
+		glPushMatrix();
+		{
+			glTranslatef(objectX, objectY, objectZ);
+			glRotatef(orientZ, 0,0,1);
+			glRotatef(orientY, 0,1,0);
+			glRotatef(orientZ, 1,0,0);
+			glScalef(objSize, objSize, objSize);
+
+			switch(objType){
+				case 0:
+					drawTree();
+					break;	
+				default:
+					drawTree();
+					break;
+			}
+		}
+		glPopMatrix();
+	}
+
+}
+
+
 void Environment::drawEnvironment(){
 	drawGrid();
-	drawTrees();
+	//drawTrees();
 }
 
 void Environment::drawGrid() {
@@ -88,84 +162,6 @@ void Environment::drawTree(){
 	}
 	glPopMatrix();
 
-}
-
-void Environment::drawRock(){
-  glColor3f(.1,.1,.1); // gray color
-  for(int i=0; i<13; i++){ // # of cylinders to stack on one another
-    glPushMatrix();
-      glTranslatef(0,i+1,0); // translate the cylinder up to new height
-      glRotatef(90,1,0,0); // rotate cylinder so it is vertical
-      gluCylinder(qobj,2+.75*cos((i+1)*36*DEG_RAD),2+.75*cos(i*36*DEG_RAD),1,32,32); // cylinder with varying base and top radii, with height 1
-    glPopMatrix();
-  }
-}
-
-void Environment::drawBox(){
-  glColor3ub(181,166,66); // Brass color
-  // BOTTOM SQUARE
-  glPushMatrix();
-    glTranslatef(0,0,-5);
-    glScalef(10,1,1);
-    glutSolidCube(1);
-  glPopMatrix();
-  glPushMatrix();
-    glTranslatef(-5,0,0);
-    glScalef(1,1,10);
-    glutSolidCube(1);
-  glPopMatrix();
-  glPushMatrix();
-    glTranslatef(0,0,5);
-    glScalef(10,1,1);
-    glutSolidCube(1);
-  glPopMatrix();
-  glPushMatrix();
-    glTranslatef(5,0,0);
-    glScalef(1,1,10);
-    glutSolidCube(1);
-  glPopMatrix();
-  // TOP SQUARE
-  glPushMatrix();
-    glTranslatef(0,10,-5);
-    glScalef(10,1,1);
-    glutSolidCube(1);
-  glPopMatrix();
-  glPushMatrix();
-    glTranslatef(-5,10,0);
-    glScalef(1,1,10);
-    glutSolidCube(1);
-  glPopMatrix();
-  glPushMatrix();
-    glTranslatef(0,10,5);
-    glScalef(10,1,1);
-    glutSolidCube(1);
-  glPopMatrix();
-  glPushMatrix();
-    glTranslatef(5,10,0);
-    glScalef(1,1,10);
-    glutSolidCube(1);
-  glPopMatrix();
-  // PILLARS
-  glPushMatrix();
-    glTranslatef(5,5,-5);
-    glScalef(1,11,1);
-    glutSolidCube(1);
-  glPopMatrix();
-  glPushMatrix();
-    glTranslatef(-5,5,-5);
-    glScalef(1,11,1);
-    glutSolidCube(1);
-  glPopMatrix();
-  glPushMatrix();
-    glTranslatef(5,5,5);
-    glScalef(1,11,1);
-    glutSolidCube(1);
-  glPopMatrix();
-  glPushMatrix();
-    glTranslatef(-5,5,5);
-    glScalef(1,11,1);
-    glutSolidCube(1);
-  glPopMatrix();
 }
 
 void Environment::drawTrees(){

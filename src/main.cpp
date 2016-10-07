@@ -17,6 +17,7 @@
 
 // Other Libraries
 #include <iostream>
+#include <fstream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -182,7 +183,7 @@ void myTimer( int value ){
 	glutTimerFunc( 1000/60, myTimer, 0);
 }
 
-void initScene()  {
+void initScene(std::ifstream& inFile)  {
 	glEnable(GL_DEPTH_TEST);
 
 	//******************************************************************
@@ -207,7 +208,7 @@ void initScene()  {
 	glShadeModel(GL_FLAT);
 
 	srand( time(NULL) );	// seed our random number generator
-	env.generateEnvironmentDL();
+	env.generateEnvironmentDL(inFile);
 }
 void View2(){
 	glViewport(0,0,windowWidth/2, windowHeight/2.5);
@@ -316,6 +317,16 @@ void renderScene(void)  {
 ////////////////////////////////////////////////////////////////////////////////
 int main(int argc, char **argv) {
 	
+	if(argc!=2){
+		cerr<<"Usage: "<<argv[0]<<" <CSV_NAME>"<<endl;
+		return 0;
+	}
+	ifstream inFile;
+	inFile.open(argv[1]);
+	if(inFile.is_open() == false){
+		cout << "Error: Couldn't open file: " << argv[1] << endl;
+		exit(1);
+	}
 	// create a double-buffered GLUT window at (50,50) with predefined windowsize
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
@@ -339,8 +350,10 @@ int main(int argc, char **argv) {
 	glutSpecialFunc(SpecialKeys);
 
 	// do some basic OpenGL setup
-	initScene();
+	//env.placeObjectsInEnvironment(inFile);
 
+	initScene(inFile);
+		
 	createMenus();
 	// and enter the GLUT loop, never to exit.
 	glutMainLoop();

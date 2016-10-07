@@ -18,13 +18,16 @@
 	#include <GLUT/glut.h>
 	#include <OpenGL/gl.h>
 	#include <OpenGL/glu.h>
+	#include <glui.h>			// include our GLUI header
+
 #else					// else compiling on Linux OS
 	#include <GL/glut.h>
 	#include <GL/gl.h>
 	#include <GL/glu.h>
+	#include <GL/glui.h>			// include our GLUI header
+
 #endif
 
-#include <GL/glui.h>			// include our GLUI header
 
 
 // C Libraries we need
@@ -251,11 +254,51 @@ void renderScene(void)  {
     }
 
     //DRAW HERE
+    surf.renderGrid();
     surf.renderSurface();
 
+    float u=(float)(0)/100,v=(float)(10)/100;
+    Point temp=surf.evaluateSurface(u,v);
+    Point axis=surf.rotationAxis(u,v);
+    float surfAngle=surf.rotationAngle(u,v);
+    //float surfTheta=surf.rotationTheta(u,v);
+    //float surfPhi = surf.rotationPhi(u,v);
+    
+    Point norm = surf.normal(u,v);
+    //cout<<surfAngle<<endl;
+    glDisable( GL_LIGHTING );
+
+    glPushMatrix();
+      glColor3f(1,1,1);
+    
+      glTranslatef(temp.getX(),temp.getY(),temp.getZ());
+      glRotatef(surfAngle,axis.getX(),axis.getY(),axis.getZ());
+      //glRotatef(surfPhi, 0,1,0);
+      //glRotatef(surfTheta,0,0,1);
+      //glRotatef(surfAngle, 0,0,1);	
+      //glutSolidSphere(0.1,20,20);
+      //glScalef(.25,2,.25);
+     glBegin(GL_LINES);
+     	glVertex3f(0,0,0);   
+     	glVertex3f(0,1,0);
+	
+	glColor3f(1,0,0);
+	glVertex3f(0,0,0);
+	glVertex3f(1,0,0);
+	
+	glColor3f(0,1,0);
+	glVertex3f(0,0,0);
+	glVertex3f(0,0,1);
+	//glVertex3f(surf.normal(u,v).getX(),surf.normal(u,v).getY(),surf.normal(u,v).getZ());
+     //glVertex3f(surf.normal(u,v).getX()*2,-surf.normal(u,v).getY()*2,surf.normal(u,v).getZ()*2);
+      glEnd();
+      //glutSolidCube(1);
+
+    glPopMatrix();
+    glEnable( GL_LIGHTING );
 
     glPushMatrix(); {
-	drawGrid();
+	//drawGrid();
     }; glPopMatrix();
 
     glEnable(GL_LIGHTING);

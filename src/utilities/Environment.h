@@ -13,17 +13,20 @@
 
 // Other libraries
 #include <cmath>
+#include <fstream>
+#include <iostream>
+#include <stdlib.h>
+#include <string>
 class Environment{
 private:
 	const static float DEG_RAD = 3.14159/180;
 public:
 	Environment();
-	void generateEnvironmentDL();
+	void placeObjectsInEnvironment(std::ifstream& inFile);
+	void generateEnvironmentDL(std::ifstream& inFile);
 	void drawEnvironment();
 	void drawGrid();
 	void drawGround();
-	void drawRock();
-	void drawBox();
 	void drawTree();
 	void drawTrees();
 
