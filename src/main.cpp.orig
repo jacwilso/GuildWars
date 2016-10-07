@@ -17,6 +17,12 @@
 
 // Other Libraries
 #include <iostream>
+<<<<<<< HEAD
+#include <fstream>
+=======
+#include <sstream>
+#include <string.h>
+>>>>>>> 6155c0c98edc63322955a9b8d5bc6d6b5a95533d
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -39,7 +45,7 @@ using namespace std;
 
 // GLOBAL VARIABLES ////////////////////////////////////////////////////////////
 static size_t windowWidth  = 640;
-static size_t windowHeight = 480;
+static size_t windowHeight = 720;
 static float aspectRatio;
 
 GLint leftMouseButton; 		   	    // status of the mouse buttons
@@ -50,6 +56,11 @@ float pipTheta, pipPhi;		// Theta and Phi values for PIP
 bool isPip = false;
 bool ctrlIsPressed = false;
 
+/*** FPS ***/
+int frameCount = 0, currentTime = 0, previousTime = 0;
+float fps = 0;
+void *font = GLUT_BITMAP_HELVETICA_18;
+char* cstr;
 
 int pipMode = 1;
 map<unsigned char,bool> keyState;
@@ -62,6 +73,8 @@ GLUquadric* Board::qobj;
 
 Bomberman bomberman;
 GLUquadric* Bomberman::qobj;
+
+Camera cam, cam2, cam3;
 /********************* Functions ****************************/
 
 void recomputeOrientation() {
@@ -83,22 +96,79 @@ void resizeWindow(int w, int h) {
 	gluPerspective(45.0,aspectRatio,0.1,100000);
 }
 
+void calculateFPS(){
+  frameCount++;
+  currentTime = glutGet(GLUT_ELAPSED_TIME);
+  int timeInterval = currentTime - previousTime;
+  if(timeInterval > 1000){
+    fps = frameCount/(timeInterval/1000.0f);
+    previousTime=currentTime;
+    frameCount=0;
+  }
+}
+
+void bitmapText(const char *string,float x,float y,float z){
+  const char* c;
+  glRasterPos3f(x,y,z);
+  for(c=string; *c!='\0'; c++){
+    glutBitmapCharacter(font,*c);
+  }
+}
+
+char* floatToChar(float i){
+  ostringstream ss;
+  ss << i;
+  string str = ss.str();
+  cstr = new char[str.length()-1];
+  strcpy(cstr,str.c_str());
+  return cstr;
+} 
+
+void drawFPS(){
+  glDisable(GL_LIGHTING);
+  glDisable(GL_TEXTURE_2D);
+  glMatrixMode(GL_PROJECTION);
+  glPushMatrix();
+  glLoadIdentity();
+  gluOrtho2D(0,windowWidth,0,windowHeight);
+  glMatrixMode(GL_MODELVIEW);
+  glPushMatrix();
+  glLoadIdentity();
+  glColor3f(1,1,1);
+  bitmapText("FPS: ",20,20,0);
+  glColor3f(1,1,1);
+  bitmapText(floatToChar(fps),100,20,0);
+  delete cstr;
+  glMatrixMode(GL_PROJECTION);
+  glPopMatrix();
+  glMatrixMode(GL_MODELVIEW);
+  glPopMatrix();
+  glEnable(GL_TEXTURE_2D);
+  glEnable(GL_LIGHTING);
+}
 
 void mouseCallback(int button, int state, int thisX, int thisY) {
 	// update the left mouse button states, if applicable
+	if(button == GLUT_LEFT_BUTTON){
+		leftMouseButton = state;
+		if(leftMouseButton == GLUT_DOWN){
+			mouseX = thisX;
+			mouseY = thisY;
+		}
+	}
 
 }
 void myMenu( int value ) {
 	switch (value){
 		case 0:
-			exit(0);
-			break;
+		exit(0);
+		break;
 		case 1:
-			break;
+		break;
 		case 2:
-			break;
+		break;
 		default:
-			break;
+		break;
 	}
 }
 
@@ -110,21 +180,34 @@ void createMenus() {
 
 
 void mouseMotion(int x, int y) {
+	if(leftMouseButton == GLUT_DOWN) {
+
+
+		cam.setCameraTheta(cam.getCameraTheta() - (x-mouseX) * 0.005);
+		cam.setCameraPhi(fmin(fmax((cam.getCameraPhi() + (y - mouseY) * 0.005),0.01),M_PI));
+		mouseX = x;
+		mouseY = y;
+		cam.recomputeOrientation();     // update camera (x,y,z) based on (radius,theta,phi)
+
+	}
+
 
 	glutPostRedisplay();	    // redraw our scene from our new camera POV
 }
 
 
 void normalKeysDown(unsigned char key, int x, int y) {
-        keyState[key]=true;
+	keyState[key]=true;
 	if(key <= 57 && key >= 48){
-		pipMode = (int)key - 48;
+		cam.setViewMode((int)key - 48);
 	}
 
 	if(key == 'q' || key == 'Q' || key == 27){
 		exit(0);
 	}else if( key == 'w'){
+		cam.moveForward();
 	}else if( key == 's'){
+		cam.moveBackward();
 	}else if(key == 'a'){
 	}else if(key == 'd'){
 	}
@@ -132,7 +215,7 @@ void normalKeysDown(unsigned char key, int x, int y) {
 }
 
 void normalKeysUp(unsigned char key, int x, int y){
-  keyState[key]=false;
+	keyState[key]=false;
 }
 
 // Special key being pressed like arrowkeys
@@ -155,12 +238,13 @@ void SpecialKeys(int key, int x, int y)
 
 // Timer function
 void myTimer( int value ){
+        calculateFPS();
 
 	glutPostRedisplay();
 	glutTimerFunc( 1000/60, myTimer, 0);
 }
 
-void initScene()  {
+void initScene(std::ifstream& inFile)  {
 	glEnable(GL_DEPTH_TEST);
 
 	//******************************************************************
@@ -185,9 +269,75 @@ void initScene()  {
 	glShadeModel(GL_FLAT);
 
 	srand( time(NULL) );	// seed our random number generator
-	env.generateEnvironmentDL();
+	env.generateEnvironmentDL(inFile);
+}
+void View2(){
+	glViewport(0,0,windowWidth/2, windowHeight/2.5);
+
+
+		// Portions within the scissor can now be modified.
+		glScissor(0,0,windowWidth/2, windowHeight/2.5);
+		glEnable(GL_SCISSOR_TEST);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glDisable( GL_SCISSOR_TEST);
+
+
+		glMatrixMode(GL_MODELVIEW);
+
+		glPushMatrix();
+		{
+			glLoadIdentity();
+			glMatrixMode(GL_PROJECTION);
+			glPushMatrix();
+			glLoadIdentity();
+			glColor3f(1,1,1);
+			glLineWidth(5);
+			glBegin(GL_LINE_LOOP);
+			glVertex3f(-1,-1,0);
+			glVertex3f(-1,1,0);
+			glVertex3f(1,1,0);
+			glVertex3f(1,-1,0);
+			glEnd();
+			glPopMatrix();
+			glMatrixMode(GL_MODELVIEW);
+		}
+		glPopMatrix();
+		glLoadIdentity();
 }
 
+void View3(){
+	glViewport(windowWidth/2, 0, windowWidth, windowHeight/2.5);
+
+
+		// Portions within the scissor can now be modified.
+		glScissor(windowWidth/2, 0, windowWidth, windowHeight/2.5);
+		glEnable(GL_SCISSOR_TEST);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glDisable( GL_SCISSOR_TEST);
+
+
+		glMatrixMode(GL_MODELVIEW);
+
+		glPushMatrix();
+		{
+			glLoadIdentity();
+			glMatrixMode(GL_PROJECTION);
+			glPushMatrix();
+			glLoadIdentity();
+			glColor3f(1,1,1);
+			glLineWidth(5);
+			glBegin(GL_LINE_LOOP);
+			glVertex3f(-1,-1,0);
+			glVertex3f(-1,1,0);
+			glVertex3f(1,1,0);
+			glVertex3f(1,-1,0);
+			glEnd();
+			glPopMatrix();
+			glMatrixMode(GL_MODELVIEW);
+		}
+		glPopMatrix();
+		glLoadIdentity();
+}
 // renderScene() ///////////////////////////////////////////////////////////////
 //
 //  GLUT callback for scene rendering. Sets up the modelview matrix, renders
@@ -205,10 +355,19 @@ void renderScene(void)  {
 	//update the modelview matrix based on the camera's position
 	glMatrixMode(GL_MODELVIEW);              //make sure we aren't changing the projection matrix!
 	glLoadIdentity();
-
+	cam.FreeCam();
+	
+	
+	glCallList( env.environmentDL );
 	// Viewport 2
-	//PictureInPicture();
-
+	View2();
+	cam2.FreeCam();
+        drawFPS();
+	glCallList( env.environmentDL );
+	// Viewport 3
+	View3();
+	cam3.FreeCam();
+	glCallList( env.environmentDL );
 	//push the back buffer to the screen
 	glutSwapBuffers();
 }
@@ -220,6 +379,16 @@ void renderScene(void)  {
 ////////////////////////////////////////////////////////////////////////////////
 int main(int argc, char **argv) {
 	
+	if(argc!=2){
+		cerr<<"Usage: "<<argv[0]<<" <CSV_NAME>"<<endl;
+		return 0;
+	}
+	ifstream inFile;
+	inFile.open(argv[1]);
+	if(inFile.is_open() == false){
+		cout << "Error: Couldn't open file: " << argv[1] << endl;
+		exit(1);
+	}
 	// create a double-buffered GLUT window at (50,50) with predefined windowsize
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
@@ -243,8 +412,10 @@ int main(int argc, char **argv) {
 	glutSpecialFunc(SpecialKeys);
 
 	// do some basic OpenGL setup
-	initScene();
+	//env.placeObjectsInEnvironment(inFile);
 
+	initScene(inFile);
+		
 	createMenus();
 	// and enter the GLUT loop, never to exit.
 	glutMainLoop();
