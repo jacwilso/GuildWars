@@ -74,6 +74,7 @@ const int RESOLUTION=100;
 vector<Point> controlPoints;
 BezierSurface surf;
 Bezier bez[2];
+int arc = 0, param = 0;
 
 /*** Models ***/
 Environment env;
@@ -84,6 +85,8 @@ GLUquadric* Board::qobj;
 
 Bomberman bomberman;
 GLUquadric* Bomberman::qobj;
+
+Donkey donkey;
 
 /*** UTILITIES ***/
 Camera cam, cam2, cam3;
@@ -159,6 +162,21 @@ void drawFPS(){
   glPopMatrix();
   glEnable(GL_TEXTURE_2D);
   glEnable(GL_LIGHTING);
+}
+
+void animationTrack(Hero& hero, Bezier curve, bool parametric){
+  Point temp;
+  if(parametric){
+    temp=curve.parametricCurve(param);
+    param++;
+    if(param+1>curve.resSize()) param=0;
+  }else{
+    temp=curve.parametricCurve(arc);
+    //temp=curve.arcLengthCurve(arc);
+    arc++;
+    if(arc+1>curve.resSize()) arc=0;
+  }
+  hero.setHeroPos(temp.getX(),0,temp.getZ(),0,0);
 }
 
 void mouseCallback(int button, int state, int thisX, int thisY) {
@@ -253,6 +271,9 @@ void SpecialKeys(int key, int x, int y)
 // Timer function
 void myTimer( int value ){
         calculateFPS();
+
+        animationTrack(board,bez[0],false);
+        animationTrack(donkey,bez[1],true);
 
 	glutPostRedisplay();
 	glutTimerFunc( 1000/60, myTimer, 0);
@@ -374,20 +395,45 @@ void renderScene(void)  {
 	
         //surf.renderGrid();
         //surf.renderSurface();
+        for(int i=0; i<2; i++){
+        glPushMatrix();
+          glTranslatef(-40+80*i,2,20*i);
+          glScalef(4,4,4);
+            bez[i].renderPoints();
+            bez[i].renderCage();
+            bez[i].renderCurve();
+            if(i==0){
+            //cout<<board.getHeroPositionZ()<<endl;
+              glPushMatrix();
+                glTranslatef(board.getHeroPositionX(),board.getHeroPositionY(),board.getHeroPositionZ());
+                glRotatef(board.getHeroTheta(),0,1,0);
+                glScalef(.25,.25,.25);
+                board.drawHero();
+              glPopMatrix();
+            }else{
+              glPushMatrix();
+                glTranslatef(donkey.getHeroPositionX(),donkey.getHeroPositionY(),donkey.getHeroPositionZ());
+                glRotatef(donkey.getHeroTheta(),0,1,0);
+                glScalef(.25,.25,.25);
+                donkey.drawHero();
+              glPopMatrix();
+            }
+          glPopMatrix();
+        }
 	glCallList( env.environmentDL );
 	// Viewport 2
-	View2();
-	cam2.FreeCam();
+	//View2();
+	//cam2.FreeCam();
         //surf.renderGrid();
         //surf.renderSurface();
-        drawFPS();
-	glCallList( env.environmentDL );
+        //drawFPS();
+	//glCallList( env.environmentDL );
 	// Viewport 3
-	View3();
+	//View3();
         //surf.renderGrid();
         //surf.renderSurface();
-	cam3.FreeCam();
-	glCallList( env.environmentDL );
+	//cam3.FreeCam();
+	//glCallList( env.environmentDL );
 	//push the back buffer to the screen
 	glutSwapBuffers();
 }
@@ -432,6 +478,7 @@ bool loadControlPoints( char* filename ) {
     for(int i=0; i<numPoints-3; i+=3)
       bez[k].bezierConnect(Bezier(tempP[i],tempP[i+1],tempP[i+2],tempP[i+3])); // pushes each set of 4 points into a bezier vector
   }
+
 
   /*** READ OBJECTS ***/
   // Pass file to environment class

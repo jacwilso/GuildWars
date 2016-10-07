@@ -189,8 +189,6 @@ void Board::drawHoverBoard(){
 //
 ////////////////////////////////////////////////////////////////////////////////
 void Board::drawHero(){
-    objectDL=glGenLists(1);
-    glNewList(objectDL, GL_COMPILE);
       glPushMatrix();
         glTranslatef(heroPosX,heroPosY,heroPosZ); // translate to the center of the arc ball
         glRotatef(heroTheta,0,1,0); // the direction of the board
@@ -215,7 +213,6 @@ void Board::drawHero(){
         drawStreak(); // draw the streak of the board
       glPopMatrix();
     }
-    glEndList();
 }
 
 void Board::animate(){
