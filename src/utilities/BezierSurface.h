@@ -1,5 +1,5 @@
-#ifndef ENVIRONMENT_H
-#define ENVIRONMENT_H
+#ifndef BEZIERSURFACE_H
+#define BEZIERSURFACE_H
 
 #ifdef __APPLE__			// if compiling on Mac OS
 	#include <GLUT/glut.h>
