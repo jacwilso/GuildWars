@@ -72,6 +72,18 @@ public:
 
 
     // Getters
+<<<<<<< HEAD
+    int getViewMode();
+    float getCameraX();
+    float getCameraY();
+    float getCameraZ();
+    float getCameraTheta();
+    float getCameraPhi();
+    float getDirX();
+    float getDirY();
+    float getDirZ();
+    float getCameraRad();
+=======
     int getViewMode()
     {return viewMode;}
     float getCameraX()
@@ -96,6 +108,7 @@ public:
     {return dirZ;}
     Point getDir()
     {return Point(dirX,dirY,dirZ);}
+>>>>>>> 1039e5ff52cf91a49a921d299197106d70b40e68
 
     // Setters
     void setViewMode(int);
