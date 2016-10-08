@@ -23,6 +23,16 @@ Camera::Camera(){
 int Camera::getViewMode(){
 	return viewMode;
 }
+float Camera::getCameraX(){
+	return cameraX;
+}
+float Camera::getCameraY(){
+	return cameraY;
+}
+float Camera::getCameraZ(){
+	return cameraZ;
+}
+
 float Camera::getCameraTheta(){
 	return cameraTheta;
 }
@@ -46,6 +56,19 @@ float Camera::getCameraRad(){
 void Camera::setViewMode(int item){
 	viewMode = item;
 }
+
+void Camera::setCameraX(float item){
+	cameraX = item;
+}
+
+void Camera::setCameraY(float item){
+	cameraY = item;
+}
+
+void Camera::setCameraZ(float item){
+	cameraZ = item;
+}
+
 void Camera::setCameraTheta(float item){
 	cameraTheta = item;
 }

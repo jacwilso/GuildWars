@@ -109,17 +109,13 @@ Point BezierSurface::normal(float u,float v){
 	Nx=du.getY()*dv.getZ()-du.getZ()*dv.getY();
 	Ny=du.getZ()*dv.getX()-du.getX()*dv.getZ();
 	Nz=du.getX()*dv.getY()-du.getY()*dv.getX();
-        //cout<<"N "<<Nx<<" "<<Ny<<" "<<Nz<<endl;
 	mag=pow(pow(Nx,2)+pow(Ny,2)+pow(Nz,2),.5);
-        //cout<<"MAG "<<mag<<endl;
 	Nx/=mag; Ny/=mag; Nz/=mag;
-        //cout<<"N "<<Nx<<" "<<Ny<<" "<<Nz<<endl;
 	return Point(Nx,Ny,Nz); 
 }
 
 float BezierSurface::rotationAngle(float u,float v){
         Point N=normal(u,v);
-        //cout<<"ANGLE "<<acos(N.getY())*float(180)/3.14159<<endl; 
         return acos(N.getY())*float(180)/3.14159;
 }
 Point BezierSurface::rotationAxis(float u,float v){

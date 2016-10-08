@@ -72,6 +72,9 @@ public:
 
     // Getters
     int getViewMode();
+    float getCameraX();
+    float getCameraY();
+    float getCameraZ();
     float getCameraTheta();
     float getCameraPhi();
     float getDirX();
@@ -81,6 +84,9 @@ public:
 
     // Setters
     void setViewMode(int);
+    void setCameraX(float);
+    void setCameraY(float);
+    void setCameraZ(float);
     void setCameraTheta(float);
     void setCameraPhi(float);
     void setDirX(float item);

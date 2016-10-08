@@ -488,9 +488,16 @@ void renderScene(void)  {
 		//update the modelview matrix based on the camera's position
 	glMatrixMode(GL_MODELVIEW);              //make sure we aren't changing the projection matrix!
 	glLoadIdentity();
-	wav.positionListener(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(),cam.getDirY(),cam.getDirZ(),0,1,0);		
+	wav.positionListener(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(),cam.getDirX(),cam.getDirY(),cam.getDirZ(),0,1,0);		
 	wav.positionSource(wav.sources[1],ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ());
 	cam.ArcBall(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ());
+
+
+	glPushMatrix();
+	glTranslatef(40,0,40);
+	glutSolidTeapot(1);
+	glPopMatrix();
+
 
 	ericCartman.drawHero();
 	drawCharacters();
@@ -604,7 +611,7 @@ int main(int argc, char **argv) {
 		// Special Function for Arrow Keys
 	glutSpecialFunc(SpecialKeys);
 
-	wav.positionSource(wav.sources[0],0,0,0);
+	wav.positionSource(wav.sources[0],40,0,40);
 		// do some basic OpenGL setup
 		//env.placeObjectsInEnvironment(inFile);
 

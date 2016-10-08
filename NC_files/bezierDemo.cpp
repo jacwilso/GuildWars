@@ -55,7 +55,7 @@ using namespace std;
 static size_t windowWidth = 640;
 static size_t windowHeight = 480;
 static float aspectRatio;
-
+float u=(float)(0)/100,v=(float)(10)/100;
 GLint leftMouseButton, rightMouseButton;    // status of the mouse buttons
 int mouseX = 0, mouseY = 0;                 // last known X and Y of the mouse
 
@@ -88,7 +88,7 @@ BezierSurface surf;
 //
 ////////////////////////////////////////////////////////////////////////////////
 float getRand() {
-    return rand() / (float)RAND_MAX;
+  return rand() / (float)RAND_MAX;
 }
 
 // drawGrid() //////////////////////////////////////////////////////////////////
@@ -103,20 +103,20 @@ void drawGrid() {
      *	Primitive - like a line, quad, point - we need to disable lighting
      *	and then reenable it for use with the GLUT 3D Primitives.
      */
-    glDisable( GL_LIGHTING );
+  glDisable( GL_LIGHTING );
 
     // draw our grid....what? triple nested for loops!  crazy!  but it works :)
-    glColor3f( 1, 1, 1 );
+  glColor3f( 1, 1, 1 );
     glLineWidth(2.0f);	// make our grid lines a little thicker so they are easier to see
     for( int dir = 0; dir < 2; dir++ ) {
-        for( int i = -5; i < 6; i++ ) {
-            glBegin( GL_LINE_STRIP ); {
-                for( int j = -5; j < 6; j++ )
-                    glVertex3f( dir < 1 ? i : j, 
-		    			      0, 
-			        dir < 1 ? j : i );
-            }; glEnd();
-        }
+      for( int i = -5; i < 6; i++ ) {
+        glBegin( GL_LINE_STRIP ); {
+          for( int j = -5; j < 6; j++ )
+            glVertex3f( dir < 1 ? i : j, 
+             0, 
+             dir < 1 ? j : i );
+        }; glEnd();
+      }
     }
     glLineWidth(1.0f);  // but be sure to set our line width back to its original size so we don't mess up future drawing
 
@@ -125,7 +125,7 @@ void drawGrid() {
      *	must turn lighting back on.
      */
     glEnable( GL_LIGHTING );
-}
+  }
 
 
 // recomputeOrientation() //////////////////////////////////////////////////////
@@ -135,7 +135,7 @@ void drawGrid() {
 //  cameraTheta, cameraPhi, or cameraRadius is updated. 
 //
 ////////////////////////////////////////////////////////////////////////////////
-void recomputeOrientation() {
+  void recomputeOrientation() {
     dirX =  sinf(cameraTheta)*sinf(cameraPhi);
     dirZ = -cosf(cameraTheta)*sinf(cameraPhi);
     dirY = -cosf(cameraPhi);
@@ -145,14 +145,14 @@ void recomputeOrientation() {
     dirX /= mag;  dirY /= mag;  dirZ /= mag;
 
     glutPostRedisplay();
-}
+  }
 
 // resizeWindow() //////////////////////////////////////////////////////////////
 //
 //  GLUT callback for window resizing. Resets GL_PROJECTION matrix and viewport.
 //
 ////////////////////////////////////////////////////////////////////////////////
-void resizeWindow(int w, int h) {
+  void resizeWindow(int w, int h) {
     aspectRatio = w / (float)h;
 
     windowWidth = w;
@@ -165,7 +165,7 @@ void resizeWindow(int w, int h) {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective(45.0,aspectRatio,0.1,100000);
-}
+  }
 
 // initScene() /////////////////////////////////////////////////////////////////
 //
@@ -173,7 +173,7 @@ void resizeWindow(int w, int h) {
 //      OpenGL context has been created. Doesn't need to be called further.
 //
 ////////////////////////////////////////////////////////////////////////////////
-void initScene()  {
+  void initScene()  {
     glEnable(GL_DEPTH_TEST);
 
     //******************************************************************
@@ -188,7 +188,7 @@ void initScene()  {
     glLightfv( GL_LIGHT0, GL_AMBIENT, ambientCol );
     glEnable( GL_LIGHTING );
     glEnable( GL_LIGHT0 );
-	
+
     // tell OpenGL not to use the material system; just use whatever we 
     // pass with glColor*()
     glEnable( GL_COLOR_MATERIAL );
@@ -210,7 +210,7 @@ void initScene()  {
     cameraTheta = -M_PI / 3.0f;
     cameraPhi = M_PI / 2.8f;
     recomputeOrientation();
-}
+  }
 
 // renderScene() ///////////////////////////////////////////////////////////////
 //
@@ -219,7 +219,7 @@ void initScene()  {
 //      front buffer (what the user sees).
 //
 ////////////////////////////////////////////////////////////////////////////////
-void renderScene(void)  {
+  void renderScene(void)  {
     // clear the render buffer
     glDrawBuffer( GL_BACK );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
@@ -257,44 +257,41 @@ void renderScene(void)  {
     surf.renderGrid();
     surf.renderSurface();
 
-    float u=(float)(0)/100,v=(float)(10)/100;
+    //float u=(float)(0)/100,v=(float)(10)/100;
     Point temp=surf.evaluateSurface(u,v);
     Point axis=surf.rotationAxis(u,v);
     float surfAngle=surf.rotationAngle(u,v);
-    //float surfTheta=surf.rotationTheta(u,v);
-    //float surfPhi = surf.rotationPhi(u,v);
     
     Point norm = surf.normal(u,v);
     //cout<<surfAngle<<endl;
     glDisable( GL_LIGHTING );
 
-    glPushMatrix();
-      glColor3f(1,1,1);
+    glTranslatef(temp.getX(),temp.getY(),temp.getZ());
     
-      glTranslatef(temp.getX(),temp.getY(),temp.getZ());
-      glRotatef(surfAngle,axis.getX(),axis.getY(),axis.getZ());
-      //glRotatef(surfPhi, 0,1,0);
-      //glRotatef(surfTheta,0,0,1);
-      //glRotatef(surfAngle, 0,0,1);	
+
+    glPushMatrix();
+    glColor3f(1,1,1);
+    
+    glRotatef(surfAngle,axis.getX(),axis.getY(),axis.getZ());	
       //glutSolidSphere(0.1,20,20);
       //glScalef(.25,2,.25);
-     glBegin(GL_LINES);
-     	glVertex3f(0,0,0);   
-     	glVertex3f(0,1,0);
-	
-	glColor3f(1,0,0);
-	glVertex3f(0,0,0);
-	glVertex3f(1,0,0);
-	
-	glColor3f(0,1,0);
-	glVertex3f(0,0,0);
-	glVertex3f(0,0,1);
-	//glVertex3f(surf.normal(u,v).getX(),surf.normal(u,v).getY(),surf.normal(u,v).getZ());
-     //glVertex3f(surf.normal(u,v).getX()*2,-surf.normal(u,v).getY()*2,surf.normal(u,v).getZ()*2);
-      glEnd();
-      //glutSolidCube(1);
+    glBegin(GL_LINES);
+    glColor3f(0,1,1);
+    // glVertex3f(0,0,0);   
+    // glVertex3f(surf.normal(u,v).getX(),surf.normal(u,v).getY(),surf.normal(u,v).getZ());
+    glVertex3f(0,0,0);
+    glVertex3f(1,0,0);
+    
+    glColor3f(0,1,0);
+    glVertex3f(0,0,0);
+    glVertex3f(0,1,0);
 
-    glPopMatrix();
+    glColor3f(1,0,1);
+    glVertex3f(0,0,0);
+    glVertex3f(0,0,1);
+    glEnd();
+    glPopMatrix();  
+
     glEnable( GL_LIGHTING );
 
     glPushMatrix(); {
@@ -306,7 +303,7 @@ void renderScene(void)  {
     //push the back buffer to the screen
     if(RenderMode==GL_RENDER)
       glutSwapBuffers();
-}
+  }
 
 // mouseCallback() /////////////////////////////////////////////////////////////
 //
@@ -315,16 +312,16 @@ void renderScene(void)  {
 //      buttons inside the motion callback (whether they are up or down).
 //
 ////////////////////////////////////////////////////////////////////////////////
-void mouseCallback(int button, int state, int thisX, int thisY) {
+  void mouseCallback(int button, int state, int thisX, int thisY) {
     //and update the last seen X and Y coordinates of the mouse
     mouseX = thisX;
     mouseY = thisY;
 
-  if(button==GLUT_LEFT_BUTTON && glutGetModifiers()==GLUT_ACTIVE_SHIFT && state==GLUT_DOWN){
+    if(button==GLUT_LEFT_BUTTON && glutGetModifiers()==GLUT_ACTIVE_SHIFT && state==GLUT_DOWN){
       RenderMode=GL_SELECT;
       glRenderMode(RenderMode);
       renderScene();
-      renderScene();
+      //renderScene();
       RenderMode=GL_RENDER;
       Nhits=glRenderMode(RenderMode);
 #ifdef BUG_KLUDGE
@@ -341,37 +338,37 @@ void mouseCallback(int button, int state, int thisX, int thisY) {
       if(Nhits==0)
         for(int k=0; k<numPoints; k++)
           pick[k]=false;
-      bool picked=false;
-      for(int i=0, index=0; i<Nhits; i++){
+        bool picked=false;
+        for(int i=0, index=0; i<Nhits; i++){
         //printf("\n");
-        nitems=PickBuffer[index++];
-        zmin=PickBuffer[index++];
-        zmax=PickBuffer[index++];
-        if(Debug && nitems!=0){
-          fprintf(stderr,"Hit # %2d: found %2d items on the name stack\n", i, nitems);
-          fprintf(stderr,"\tZmin = 0x%0x, Zmax = 0x%0x\n", zmin, zmax);
+          nitems=PickBuffer[index++];
+          zmin=PickBuffer[index++];
+          zmax=PickBuffer[index++];
+          if(Debug && nitems!=0){
+            fprintf(stderr,"Hit # %2d: found %2d items on the name stack\n", i, nitems);
+            fprintf(stderr,"\tZmin = 0x%0x, Zmax = 0x%0x\n", zmin, zmax);
+          }
+          for(int j=0; j<nitems; j++){
+            picked=true;
+            item=PickBuffer[index++];
+            for(int k=0; k<numPoints; k++)
+              pick[k]=false;
+            pick[item-1]=true;
+            if(Debug)
+              fprintf(stderr,"\t%2d: %6d\n", j, item);
+          }
+          if(!picked)
+            for(int k=0; k<numPoints; k++)
+              pick[k]=false;
+          }
+          glutSetWindow(GrWindow);
+          glutPostRedisplay();
         }
-        for(int j=0; j<nitems; j++){
-          picked=true;
-          item=PickBuffer[index++];
-          for(int k=0; k<numPoints; k++)
-            pick[k]=false;
-          pick[item-1]=true;
-          if(Debug)
-            fprintf(stderr,"\t%2d: %6d\n", j, item);
-        }
-        if(!picked)
-          for(int k=0; k<numPoints; k++)
-            pick[k]=false;
-      }
-      glutSetWindow(GrWindow);
-      glutPostRedisplay();
-    }
-    
+
     //update the left and right mouse button states, if applicable
-    else if(button == GLUT_LEFT_BUTTON)
-        leftMouseButton = state;
-}
+        else if(button == GLUT_LEFT_BUTTON)
+          leftMouseButton = state;
+      }
 
 // mouseMotion() ///////////////////////////////////////////////////////////////
 //
@@ -382,31 +379,31 @@ void mouseCallback(int button, int state, int thisX, int thisY) {
 //      buttons, the function just updates the last seen mouse X and Y coords.
 //
 ////////////////////////////////////////////////////////////////////////////////
-void mouseMotion(int x, int y) {
-    if(leftMouseButton == GLUT_DOWN) {
-        cameraTheta += (x - mouseX)*0.005;
-        cameraPhi   += (mouseY - y)*0.005;
+      void mouseMotion(int x, int y) {
+        if(leftMouseButton == GLUT_DOWN) {
+          cameraTheta += (x - mouseX)*0.005;
+          cameraPhi   += (mouseY - y)*0.005;
 
         // make sure that phi stays within the range (0, M_PI)
-        if(cameraPhi <= 0)
+          if(cameraPhi <= 0)
             cameraPhi = 0+0.001;
-        if(cameraPhi >= M_PI)
+          if(cameraPhi >= M_PI)
             cameraPhi = M_PI-0.001;
-        
-        recomputeOrientation();     //update camera (x,y,z) based on (radius,theta,phi)
-    }
 
-    mouseX = x;
-    mouseY = y;
-}
+        recomputeOrientation();     //update camera (x,y,z) based on (radius,theta,phi)
+      }
+
+      mouseX = x;
+      mouseY = y;
+    }
 
 // normalKeysDown() ////////////////////////////////////////////////////////////
 //
 //  GLUT keyboard callback; gets called when the user presses a key.
 //
 ////////////////////////////////////////////////////////////////////////////////
-void normalKeysDown( unsigned char key, int x, int y ) {
-    if( key == 'q' || key == 'Q' || key == 27 )
+    void normalKeysDown( unsigned char key, int x, int y ) {
+      if( key == 'q' || key == 'Q' || key == 27 )
         exit(0);
 
     // because the direction vector is unit length, and we probably don't want
@@ -414,74 +411,75 @@ void normalKeysDown( unsigned char key, int x, int y ) {
     // to keep track of how far we want to move at each step. you could make
     // this change w.r.t. the amount of time the button's held down for
     // simple scale-sensitive movement!
-    float movementConstant = 0.3f;
+      float movementConstant = 0.3f;
 
     // move forward!
-    if( key == 'w' || key == 'W' ) {
+      if( key == 'w' || key == 'W' ) {
         //that's as simple as just moving along the direction.
         cameraX += dirX*movementConstant;
         cameraY += dirY*movementConstant;
         cameraZ += dirZ*movementConstant;
-    }
+      }
 
     // move backwards!
-    else if( key == 's' || key == 'S' ) {
+      else if( key == 's' || key == 'S' ) {
         //just move BACKWARDS along the direction.
         cameraX -= dirX*movementConstant;
         cameraY -= dirY*movementConstant;
         cameraZ -= dirZ*movementConstant;
+      }
     }
-}
 
 // specialKeysDown() ////////////////////////////////////////////////////////////
 //
 //  GLUT keyboard callback; gets called when the user presses a special key.
 //
 ////////////////////////////////////////////////////////////////////////////////
-void specialKeysDown(int key, int x, int y){
-  int point=-1;
-  for(int i=0; i<numPoints; i++)
-    if(pick[i]==true) point=i;
-  if(point!=-1){
-    if(key == GLUT_KEY_UP){
-      controlPoints[point]+=Point(0,1,0);
+    void specialKeysDown(int key, int x, int y){
+      if(key == GLUT_KEY_UP){
+        u += 0.01;
+      }
+      
+      if(key == GLUT_KEY_DOWN){
+        u -= 0.01;
+      }
+      
+      if(key == GLUT_KEY_LEFT){
+        v+= 0.01;
+      }
+
+      if(key == GLUT_KEY_RIGHT){
+
+        v -= 0.01;
+
+      }
+
+      glutPostRedisplay();
     }
-    if(key == GLUT_KEY_DOWN)
-      controlPoints[point]-=Point(0,1,0);
-    if(key == GLUT_KEY_LEFT && glutGetModifiers() == GLUT_ACTIVE_CTRL)
-      controlPoints[point]+=Point(0,0,1);
-    else if(key == GLUT_KEY_LEFT)
-      controlPoints[point]-=Point(1,0,0);
-    if(key == GLUT_KEY_RIGHT && glutGetModifiers() == GLUT_ACTIVE_CTRL)
-      controlPoints[point]-=Point(0,0,1);
-    else if(key == GLUT_KEY_RIGHT)
-      controlPoints[point]+=Point(1,0,0);
-  }
-}
 
 // myTimer() ////////////////////////////////////////////////////////////////////
 //
 //  GLUT timer callback; gets called when a timer expires
 //
 ////////////////////////////////////////////////////////////////////////////////
-void myTimer( int value ) {
+    void myTimer( int value ) {
     // redraw our display
-    glutPostRedisplay();
+      glutPostRedisplay();
     // register a new timer callback
-    glutTimerFunc( 1000.0f / 60.0f, myTimer, 0 );
-}
+      glutTimerFunc( 1000.0f / 60.0f, myTimer, 0 );
+    }
 
 // myMenu() /////////////////////////////////////////////////////////////////////
 //
 //  Handles our Menu events
 //
 ////////////////////////////////////////////////////////////////////////////////
-void myMenu( int value ) {
+    void myMenu( int value ) {
 	// TODO #02: handle our menu options
-  switch(value){
-  case 0: exit(0);
-  }
-}
+      switch(value){
+        case 0: exit(0);
+      }
+    }
 
 // createMenus() ///////////////////////////////////////////////////////////////
 //
@@ -489,49 +487,49 @@ void myMenu( int value ) {
 //  a mouse button
 //
 ////////////////////////////////////////////////////////////////////////////////
-void createMenus() {
+    void createMenus() {
 	// TODO #01: Create a Simple Menu
-  glutCreateMenu(myMenu);
-  glutAddMenuEntry("Quit",0);
-  glutAttachMenu(GLUT_RIGHT_BUTTON);
-}
+      glutCreateMenu(myMenu);
+      glutAddMenuEntry("Quit",0);
+      glutAttachMenu(GLUT_RIGHT_BUTTON);
+    }
 
 // registerCallbacks() /////////////////////////////////////////////////////////
 //
 //  Register all of our callbacks for GLUT.
 //
 ////////////////////////////////////////////////////////////////////////////////
-void registerCallbacks() {
+    void registerCallbacks() {
     // keyboard callbacks
-    glutSetKeyRepeat(   GLUT_KEY_REPEAT_ON );
-    glutKeyboardFunc(   normalKeysDown     );
-    glutSpecialFunc(    specialKeysDown    );
+      glutSetKeyRepeat(   GLUT_KEY_REPEAT_ON );
+      glutKeyboardFunc(   normalKeysDown     );
+      glutSpecialFunc(    specialKeysDown    );
 
     // mouse callbacks
-    glutMouseFunc(      mouseCallback      );
-    glutMotionFunc(     mouseMotion        );
+      glutMouseFunc(      mouseCallback      );
+      glutMotionFunc(     mouseMotion        );
 
     // display callbacks
-    glutDisplayFunc(    renderScene        );
-    glutReshapeFunc(    resizeWindow       );
+      glutDisplayFunc(    renderScene        );
+      glutReshapeFunc(    resizeWindow       );
 
     // timer callback
-    glutTimerFunc( 1000.0f / 60.0f, myTimer, 0 );
-}
+      glutTimerFunc( 1000.0f / 60.0f, myTimer, 0 );
+    }
 
 // loadControlPoints() /////////////////////////////////////////////////////////
 //
 //  Load our control points from file and store them in a global variable.
 //
 ////////////////////////////////////////////////////////////////////////////////
-bool loadControlPoints( char* filename ) {
-  ifstream file(filename);
-  if(!file.is_open()){
-    cerr<<"ERROR. Could not find/ read file. Check spelling."<<endl;
-    return false;
-  }
- 
-  int numPoints;
+    bool loadControlPoints( char* filename ) {
+      ifstream file(filename);
+      if(!file.is_open()){
+        cerr<<"ERROR. Could not find/ read file. Check spelling."<<endl;
+        return false;
+      }
+
+      int numPoints;
   file>>numPoints; // number of points
 
   char c;
@@ -559,40 +557,40 @@ bool loadControlPoints( char* filename ) {
 int main( int argc, char **argv ) {
 
     // TODO #03: make sure a control point CSV file was passed in.  Then read the points from file
-    if(argc!=2){
-      cerr<<"Usage: "<<argv[0]<<" <CSV_NAME>"<<endl;
-      return 0;
-    }
-    loadControlPoints(argv[1]);
+  if(argc!=2){
+    cerr<<"Usage: "<<argv[0]<<" <CSV_NAME>"<<endl;
+    return 0;
+  }
+  loadControlPoints(argv[1]);
 
     // create a double-buffered GLUT window at (50, 50) with predefined window size
-    glutInit( &argc, argv );
-    glutInitDisplayMode( GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGB );
-    glutInitWindowPosition( 50, 50 );
-    glutInitWindowSize( windowWidth, windowHeight );
-    GrWindow=glutCreateWindow( "Lab03 - Bezier Curves" );
-    glSelectBuffer(PICK_BUFFER_SIZE,PickBuffer);
+  glutInit( &argc, argv );
+  glutInitDisplayMode( GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGB );
+  glutInitWindowPosition( 50, 50 );
+  glutInitWindowSize( windowWidth, windowHeight );
+  GrWindow=glutCreateWindow( "Lab03 - Bezier Curves" );
+  glSelectBuffer(PICK_BUFFER_SIZE,PickBuffer);
 
-    fprintf(stdout, "[INFO]: /--------------------------------------------------------\\\n");
-    fprintf(stdout, "[INFO]: | OpenGL Information                                     |\n");
-    fprintf(stdout, "[INFO]: |--------------------------------------------------------|\n");
-    fprintf(stdout, "[INFO]: |   OpenGL Version:  %35s |\n", glGetString(GL_VERSION));
-    fprintf(stdout, "[INFO]: |   OpenGL Renderer: %35s |\n", glGetString(GL_RENDERER));
-    fprintf(stdout, "[INFO]: |   OpenGL Vendor:   %35s |\n", glGetString(GL_VENDOR));
-    fprintf(stdout, "[INFO]: |   GLUI Version:    %35.2f |\n", GLUI_VERSION);
-    fprintf(stdout, "[INFO]: \\--------------------------------------------------------/\n");
+  fprintf(stdout, "[INFO]: /--------------------------------------------------------\\\n");
+  fprintf(stdout, "[INFO]: | OpenGL Information                                     |\n");
+  fprintf(stdout, "[INFO]: |--------------------------------------------------------|\n");
+  fprintf(stdout, "[INFO]: |   OpenGL Version:  %35s |\n", glGetString(GL_VERSION));
+  fprintf(stdout, "[INFO]: |   OpenGL Renderer: %35s |\n", glGetString(GL_RENDERER));
+  fprintf(stdout, "[INFO]: |   OpenGL Vendor:   %35s |\n", glGetString(GL_VENDOR));
+  fprintf(stdout, "[INFO]: |   GLUI Version:    %35.2f |\n", GLUI_VERSION);
+  fprintf(stdout, "[INFO]: \\--------------------------------------------------------/\n");
 
     // do some basic OpenGL setup
-    initScene();
+  initScene();
 
     // create our menu options and attach to mouse button
-    createMenus();
+  createMenus();
 
     // register callback functions...
-    registerCallbacks();
+  registerCallbacks();
 
     // and enter the GLUT loop, never to exit.
-    glutMainLoop();
+  glutMainLoop();
 
-    return(0);
+  return(0);
 }

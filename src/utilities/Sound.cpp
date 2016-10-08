@@ -17,26 +17,26 @@ void Sound::initializeOpenAL( int argc, char *argv[] ) {
 
 // WAV #1 -- NEED TO CHANGE ON PROGRAM BASIS
     #ifdef __APPLE__
-      alutLoadWAVFile((ALbyte*)"src/SoundFiles/Bird_in_Rain.wav",&format,&data,&size,&freq);
+      alutLoadWAVFile((ALbyte*)"src/SoundFiles/bird_chirping2.wav",&format,&data,&size,&freq);
     #else
-      alutLoadWAVFile((ALbyte*)"src/SoundFiles/Bird_in_Rain.wav",&format,&data,&size,&freq,&loop);
+      alutLoadWAVFile((ALbyte*)"src/SoundFiles/bird_chirping2.wav",&format,&data,&size,&freq,&loop);
     #endif
       alBufferData(buffers[0],format,data,size,freq);
     alutUnloadWAV(format,data,size,freq);
     alSourcei(sources[0],AL_BUFFER,buffers[0]);
     alSourcei(sources[0],AL_LOOPING,AL_TRUE);
-    positionSource(sources[0],0,0,0);
+    //positionSource(sources[0],0,0,0);
 // WAV #2 -- NEED TO CHANGE ON PROGRAM BASIS
     #ifdef __APPLE__
-      alutLoadWAVFile((ALbyte*)"src/SoundFiles/CartmanPoker_Face.wav",&format,&data,&size,&freq);
+      alutLoadWAVFile((ALbyte*)"src/SoundFiles/cCartmanPoker_Face.wav",&format,&data,&size,&freq);
     #else
-      alutLoadWAVFile((ALbyte*)"src/SoundFiles/CartmanPoker_Face.wav",&format,&data,&size,&freq,&loop);
+      alutLoadWAVFile((ALbyte*)"src/SoundFiles/cCartmanPoker_Face.wav",&format,&data,&size,&freq,&loop);
     #endif
       alBufferData(buffers[1],format,data,size,freq);
     alutUnloadWAV(format,data,size,freq);
     alSourcei(sources[1],AL_BUFFER,buffers[1]);
     alSourcei(sources[1],AL_LOOPING,AL_FALSE);
-    positionSource(sources[1],0,0,0);
+    //positionSource(sources[1],0,0,0);
 
     PrintOpenALInfo();					// print our OpenAL versioning information
 }
