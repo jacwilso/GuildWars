@@ -9,6 +9,7 @@
 #endif
 
 #include <math.h>
+#include "Point.h"
 class Camera
 {
 private:
@@ -71,13 +72,30 @@ public:
 
 
     // Getters
-    int getViewMode();
-    float getCameraTheta();
-    float getCameraPhi();
-    float getDirX();
-    float getDirY();
-    float getDirZ();
-    float getCameraRad();
+    int getViewMode()
+    {return viewMode;}
+    float getCameraX()
+    {return cameraX;}
+    float getCameraY()
+    {return cameraY;}
+    float getCameraZ()
+    {return cameraZ;}
+    Point getCameraPos()
+    {return Point(cameraX,cameraY,cameraZ);}
+    float getCameraTheta()
+    {return cameraTheta;}
+    float getCameraPhi()
+    {return cameraPhi;}
+    float getCameraRad()
+    {return cameraRad;}
+    float getDirX()
+    {return dirX;}
+    float getDirY()
+    {return dirY;}
+    float getDirZ()
+    {return dirZ;}
+    Point getDir()
+    {return Point(dirX,dirY,dirZ);}
 
     // Setters
     void setViewMode(int);

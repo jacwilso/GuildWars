@@ -16,6 +16,7 @@ class Point{
     float getZ();
 
     float distance(Point p);
+    void normalize();
 
     void operator=(Point p);
     void operator+=(Point p);
