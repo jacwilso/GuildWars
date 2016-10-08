@@ -240,10 +240,10 @@ void mouseMotion(int x, int y) {
 
 
 		glutPostRedisplay();	    // redraw our scene from our new camera POV
-	}
+}
 
 
-	void normalKeysDown(unsigned char key, int x, int y) {
+void normalKeysDown(unsigned char key, int x, int y) {
 		keyState[key]=true;
 		if(key <= 57 && key >= 48){
 			cam.setViewMode((int)key - 48);
@@ -251,43 +251,49 @@ void mouseMotion(int x, int y) {
 
 		if(key == 'q' || key == 'Q' || key == 27){
 			exit(0);
-		}else if( key == 'w'){
+		}		glutPostRedisplay();		// redraw our scene from our new camera POV
+}
+
+void normalKeysUp(unsigned char key, int x, int y){
+		keyState[key]=false;
+}
+
+void normalKeys(){
+                if( keyState['w'] || keyState['W']){
 			ericCartman.moveEricForward();
 			ALenum sourceState;
 			alGetSourcei( wav.sources[1], AL_SOURCE_STATE, &sourceState );
 			if(sourceState != AL_PLAYING){
 				alSourcePlay( wav.sources[1] );
 			}
-		}else if( key == 's'){
+		}
+                if(keyState['s'] || keyState['S']){
 			ericCartman.moveEricBackward();
 			ALenum sourceState;
 			alGetSourcei( wav.sources[1], AL_SOURCE_STATE, &sourceState );
 			if(sourceState != AL_PLAYING)
 				alSourcePlay( wav.sources[1] );
-		}else if(key == 'a'){
+		}
+                if(keyState['a'] || keyState['A']){
 			ericCartman.turnEricLeft();
 			ALenum sourceState;
 			alGetSourcei( wav.sources[1], AL_SOURCE_STATE, &sourceState );
 			if(sourceState != AL_PLAYING)
 				alSourcePlay( wav.sources[1] );
-		}else if(key == 'd'){
+		}
+                if(keyState['d'] || keyState['D']){
 			ericCartman.turnEricRight();
 			ALenum sourceState;
 			alGetSourcei( wav.sources[1], AL_SOURCE_STATE, &sourceState );
 			if(sourceState != AL_PLAYING)
 				alSourcePlay( wav.sources[1] );
 		}
-		glutPostRedisplay();		// redraw our scene from our new camera POV
-	}
-
-	void normalKeysUp(unsigned char key, int x, int y){
-		keyState[key]=false;
-		if( key == 'w' || key == 'W'|| key == 's' || key == 'S' ) {
+                if( !keyState['w'] || !keyState['W'] ||
+                    !keyState['s'] || !keyState['S'] ||
+                    !keyState['a'] || !keyState['A'] ||
+                    !keyState['d'] || !keyState['D']  )
 			alSourcePause( wav.sources[1] );
-		}else if(key == 'a' || key == 'A' || key == 'd' || key == 'D'){
-			alSourcePause( wav.sources[1]);
-		}
-	}
+}
 
 // Special key being pressed like arrowkeys
 
@@ -309,6 +315,7 @@ void mouseMotion(int x, int y) {
 
 // Timer function
 	void myTimer( int value ){
+                normalKeys();
 		calculateFPS();
 		ericCartman.animate();
 		animationTrack(board,bez[0],false);
