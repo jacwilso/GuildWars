@@ -1,8 +1,6 @@
 #include "Environment.h"
 
-Environment::Environment(){
-
-}
+Environment::Environment(){}
 
 void Environment::generateEnvironmentDL(std::ifstream& inFile) {
 	environmentDL = glGenLists( 1 );
@@ -13,6 +11,7 @@ void Environment::generateEnvironmentDL(std::ifstream& inFile) {
 	glPushMatrix(); {
 		placeObjectsInEnvironment(inFile);
 		drawEnvironment();
+                drawSurface();
 	}; glPopMatrix();
 	// Tell openGL to end displayiung lists
 	glEndList();
@@ -94,7 +93,6 @@ void Environment::placeObjectsInEnvironment(std::ifstream& inFile){
 
 void Environment::drawEnvironment(){
 	drawGrid();
-	//drawTrees();
 }
 
 void Environment::drawGrid() {
@@ -238,3 +236,14 @@ void Environment::drawTrees(){
 
 }
 
+void Environment::addSurface(vector<BezierSurface> surf){
+  for(int i=0; i<surf.size(); i++)
+    this->surf.push_back(surf[i]);
+}
+
+void Environment::drawSurface(){
+  for(int i=0; i<surf.size(); i++){
+    surf[i].renderSurface();
+    surf[i].renderPoints();
+  }
+}

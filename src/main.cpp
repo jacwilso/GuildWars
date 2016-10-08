@@ -581,6 +581,7 @@ bool loadControlPoints( char* filename ) {
         surf.push_back(tempSurf);
   }
   }
+  env.addSurface(surf);
 
   /*** READ TRACKS ***/
   for(int k=0; k<2; k++){
