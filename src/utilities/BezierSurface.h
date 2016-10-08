@@ -50,8 +50,6 @@ class BezierSurface{
 
     Point normal(float u,float v);
     float rotationAngle(float u,float v);
-    float rotationPhi(float u, float v);
-    float rotationTheta(float u, float v);
     Point rotationAxis(float u,float v);
 };
 

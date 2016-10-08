@@ -118,6 +118,8 @@ all: $(TARGET)
 
 clean:
 	rm -f $(OBJECTS) $(TARGET)
+test: all
+	./$(TARGET) fileIO.txt
 
 depend:
 	rm -f Makefile.bak

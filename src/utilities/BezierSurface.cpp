@@ -122,21 +122,11 @@ float BezierSurface::rotationAngle(float u,float v){
         //cout<<"ANGLE "<<acos(N.getY())*float(180)/3.14159<<endl; 
         return acos(N.getY())*float(180)/3.14159;
 }
-
-float BezierSurface::rotationTheta(float u, float v) {
-	Point N=normal(u,v);
-	return atan(N.getY()/N.getX()) * (180/3.14159);
-}
-
-float BezierSurface::rotationPhi(float u, float v){
-	Point N=normal(u,v);
-	return atan(sqrt(pow(N.getX(),2) + pow(N.getY(),2 ) )/N.getZ()) * (180/3.14159) ;
-}
 Point BezierSurface::rotationAxis(float u,float v){
 	Point N=normal(u,v);
 	float Rx,Rz,mag;
-	Rx=-N.getZ();
-	Rz=N.getX();
+	Rx= N.getZ();
+	Rz= -N.getX();
         //cout<<"R "<<Rx<<" "<<Rz<<endl;
         mag=pow(pow(Rx,2)+pow(Rz,2),.5);
         //cout<<"MAG "<<mag<<endl;
