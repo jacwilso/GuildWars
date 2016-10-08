@@ -521,7 +521,7 @@ void renderScene(void)  {
 
 	ericCartman.drawHero();
 	drawCharacters();
- //    surf.renderGrid();
+     surf.renderGrid();
  //    surf.renderSurface();
 	glCallList( env.environmentDL );
 	// Viewport 2
