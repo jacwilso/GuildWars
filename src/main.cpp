@@ -346,11 +346,11 @@ void mouseMotion(int x, int y) {
 	env.generateEnvironmentDL(file);
 }
 void View2(){
-	glViewport(0,0,windowWidth/2, windowHeight/2.5);
+	glViewport(0,0,windowWidth/2, windowHeight/2);
 
 
 		// Portions within the scissor can now be modified.
-	glScissor(0,0,windowWidth/2, windowHeight/2.5);
+	glScissor(0,0,windowWidth/2, windowHeight/2);
 	glEnable(GL_SCISSOR_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glDisable( GL_SCISSOR_TEST);
@@ -380,17 +380,18 @@ void View2(){
 }
 
 void View3(){
-	glViewport(windowWidth/2, 0, windowWidth, windowHeight/2.5);
+	glViewport(windowWidth/2, 0, windowWidth, windowHeight/2);
 
 
 		// Portions within the scissor can now be modified.
-	glScissor(windowWidth/2, 0, windowWidth, windowHeight/2.5);
+	glScissor(windowWidth/2, 0, windowWidth, windowHeight/2);
 	glEnable(GL_SCISSOR_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glDisable( GL_SCISSOR_TEST);
 
 
 	glMatrixMode(GL_MODELVIEW);
+
 
 	glPushMatrix();
 	{
@@ -410,8 +411,58 @@ void View3(){
 		glMatrixMode(GL_MODELVIEW);
 	}
 	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
+
+void drawCharacters(){
+	for(int i=0; i<2; i++){
+		glPushMatrix();
+		glTranslatef(-40+80*i,2,20*i);
+		glScalef(4,4,4);
+		bez[i].renderPoints();
+		bez[i].renderCage();
+		bez[i].renderCurve();
+		if(i==0){
+            //cout<<board.getHeroPositionZ()<<endl;
+			glPushMatrix();
+                //glTranslatef(board.getHeroPositionX(),board.getHeroPositionY(),board.getHeroPositionZ());
+			glRotatef(board.getHeroTheta(),0,1,0);
+			glScalef(.25,.25,.25);
+			board.drawHero();
+			glDisable(GL_LIGHTING);
+			glPushMatrix();
+			glColor3f(1,1,1);
+			glTranslatef(-2,1,0);
+			glScalef(.01,.01,.01);
+			const char* c;
+			for(c="jacwilso"; *c!='\0'; c++)
+				glutStrokeCharacter(StrFont,*c);
+			glPopMatrix();
+			glEnable(GL_LIGHTING);
+			glPopMatrix();
+		}else{
+			glPushMatrix();
+			glTranslatef(donkey.getHeroPositionX(),donkey.getHeroPositionY(),donkey.getHeroPositionZ());
+			glRotatef(donkey.getHeroTheta(),0,1,0);
+			glScalef(.25,.25,.25);
+			donkey.drawHero();
+			glDisable(GL_LIGHTING);
+			glPushMatrix();
+			glColor3f(1,1,1);
+			glTranslatef(-4,3.5,0);
+			glScalef(.01,.01,.01);
+			const char* c;
+			for(c="zhemingdeng"; *c!='\0'; c++)
+				glutStrokeCharacter(StrFont,*c);
+			glPopMatrix();
+			glEnable(GL_LIGHTING);
+			glPopMatrix();
+		}
+		glPopMatrix();
+	}
+}
+
 // renderScene() ///////////////////////////////////////////////////////////////
 //
 //  GLUT callback for scene rendering. Sets up the modelview matrix, renders
@@ -427,94 +478,55 @@ void renderScene(void)  {
 		//First Viewport: Take up the entire screen
 	glViewport(0,0,windowWidth,windowHeight);
 		//update the modelview matrix based on the camera's position
-		glMatrixMode(GL_MODELVIEW);              //make sure we aren't changing the projection matrix!
-		glLoadIdentity();
-		wav.positionListener(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(),cam.getDirY(),cam.getDirZ(),0,1,0);		
-		wav.positionSource(wav.sources[1],ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ());
-		cam.ArcBall(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ());
+	glMatrixMode(GL_MODELVIEW);              //make sure we aren't changing the projection matrix!
+	glLoadIdentity();
+	wav.positionListener(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(),cam.getDirY(),cam.getDirZ(),0,1,0);		
+	wav.positionSource(wav.sources[1],ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ());
+	cam.ArcBall(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ());
 
-		ericCartman.drawHero();
-        //surf.renderGrid();
-        //surf.renderSurface();
-		for(int i=0; i<2; i++){
-			glPushMatrix();
-			glTranslatef(-40+80*i,2,20*i);
-			glScalef(4,4,4);
-			bez[i].renderPoints();
-			bez[i].renderCage();
-			bez[i].renderCurve();
-			if(i==0){
-            //cout<<board.getHeroPositionZ()<<endl;
-				glPushMatrix();
-                //glTranslatef(board.getHeroPositionX(),board.getHeroPositionY(),board.getHeroPositionZ());
-				glRotatef(board.getHeroTheta(),0,1,0);
-				glScalef(.25,.25,.25);
-				board.drawHero();
-				glDisable(GL_LIGHTING);
-				glPushMatrix();
-				glColor3f(1,1,1);
-				glTranslatef(-2,1,0);
-				glScalef(.01,.01,.01);
-				const char* c;
-				for(c="jacwilso"; *c!='\0'; c++)
-					glutStrokeCharacter(StrFont,*c);
-				glPopMatrix();
-				glEnable(GL_LIGHTING);
-				glPopMatrix();
-			}else{
-				glPushMatrix();
-				glTranslatef(donkey.getHeroPositionX(),donkey.getHeroPositionY(),donkey.getHeroPositionZ());
-				glRotatef(donkey.getHeroTheta(),0,1,0);
-				glScalef(.25,.25,.25);
-				donkey.drawHero();
-				glDisable(GL_LIGHTING);
-				glPushMatrix();
-				glColor3f(1,1,1);
-				glTranslatef(-4,3.5,0);
-				glScalef(.01,.01,.01);
-				const char* c;
-				for(c="zhemingdeng"; *c!='\0'; c++)
-					glutStrokeCharacter(StrFont,*c);
-				glPopMatrix();
-				glEnable(GL_LIGHTING);
-				glPopMatrix();
-			}
-			glPopMatrix();
-		}
-		glCallList( env.environmentDL );
+	ericCartman.drawHero();
+	drawCharacters();
+ //    surf.renderGrid();
+ //    surf.renderSurface();
+	glCallList( env.environmentDL );
 	// Viewport 2
 	//View2();
 	//cam2.FreeCam();
-        //surf.renderGrid();
-        //surf.renderSurface();
-        //drawFPS();
+	//ericCartman.drawHero();
+	// drawCharacters();
+ //    //surf.renderGrid();
+ //    surf.renderSurface();
+ //    drawFPS();
 	//glCallList( env.environmentDL );
 	// Viewport 3
-	//View3();
-        //surf.renderGrid();
-        //surf.renderSurface();
-	//cam3.FreeCam();
-	//glCallList( env.environmentDL );
+	// View3();
+	
+	//  cam3.FreeCam();
+	//  ericCartman.drawHero();
+	// drawCharacters();
+	glCallList( env.environmentDL );
+	// //surf.renderGrid();
+ //    surf.renderSurface();
 	//push the back buffer to the screen
-		glutSwapBuffers();
-	}
+	glutSwapBuffers();
+}
 
 // loadControlPoints() /////////////////////////////////////////////////////////
 //
 //  Load our control points from file and store them in a global variable.
 //
 ////////////////////////////////////////////////////////////////////////////////
-	bool loadControlPoints( char* filename ) {
-		file.open(filename);
-		if(!file.is_open()){
-			cerr<<"ERROR. Could not find/ read file. Check spelling."<<endl;
-			return false;
-		}
-		int numPoints;
-		char c;
-		float tempX,tempY,tempZ;
-		vector<Point> tempP;
-		vector<Bezier> tempBez;
+bool loadControlPoints( char* filename ) {
+	file.open(filename);
+	if(!file.is_open()){
+		cerr<<"ERROR. Could not find/ read file. Check spelling."<<endl;
+		return false;
+	}
+	int numPoints;
+	char c;
+	float tempX,tempY,tempZ;
+	vector<Point> tempP;
+	vector<Bezier> tempBez;
 
   /*** READ SURFACE ***/
   file>>numPoints; // number of points

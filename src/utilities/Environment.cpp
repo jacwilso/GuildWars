@@ -33,40 +33,41 @@ void Environment::placeObjectsInEnvironment(std::ifstream& inFile){
 	inFile >> numObjects;
 	for(int i = 0; i < numObjects ; i++){
 		std::string inValue;
-		std::cout << "Start" << i << std::endl;
+		
 		getline(inFile, inValue, ',');
 		objType = atoi(inValue.c_str());
-		std::cout << objType << " ";
+		
 		getline(inFile, inValue, ',');
 		objectX = atof(inValue.c_str());
-		std::cout << objectX << " ";
+		
 		getline(inFile, inValue, ',');
 		objectY = atof(inValue.c_str());
-		std::cout << objectY << " ";
+		
 		getline(inFile, inValue, ',');
 		objectZ = atof(inValue.c_str());
-		std::cout << objectZ << " ";
+		
 		getline(inFile, inValue, ',');
 		orientX = atof(inValue.c_str());
-		std::cout << orientX << " ";
+		
 		getline(inFile, inValue, ',');
 		orientY = atof(inValue.c_str());
-		std::cout << orientY << " ";
+		
 		getline(inFile, inValue, ',');
 		orientZ = atof(inValue.c_str());
-		std::cout << orientZ << " ";
+		
 		getline(inFile,inValue, '\n');
 		objSize = atof(inValue.c_str());
-		std::cout << objSize << std::endl;
+		
+		// std::cout << "Start" << i << std::endl;
+		// std::cout << objType << " ";
+		// std::cout << objectX << " ";
+		// std::cout << objectY << " ";
+		// std::cout << objectZ << " ";
+		// std::cout << orientX << " ";
+		// std::cout << orientY << " ";
+		// std::cout << orientZ << " ";
+		// std::cout << objSize << std::endl;
 		// Debugging
-		
-		
-		
-		
-		
-
-		
-		
 		//
 		glPushMatrix();
 		{

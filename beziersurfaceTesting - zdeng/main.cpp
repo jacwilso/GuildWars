@@ -26,7 +26,7 @@
 	
 #endif
 
-//#include <GL/glui.h>			// include our GLUI header
+//#include <glui.h>			// include our GLUI header
 
 
 // C Libraries we need
@@ -83,7 +83,7 @@ static float charPosX = 0;
 static float charPosZ = 0;
 static int charRotateAngle = 0;
 //the index for fairy's position
-static int index = 0;
+//static int index = 0;
 static float tailRotateAngle = 0.0;
 
 static bool thirdPersonViewOn = false;
@@ -350,8 +350,8 @@ void drawFairy() {
 	
 	//glPushMatrix();
 	glColor3f(0.28, 0.85, 0.12);
-	glTranslatef(bezierPoints.at(index).getX(), bezierPoints.at(index).getY(), bezierPoints.at(index).getZ());
-	glutSolidSphere(0.25, 16, 16);
+	//glTranslatef(bezierPoints[index].getX(), bezierPoints[index]getY(), bezierPoints[index].getZ());
+	//glutSolidSphere(0.25, 16, 16);
 	//glPopMatrix();
 }
 
@@ -969,7 +969,7 @@ int main( int argc, char **argv ) {
     fprintf(stdout, "[INFO]: |   OpenGL Version:  %35s |\n", glGetString(GL_VERSION));
     fprintf(stdout, "[INFO]: |   OpenGL Renderer: %35s |\n", glGetString(GL_RENDERER));
     fprintf(stdout, "[INFO]: |   OpenGL Vendor:   %35s |\n", glGetString(GL_VENDOR));
-    fprintf(stdout, "[INFO]: |   GLUI Version:    %35.2f |\n", GLUI_VERSION);
+    //fprintf(stdout, "[INFO]: |   GLUI Version:    %35.2f |\n", GLUI_VERSION);
     fprintf(stdout, "[INFO]: \\--------------------------------------------------------/\n");
 
     // do some basic OpenGL setup

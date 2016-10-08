@@ -87,7 +87,6 @@ ifeq ($(USING_OPENGL), 1)
 
     # Mac builds
     else ifeq ($(shell uname), Darwin)
-        CFLAGS += -stdlib=libstdc++
 	LIBS += -framework GLUT -framework OpenGL
 
     # Linux and all other builds
@@ -129,8 +128,8 @@ endif
 
 all: $(TARGET)
 
-run: all
-	./$(TARGET)
+test: all
+	./$(TARGET) test2.csv
 
 clean:
 	rm -f $(OBJECTS) $(TARGET)

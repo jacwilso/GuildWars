@@ -21,18 +21,17 @@
 ## compile against.
 ########################################
 
-TARGET = a4
-OBJECTS = main.o Point.o Camera.o Bezier.o BezierSurface.o
+TARGET = run
+OBJECTS = bezierDemo.o Point.o Bezier.o BezierSurface.o
 
-LOCAL_INC_PATH = /opt/local/Desktop/include
-LOCAL_LIB_PATH = /opt/local/Desktop/lib
-LOCAL_BIN_PATH = /opt/local/Desktop/bin
-
+LOCAL_INC_PATH = /opt/local/include
+LOCAL_LIB_PATH = /opt/local/lib
+LOCAL_BIN_PATH = /opt/local/bin
 
 BUILDING_IN_LAB = 1
 
 USING_OPENGL = 1
-USING_GLUI = 0
+USING_GLUI = 1
 
 #########################################################################################
 #########################################################################################
@@ -56,7 +55,6 @@ CFLAGS = -Wall -g
 LAB_INC_PATH = C:/sw/opengl/include
 LAB_LIB_PATH = C:/sw/opengl/lib
 LAB_BIN_PATH = C:/sw/opengl/bin
-#INCPATH += -I./include
 
 # if we are not building in the Lab
 ifeq ($(BUILDING_IN_LAB), 0)
