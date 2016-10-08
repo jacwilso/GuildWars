@@ -78,7 +78,7 @@ map<unsigned char,bool> keyState;
 /*** Bezier ***/
 const int RESOLUTION=100;
 vector<Point> controlPoints;
-BezierSurface surf;
+vector<BezierSurface> surf;
 Bezier bez[2];
 int arc = 0, param = 0;
 
@@ -521,8 +521,10 @@ void renderScene(void)  {
 
 	ericCartman.drawHero();
 	drawCharacters();
- //    surf.renderGrid();
- //    surf.renderSurface();
+        for(int i=0; i<surf.size(); i++){
+          surf[i].renderGrid();
+          surf[i].renderSurface();
+        }
 	glCallList( env.environmentDL );
 	// Viewport 2
 	//View2();
@@ -562,21 +564,26 @@ bool loadControlPoints( char* filename ) {
 	float tempX,tempY,tempZ;
 	vector<Point> tempP;
 	vector<Bezier> tempBez;
+        BezierSurface tempSurf;
 
   /*** READ SURFACE ***/
   file>>numPoints; // number of points
 
+  for(int j=0; j<numPoints; j++){
   for(int i=0; i<numPoints*16; i++){
   	file>>tempX>>c>>tempY>>c>>tempZ;
     tempP.push_back(Point(tempX,tempY,tempZ)); // pushes each value into a point into a vector
-}
-for(int i=0; i<numPoints*4; i++)
+  }
+  for(int i=0; i<numPoints*4; i++)
     tempBez.push_back(Bezier(tempP[4*i],tempP[4*i+1],tempP[4*i+2],tempP[4*i+3])); // pushes each set of 4 points into a bezier vector
-for(int i=0; i<numPoints; i++)
-	surf.createSurface(tempBez[4*i],tempBez[4*i+1],tempBez[4*i+2],tempBez[4*i+3]);
+  for(int i=0; i<numPoints; i++){
+	tempSurf.createSurface(tempBez[4*i],tempBez[4*i+1],tempBez[4*i+2],tempBez[4*i+3]);
+        surf.push_back(tempSurf);
+  }
+  }
 
   /*** READ TRACKS ***/
-for(int k=0; k<2; k++){
+  for(int k=0; k<2; k++){
 	tempP.clear();
 	file>>numPoints;
 	for(int i=0; i<numPoints; i++){
