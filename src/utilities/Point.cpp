@@ -28,6 +28,11 @@ float Point::distance(Point p){
   return pow(pow(x-p.getX(),2)+pow(y-p.getY(),2)+pow(z-p.getZ(),2),.5);
 }
 
+void Point::normalize(){
+  float mag=pow(pow(x,2)+pow(y,2)+pow(z,2),0.5);
+  x/=mag; y/=mag; z/=mag;
+}
+
 Point operator*(Point p,float f){
   return Point(p.getX()*f, p.getY()*f, p.getZ()*f);
 }

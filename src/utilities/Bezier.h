@@ -40,6 +40,8 @@ class Bezier{
 
     Point evaluateCurve(int bez,float t); // evaluate points along the bezier curve
     Point derivative(int bez,float t);
+    Point paramDerivative(int pos);
+    Point arcDerivative(int arcStep);
 
     void renderCurve(); // render the curve by connecting the points
     void renderPoints(); // render the control points
@@ -47,7 +49,7 @@ class Bezier{
 
     void bezierConnect(Bezier bez); // connect anothe bezier curve to the current curve
     Point parametricCurve(int pos); // track the point along the curve
-    Point arcLengthCurve(float arc);
+    Point arcLengthCurve(int arcStep);
 
     void operator=(Bezier bez);
 };

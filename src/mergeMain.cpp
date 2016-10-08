@@ -100,6 +100,11 @@ EricCartman ericCartman;
 Camera cam, cam2, cam3;
 Sound wav;
 ifstream file;
+
+/*** temporary ***/
+Point arcPos, paramPos;
+float boardTheta, donkeyTheta;
+
 /********************* Functions ****************************/
 void recomputeOrientation() {
 
@@ -171,19 +176,34 @@ void drawFPS(){
 	glEnable(GL_LIGHTING);
 }
 
-void animationTrack(Hero& hero, Bezier curve, bool parametric){
-	Point temp;
+void animationTrack(Bezier curve, bool parametric){
+	Point tmpC, tmpD;
 	if(parametric){
-		temp=curve.parametricCurve(param);
+		tmpC=curve.parametricCurve(param);
+
+                tmpD=curve.paramDerivative(param);
+                donkeyTheta=atan2(tmpD.getX(),tmpD.getZ())*180/3.1415;
 		param++;
 		if(param+1>curve.resSize()) param=0;
+                paramPos=tmpC;
 	}else{
-		temp=curve.parametricCurve(arc);
-    //temp=curve.arcLengthCurve(arc);
+                tmpC=curve.arcLengthCurve(arc);
+                //cout<<"TEMP: "<<temp.getX()<<", "<<temp.getZ()<<endl<<"ARC++ "<<arc<<endl;
+                tmpD=curve.arcDerivative(arc);
+                boardTheta=atan2(tmpD.getX(),tmpD.getZ())*180/3.1415;
 		arc++;
 		if(arc+1>curve.resSize()) arc=0;
+                arcPos=tmpC;
 	}
-  //hero.setHeroPos(temp.getX(),0,temp.getZ(),0,0);
+}
+
+float nameAngle(Point pos){
+  Point dif=pos-cam.getCameraPos();
+  dif.normalize();
+  Point camDir=cam.getDir();
+  camDir.normalize();
+  float dot=dif.getX()*camDir.getX()+dif.getY()*camDir.getY()+dif.getZ()*camDir.getZ();
+  return 180-acos(dot)*180/3.1415;
 }
 
 void mouseCallback(int button, int state, int thisX, int thisY) {
@@ -319,8 +339,8 @@ void mouseMotion(int x, int y) {
 		normalKeys();
 		calculateFPS();
 		ericCartman.animate();
-		animationTrack(board,bez[0],false);
-		animationTrack(donkey,bez[1],true);
+                animationTrack(bez[0],false);
+                animationTrack(bez[1],true);
 
 		glutPostRedisplay();
 		glutTimerFunc( 1000/60, myTimer, 0);
@@ -486,6 +506,7 @@ void renderScene(void)  {
 		//First Viewport: Take up the entire screen
 	glViewport(0,0,windowWidth,windowHeight);
 		//update the modelview matrix based on the camera's position
+<<<<<<< HEAD:src/main.cpp
 	glMatrixMode(GL_MODELVIEW);              //make sure we aren't changing the projection matrix!
 	glLoadIdentity();
 	wav.positionListener(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(),cam.getDirY(),cam.getDirZ(),0,1,0);		
@@ -497,6 +518,64 @@ void renderScene(void)  {
  //    surf.renderGrid();
  //    surf.renderSurface();
 	glCallList( env.environmentDL );
+=======
+		glMatrixMode(GL_MODELVIEW);              //make sure we aren't changing the projection matrix!
+		glLoadIdentity();
+		wav.positionListener(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(),cam.getDirY(),cam.getDirZ(),0,1,0);		
+		wav.positionSource(wav.sources[1],ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ());
+		cam.ArcBall(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ());
+
+		ericCartman.drawHero();
+                
+		const char* c;
+		glPushMatrix();
+		  glTranslatef(0,3,0);
+		  glScalef(4,4,4);
+		  bez[0].renderPoints();
+		  bez[0].renderCage();
+		  bez[0].renderCurve();
+                  glPushMatrix();
+                    glTranslatef(arcPos.getX(),arcPos.getY(),arcPos.getZ());
+                    glRotatef(boardTheta+90,0,1,0);
+                    glScalef(.25,.25,.25);
+                    board.drawHero();
+		    glDisable(GL_LIGHTING);
+		    glPushMatrix();
+		      glColor3f(1,1,1);
+		      glTranslatef(-2,1,0);
+		      glScalef(.01,.01,.01);
+		      for(c="jacwilso"; *c!='\0'; c++)
+		      	glutStrokeCharacter(StrFont,*c);
+		    glPopMatrix();
+		    glEnable(GL_LIGHTING);
+                  glPopMatrix();
+                glPopMatrix();
+		glPushMatrix();
+		  glTranslatef(10,3,10);
+		  glScalef(4,4,4);
+		  bez[1].renderPoints();
+		  bez[1].renderCage();
+		  bez[1].renderCurve();
+                  glPushMatrix();
+                    glTranslatef(paramPos.getX(),paramPos.getY(),paramPos.getZ());
+                    glScalef(.25,.25,.25);
+                    glRotatef(donkeyTheta-180,0,1,0);
+                    donkey.drawHero();
+		    glDisable(GL_LIGHTING);
+		    glPushMatrix();
+		      glColor3f(1,1,1);
+		      glTranslatef(-4,3.5,0);
+                      //glRotatef(nameAngle(paramPos),0,1,0);
+		      glScalef(.01,.01,.01);
+		      for(c="zhemingdeng"; *c!='\0'; c++)
+		        glutStrokeCharacter(StrFont,*c);
+	            glPopMatrix();
+		    glEnable(GL_LIGHTING);
+                  glPopMatrix();
+                glPopMatrix();
+
+		glCallList( env.environmentDL );
+>>>>>>> jacwilso:src/mergeMain.cpp
 	// Viewport 2
 	//View2();
 	//cam2.FreeCam();

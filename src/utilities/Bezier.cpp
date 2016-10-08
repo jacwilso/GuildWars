@@ -24,6 +24,20 @@ Point Bezier::derivative(int bez,float t) {
           3*pow(t,2)*p[bez+3]);
 }
 
+Point Bezier::paramDerivative(int pos) {
+  int bez=4*(pos/RESOLUTION);
+  float t=(float)(pos%RESOLUTION)/RESOLUTION;
+  return derivative(bez,t);
+}
+
+Point Bezier::arcDerivative(int arcStep){
+  float arc=(float)(arcStep)*(float)(arcSize())/resSize();
+  if(arc!=0 || arc!=p.size()/4)
+    popTab(arc);
+  int bez=floor(arcParam[arc]);
+  return derivative(4*bez,arcParam[arc]-bez);
+}
+
 // render the curve -- same code as lab03
 void Bezier::renderCurve() {
   glDisable(GL_LIGHTING);
@@ -77,14 +91,21 @@ Point Bezier::parametricCurve(int pos){
 
 void Bezier::populateTable(){
   float dist=0;
+  arcParam.clear(); paramArc.clear();
   arcParam[0]=0;
   paramArc[0]=0;
-  for(unsigned int i=0; i<RESOLUTION*p.size()/4; i++){
-      Point tmp1=evaluateCurve(i/RESOLUTION,(float)(i)/RESOLUTION);
-      Point tmp2=evaluateCurve(i/RESOLUTION,(float)(i+1)/RESOLUTION);
+  for(unsigned int i=0; i<p.size(); i+=4)
+    for(unsigned int j=0; j<RESOLUTION; j++){
+      Point tmp1=evaluateCurve(i,(float)(j)/RESOLUTION);
+      Point tmp2=evaluateCurve(i,(float)(j+1)/RESOLUTION);
+      //cout<<i<<" "<<(float)(j)/RESOLUTION<<" "<<(float)(j+1)/RESOLUTION<<endl;
       dist+=tmp1.distance(tmp2);
-      paramArc[(float)(i+1)/RESOLUTION+(i)/RESOLUTION]=dist;
+      float t=(float)(j+1)/RESOLUTION+i/4;
+      //cout<<"dist "<<dist<<" t "<<t<<endl;
+      paramArc[t]=dist;
+      arcParam[dist]=t;
     }
+    cout<<arcSize()<<endl;
 }
 
 void Bezier::popTab(float arc){
@@ -106,14 +127,19 @@ void Bezier::popTab(float arc){
     }
   }
   tmp=(arc-left)/(right-left)*(rightT-leftT)+leftT;
+  //cout<<"ARC "<<arc<<" T "<<tmp<<endl;
   arcParam[arc]=tmp;
   paramArc[tmp]=arc;
 }
 
-Point Bezier::arcLengthCurve(float arc){
+Point Bezier::arcLengthCurve(int arcStep){
+  float arc=(float)(arcStep)*(float)(arcSize())/resSize();
+  //cout<<"ARC "<<arc<<" SIZE "<<arcSize()<<endl;
   if(arc!=0 || arc!=p.size()/4)
     popTab(arc);
-  return evaluateCurve(floor(arcParam[arc]),arcParam[arc]);
+  int bez=floor(arcParam[arc]);
+  //cout<<"BEZ "<<bez<<" T "<<arcParam[arc]<<endl;
+  return evaluateCurve(4*bez,arcParam[arc]-bez);
 }
 
 void Bezier::operator=(Bezier bez){

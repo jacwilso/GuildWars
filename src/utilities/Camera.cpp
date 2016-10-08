@@ -18,30 +18,6 @@ Camera::Camera(){
 }
 
 
-
-// Getters
-int Camera::getViewMode(){
-	return viewMode;
-}
-float Camera::getCameraTheta(){
-	return cameraTheta;
-}
-float Camera::getCameraPhi(){
-	return cameraPhi;
-}
-float Camera::getDirX(){
-	return dirX;
-}
-float Camera::getDirY(){
-	return dirY;
-}
-float Camera::getDirZ(){
-	return dirZ;
-}
-float Camera::getCameraRad(){
-	return cameraRad;
-}
-
 // Setters
 void Camera::setViewMode(int item){
 	viewMode = item;
