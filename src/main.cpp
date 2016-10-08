@@ -412,6 +412,7 @@ void renderScene(void)  {
                 board.drawHero();
                 glDisable(GL_LIGHTING);
                 glPushMatrix();
+                  glColor3f(1,1,1);
                   glTranslatef(-2,1,0);
                   glScalef(.01,.01,.01);
                   const char* c;
@@ -426,6 +427,16 @@ void renderScene(void)  {
                 glRotatef(donkey.getHeroTheta(),0,1,0);
                 glScalef(.25,.25,.25);
                 donkey.drawHero();
+                glDisable(GL_LIGHTING);
+                glPushMatrix();
+                  glColor3f(1,1,1);
+                  glTranslatef(-4,3.5,0);
+                  glScalef(.01,.01,.01);
+                  const char* c;
+                  for(c="zhemingdeng"; *c!='\0'; c++)
+                    glutStrokeCharacter(StrFont,*c);
+                glPopMatrix();
+                glEnable(GL_LIGHTING);
               glPopMatrix();
             }
           glPopMatrix();
