@@ -1,8 +1,6 @@
 #include "Environment.h"
 
-Environment::Environment(){
-
-}
+Environment::Environment(){}
 
 void Environment::generateEnvironmentDL(std::ifstream& inFile) {
 	environmentDL = glGenLists( 1 );
@@ -12,7 +10,9 @@ void Environment::generateEnvironmentDL(std::ifstream& inFile) {
 	// Draw the figures
 	glPushMatrix(); {
 		placeObjectsInEnvironment(inFile);
-		drawEnvironment();
+		//drawGrid();
+                drawSurface();
+                drawCurve();
 	}; glPopMatrix();
 	// Tell openGL to end displayiung lists
 	glEndList();
@@ -29,7 +29,7 @@ void Environment::placeObjectsInEnvironment(std::ifstream& inFile){
 	float objectX = 0, objectY = 0, objectZ = 0;
 	float orientX = 0, orientY = 0, orientZ = 0;
 	float objSize = 0;
-	char comments;
+	//char comments;
 	inFile >> numObjects;
 	for(int i = 0; i < numObjects ; i++){
 		std::string inValue;
@@ -72,7 +72,7 @@ void Environment::placeObjectsInEnvironment(std::ifstream& inFile){
 		glPushMatrix();
 		{
 			glTranslatef(objectX, objectY, objectZ);
-			glRotatef(orientZ, 0,0,1);
+			glRotatef(orientX, 0,0,1);
 			glRotatef(orientY, 0,1,0);
 			glRotatef(orientZ, 1,0,0);
 			glScalef(objSize, objSize, objSize);
@@ -81,6 +81,9 @@ void Environment::placeObjectsInEnvironment(std::ifstream& inFile){
 				case 0:
 					drawTree();
 					break;	
+                                case 1:
+                                        drawHut();
+                                        break;
 				default:
 					drawTree();
 					break;
@@ -89,12 +92,6 @@ void Environment::placeObjectsInEnvironment(std::ifstream& inFile){
 		glPopMatrix();
 	}
 
-}
-
-
-void Environment::drawEnvironment(){
-	drawGrid();
-	//drawTrees();
 }
 
 void Environment::drawGrid() {
@@ -162,79 +159,117 @@ void Environment::drawTree(){
 		glPopMatrix();
 	}
 	glPopMatrix();
-
 }
 
-void Environment::drawTrees(){
+void Environment::drawHut() {
 	glPushMatrix();
-	glTranslatef(20,0,25);
-	drawTree();
+	glRotatef(-90, 1, 0, 0);
+	glColor3f(0.55, 0.55, 0.57);
+	GLUquadricObj *quadratic;
+	quadratic = gluNewQuadric();
+	gluCylinder(quadratic, 2, 2, 4, 32, 32);
 	glPopMatrix();
-
 	glPushMatrix();
-	glTranslatef(-25,0,-20);
-	drawTree();
+	glRotatef(90, 1, 0, 0);
+	glTranslatef(0, 0, -7);
+	glColor3f(0.5, 0.5, 0);
+	gluCylinder(quadratic, 0, 3, 4, 32, 32);
 	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-40,0,-30);
-	drawTree();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-50,0,-50);
-	drawTree();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-70,0,-80);
-	drawTree();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-65,0,-93);
-	drawTree();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-15,0,-65);
-	drawTree();
-	glPopMatrix();	
-
-	glPushMatrix();
-	glTranslatef(-82,0,-77);
-	drawTree();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(0,0,-77);
-	drawTree();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(10,0,-44);
-	drawTree();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(22,0,90);
-	drawTree();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(90,0,90);
-	drawTree();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-82,0,20);
-	drawTree();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-40,0,-23);
-	drawTree();
-	glPopMatrix();
-
 }
 
+void Environment::addSurface(vector<BezierSurface> surf){
+  for(unsigned int i=0; i<surf.size(); i++)
+    this->surf.push_back(surf[i]);
+}
+
+void Environment::drawSurface(){
+  for(unsigned int i=0; i<surf.size(); i++){
+          glPushMatrix();
+          glTranslatef(0,0,0);
+          glScalef(4,4,4);
+          surf[i].renderGrid();
+          surf[i].renderSurface();
+          glPopMatrix();
+  }
+}
+
+void Environment::addCurve(Bezier curve){
+  this->track=curve;
+}
+
+void Environment::drawCurve(){
+  glPushMatrix();
+	glTranslatef(0,3,0);
+        glScalef(4,4,4);
+        track.renderPoints();
+	track.renderCage();
+	track.renderCurve();
+  glPopMatrix();
+}
+
+void Environment::drawBox(){
+  glColor3ub(181,166,66); // Brass color
+  // BOTTOM SQUARE
+  glPushMatrix();
+    glTranslatef(0,0,-5);
+    glScalef(10,1,1);
+    glutSolidCube(1);
+  glPopMatrix();
+  glPushMatrix();
+    glTranslatef(-5,0,0);
+    glScalef(1,1,10);
+    glutSolidCube(1);
+  glPopMatrix();
+  glPushMatrix();
+    glTranslatef(0,0,5);
+    glScalef(10,1,1);
+    glutSolidCube(1);
+  glPopMatrix();
+  glPushMatrix();
+    glTranslatef(5,0,0);
+    glScalef(1,1,10);
+    glutSolidCube(1);
+  glPopMatrix();
+  // TOP SQUARE
+  glPushMatrix();
+    glTranslatef(0,10,-5);
+    glScalef(10,1,1);
+    glutSolidCube(1);
+  glPopMatrix();
+  glPushMatrix();
+    glTranslatef(-5,10,0);
+    glScalef(1,1,10);
+    glutSolidCube(1);
+  glPopMatrix();
+  glPushMatrix();
+    glTranslatef(0,10,5);
+    glScalef(10,1,1);
+    glutSolidCube(1);
+  glPopMatrix();
+  glPushMatrix();
+    glTranslatef(5,10,0);
+    glScalef(1,1,10);
+    glutSolidCube(1);
+  glPopMatrix();
+  // PILLARS
+  glPushMatrix();
+    glTranslatef(5,5,-5);
+    glScalef(1,11,1);
+    glutSolidCube(1);
+  glPopMatrix();
+  glPushMatrix();
+    glTranslatef(-5,5,-5);
+    glScalef(1,11,1);
+    glutSolidCube(1);
+  glPopMatrix();
+  glPushMatrix();
+    glTranslatef(5,5,5);
+    glScalef(1,11,1);
+    glutSolidCube(1);
+  glPopMatrix();
+  glPushMatrix();
+    glTranslatef(-5,5,5);
+    glScalef(1,11,1);
+    glutSolidCube(1);
+  glPopMatrix();
+}

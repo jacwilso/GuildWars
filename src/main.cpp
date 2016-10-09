@@ -79,7 +79,7 @@ map<unsigned char,bool> keyState;
 const int RESOLUTION=100;
 vector<Point> controlPoints;
 vector<BezierSurface> surf;
-Bezier bez[2];
+Bezier track;
 int arc = 0, param = 0;
 
 /*** Models ***/
@@ -123,10 +123,10 @@ void resizeWindow(int w, int h) {
 	windowWidth = w;
 	windowHeight = h;
 
-		//update the viewport to fill the window
+  //update the viewport to fill the window
 	glViewport(0, 0, w, h);
 
-		//update the projection matrix with the new window properties
+  //update the projection matrix with the new window properties
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(45.0,aspectRatio,0.1,100000);
@@ -183,23 +183,23 @@ void drawFPS(){
 	glEnable(GL_LIGHTING);
 }
 
-void animationTrack(Bezier curve, bool parametric){
+void animationTrack(bool parametric){
 	Point tmpC, tmpD;
 	if(parametric){
-		tmpC=curve.parametricCurve(param);
+		tmpC=track.parametricCurve(param);
 
-		tmpD=curve.paramDerivative(param);
+		tmpD=track.paramDerivative(param);
 		donkeyTheta=atan2(tmpD.getX(),tmpD.getZ())*180/3.1415;
 		param++;
-		if(param+1>curve.resSize()) param=0;
+		if(param+1>track.resSize()) param=0;
 		paramPos=tmpC;
 	}else{
-		tmpC=curve.arcLengthCurve(arc);
-                //cout<<"TEMP: "<<temp.getX()<<", "<<temp.getZ()<<endl<<"ARC++ "<<arc<<endl;
-		tmpD=curve.arcDerivative(arc);
+		tmpC=track.arcLengthCurve(arc);
+    //cout<<"TEMP: "<<temp.getX()<<", "<<temp.getZ()<<endl<<"ARC++ "<<arc<<endl;
+		tmpD=track.arcDerivative(arc);
 		boardTheta=atan2(tmpD.getX(),tmpD.getZ())*180/3.1415;
 		arc++;
-		if(arc+1>curve.resSize()) arc=0;
+		if(arc+1>track.resSize()) arc=0;
 		arcPos=tmpC;
 	}
 }
@@ -214,7 +214,7 @@ float nameAngle(Point pos){
 }
 
 void mouseCallback(int button, int state, int thisX, int thisY) {
-		// update the left mouse button states, if applicable
+  // update the left mouse button states, if applicable
 	if(button == GLUT_LEFT_BUTTON){
 		leftMouseButton = state;
 		if(leftMouseButton == GLUT_DOWN){
@@ -228,13 +228,13 @@ void processEricMenu( int value ) {
 	screen1SubjectNumber = 0;
 	switch (value){
 		case 0: // Arcball
-			cam.setViewMode(6);
+		cam.setViewMode(6);
 		break;
 		case 1: // 1st Person
-			cam.setViewMode(2);
+		cam.setViewMode(2);
 		break;
 		case 2: // SkyCam
-			cam.setViewMode(4);
+		cam.setViewMode(4);
 		break;
 		break;
 		default:
@@ -245,13 +245,13 @@ void processBoardMenu( int value ) {
 	screen1SubjectNumber = 1;
 	switch (value){
 		case 0:
-			cam.setViewMode(6);
+		cam.setViewMode(6);
 		break;
 		case 1:
-			cam.setViewMode(2);
+		cam.setViewMode(2);
 		break;
 		case 2:
-			cam.setViewMode(4);
+		cam.setViewMode(4);
 		break;
 		default:
 		break;
@@ -261,13 +261,13 @@ void processDonkeyMenu( int value ) {
 	screen1SubjectNumber = 2;
 	switch (value){
 		case 0:
-			cam.setViewMode(6);
+		cam.setViewMode(6);
 		break;
 		case 1:
-			cam.setViewMode(2);
+		cam.setViewMode(2);
 		break;
 		case 2:
-			cam.setViewMode(4);
+		cam.setViewMode(4);
 		break;
 		default:
 		break;
@@ -278,16 +278,16 @@ void processScreen1Menu(int value){
 	screen1SubjectNumber = value/3;
 	switch(value%3){
 		case 0:
-			cam.setViewMode(6);
+		cam.setViewMode(6);
 		break;
 		case 1:
-			cam.setViewMode(2);	
+		cam.setViewMode(2);	
 		break;
 		case 2:
-			cam.setViewMode(4);
+		cam.setViewMode(4);
 		break;
 		default:
-			cam.setViewMode(6);
+		cam.setViewMode(6);
 		break;
 	}
 }
@@ -296,16 +296,16 @@ void processScreen2Menu(int value){
 	screen2SubjectNumber = value/3;
 	switch(value%3){
 		case 0:
-			cam2.setViewMode(6);
+		cam2.setViewMode(6);
 		break;
 		case 1:
-			cam2.setViewMode(2);	
+		cam2.setViewMode(2);	
 		break;
 		case 2:
-			cam2.setViewMode(4);
+		cam2.setViewMode(4);
 		break;
 		default:
-			cam2.setViewMode(6);
+		cam2.setViewMode(6);
 		break;
 	}
 }
@@ -314,16 +314,16 @@ void processScreen3Menu(int value){
 	screen3SubjectNumber = value/3;
 	switch(value%3){
 		case 0:
-			cam3.setViewMode(6);
+		cam3.setViewMode(6);
 		break;
 		case 1:
-			cam3.setViewMode(2);	
+		cam3.setViewMode(2);	
 		break;
 		case 2:
-			cam3.setViewMode(4);
+		cam3.setViewMode(4);
 		break;
 		default:
-			cam3.setViewMode(6);
+		cam3.setViewMode(6);
 		break;
 	}
 }
@@ -346,7 +346,7 @@ void processMainMenu(int value){
 		}
 		break;
 		case 2:
-
+			cam.setViewMode(0);
 		break;
 		case 3:
 		fpsOn = !fpsOn;
@@ -437,131 +437,136 @@ void mouseMotion(int x, int y) {
 		}
 		mouseX = x;
 		mouseY = y;
-				cam.recomputeOrientation();     // update camera (x,y,z) based on (radius,theta,phi)
-				cam2.recomputeOrientation();
-				cam3.recomputeOrientation();
-			}
+    cam.recomputeOrientation();     // update camera (x,y,z) based on (radius,theta,phi)
+    cam2.recomputeOrientation();
+    cam3.recomputeOrientation();
+}
 
 
-		glutPostRedisplay();	    // redraw our scene from our new camera POV
+  glutPostRedisplay();	    // redraw our scene from our new camera POV
+}
+
+
+void normalKeysDown(unsigned char key, int x, int y) {
+	keyState[key]=true;
+	if(key <= 57 && key >= 48){
+		cam.setViewMode((int)key - 48);
 	}
 
+	if(key == 'q' || key == 'Q' || key == 27){
+		exit(0);
+  }		glutPostRedisplay();		// redraw our scene from our new camera POV
+}
 
-	void normalKeysDown(unsigned char key, int x, int y) {
-		keyState[key]=true;
-		if(key <= 57 && key >= 48){
-			cam.setViewMode((int)key - 48);
+void normalKeysUp(unsigned char key, int x, int y){
+	keyState[key]=false;
+	if( !keyState['w'] || !keyState['W'] ||
+		!keyState['s'] || !keyState['S'] ||
+		!keyState['a'] || !keyState['A'] ||
+		!keyState['d'] || !keyState['D']  )
+		alSourcePause( wav.sources[1] );
+}
+
+void normalKeys(){
+	if( keyState['w'] || keyState['W']){
+		ericCartman.moveEricForward();
+		ALenum sourceState;
+		alGetSourcei( wav.sources[1], AL_SOURCE_STATE, &sourceState );
+		if(sourceState != AL_PLAYING){
+			alSourcePlay( wav.sources[1] );
 		}
-
-		if(key == 'q' || key == 'Q' || key == 27){
-			exit(0);
-		}		glutPostRedisplay();		// redraw our scene from our new camera POV
+	}
+	if(keyState['s'] || keyState['S']){
+		ericCartman.moveEricBackward();
+		ALenum sourceState;
+		alGetSourcei( wav.sources[1], AL_SOURCE_STATE, &sourceState );
+		if(sourceState != AL_PLAYING)
+			alSourcePlay( wav.sources[1] );
+	}
+	if(keyState['a'] || keyState['A']){
+		ericCartman.turnEricLeft();
+		ALenum sourceState;
+		alGetSourcei( wav.sources[1], AL_SOURCE_STATE, &sourceState );
+		if(sourceState != AL_PLAYING)
+			alSourcePlay( wav.sources[1] );
+	}
+	if(keyState['d'] || keyState['D']){
+		ericCartman.turnEricRight();
+		ALenum sourceState;
+		alGetSourcei( wav.sources[1], AL_SOURCE_STATE, &sourceState );
+		if(sourceState != AL_PLAYING)
+			alSourcePlay( wav.sources[1] );
 	}
 
-	void normalKeysUp(unsigned char key, int x, int y){
-		keyState[key]=false;
-		if( !keyState['w'] || !keyState['W'] ||
-			!keyState['s'] || !keyState['S'] ||
-			!keyState['a'] || !keyState['A'] ||
-			!keyState['d'] || !keyState['D']  )
-			alSourcePause( wav.sources[1] );
-	}
-
-	void normalKeys(){
-		if( keyState['w'] || keyState['W']){
-			ericCartman.moveEricForward();
-			ALenum sourceState;
-			alGetSourcei( wav.sources[1], AL_SOURCE_STATE, &sourceState );
-			if(sourceState != AL_PLAYING){
-				alSourcePlay( wav.sources[1] );
-			}
-		}
-		if(keyState['s'] || keyState['S']){
-			ericCartman.moveEricBackward();
-			ALenum sourceState;
-			alGetSourcei( wav.sources[1], AL_SOURCE_STATE, &sourceState );
-			if(sourceState != AL_PLAYING)
-				alSourcePlay( wav.sources[1] );
-		}
-		if(keyState['a'] || keyState['A']){
-			ericCartman.turnEricLeft();
-			ALenum sourceState;
-			alGetSourcei( wav.sources[1], AL_SOURCE_STATE, &sourceState );
-			if(sourceState != AL_PLAYING)
-				alSourcePlay( wav.sources[1] );
-		}
-		if(keyState['d'] || keyState['D']){
-			ericCartman.turnEricRight();
-			ALenum sourceState;
-			alGetSourcei( wav.sources[1], AL_SOURCE_STATE, &sourceState );
-			if(sourceState != AL_PLAYING)
-				alSourcePlay( wav.sources[1] );
-		}
-
-	}
+}
 
 // Special key being pressed like arrowkeys
 
-	void SpecialKeys(int key, int x, int y)
+void SpecialKeys(int key, int x, int y)
+{
+	switch (key)
 	{
-		switch (key)
-		{
-			case GLUT_KEY_LEFT:
-			break;
-			case GLUT_KEY_RIGHT:
-			break;
-			case GLUT_KEY_UP:
-			break;
-			case GLUT_KEY_DOWN:
-			break;
-		}
-		glutPostRedisplay();
+		case GLUT_KEY_LEFT:
+		break;
+		case GLUT_KEY_RIGHT:
+		break;
+		case GLUT_KEY_UP:
+		break;
+		case GLUT_KEY_DOWN:
+		break;
 	}
+	glutPostRedisplay();
+}
 
 // Timer function
-	void myTimer( int value ){
-		normalKeys();
-		calculateFPS();
-		ericCartman.animate();
-		animationTrack(bez[0],false);
-		animationTrack(bez[1],true);
+void myTimer( int value ){
+	normalKeys();
+	calculateFPS();
 
-		glutPostRedisplay();
-		glutTimerFunc( 1000/60, myTimer, 0);
-	}
+	ericCartman.animate();
+	board.animate();
+	donkey.animate();
 
-	void initScene()  {
-		glEnable(GL_DEPTH_TEST);
+	animationTrack(false);
+	animationTrack(true);
 
-		//******************************************************************
-		// this is some code to enable a default light for the scene;
-		// feel free to play around with this, but we won't talk about
-		// lighting in OpenGL for another couple of weeks yet.
-		float lightCol[4] = { 1, 1, 1, 1};
-		float ambientCol[4] = { 0.0, 0.0, 0.0, 1.0 };
-		float lPosition[4] = { 10, 10, 10, 1 };
-		glLightfv( GL_LIGHT0, GL_POSITION,lPosition );
-		glLightfv( GL_LIGHT0, GL_DIFFUSE,lightCol );
-		glLightfv( GL_LIGHT0, GL_AMBIENT, ambientCol );
-		glEnable( GL_LIGHTING );
-		glEnable( GL_LIGHT0 );
 
-		// tell OpenGL not to use the material system; just use whatever we 
-		// pass with glColor*()
-		glEnable( GL_COLOR_MATERIAL );
-		glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
-		//******************************************************************
+	glutPostRedisplay();
+	glutTimerFunc( 1000/60, myTimer, 0);
+}
 
-		glShadeModel(GL_FLAT);
+void initScene()  {
+	glEnable(GL_DEPTH_TEST);
 
-	srand( time(NULL) );	// seed our random number generator
-	env.generateEnvironmentDL(file);
+  //******************************************************************
+  // this is some code to enable a default light for the scene;
+  // feel free to play around with this, but we won't talk about
+  // lighting in OpenGL for another couple of weeks yet.
+	float lightCol[4] = { 1, 1, 1, 1};
+	float ambientCol[4] = { 0.0, 0.0, 0.0, 1.0 };
+	float lPosition[4] = { 10, 10, 10, 1 };
+	glLightfv( GL_LIGHT0, GL_POSITION,lPosition );
+	glLightfv( GL_LIGHT0, GL_DIFFUSE,lightCol );
+	glLightfv( GL_LIGHT0, GL_AMBIENT, ambientCol );
+	glEnable( GL_LIGHTING );
+	glEnable( GL_LIGHT0 );
+
+  // tell OpenGL not to use the material system; just use whatever we 
+  // pass with glColor*()
+	glEnable( GL_COLOR_MATERIAL );
+	glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
+  //******************************************************************
+
+	glShadeModel(GL_FLAT);
+
+  srand( time(NULL) );	// seed our random number generator
+  env.generateEnvironmentDL(file);
 }
 void View2(){
 	glViewport(0,0,windowWidth/2, windowHeight/2);
 
 
-		// Portions within the scissor can now be modified.
+  // Portions within the scissor can now be modified.
 	glScissor(0,0,windowWidth/2, windowHeight/2);
 	glEnable(GL_SCISSOR_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -595,7 +600,7 @@ void View3(){
 	glViewport(windowWidth/2, 0, windowWidth, windowHeight/2);
 
 
-		// Portions within the scissor can now be modified.
+  // Portions within the scissor can now be modified.
 	glScissor(windowWidth/2, 0, windowWidth, windowHeight/2);
 	glEnable(GL_SCISSOR_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -629,39 +634,33 @@ void View3(){
 
 void drawCharacters(){
 	const char* c;
-
+  /*
+     Point temp=surf.evaluateSurface(u,v);
+     Point axis=surf.rotationAxis(u,v);
+     float surfAngle=surf.rotationAngle(u,v);
+     Point norm = surf.normal(u,v);
+   */
 	glPushMatrix();
-		glTranslatef(0,3,0);
-		glScalef(4,4,4);
-		bez[0].renderPoints();
-		bez[0].renderCage();
-		bez[0].renderCurve();
-
-		glPushMatrix();
-		glTranslatef(arcPos.getX(),arcPos.getY(),arcPos.getZ());
-		glRotatef(boardTheta+90,0,1,0);
-		glScalef(.25,.25,.25);
-		board.drawHero();
-		glDisable(GL_LIGHTING);
-			glPushMatrix();
-			glColor3f(1,1,1);
-			glTranslatef(-2,1,0);
-			glScalef(.01,.01,.01);
-			for(c="jacwilso"; *c!='\0'; c++){
-				glutStrokeCharacter(StrFont,*c);
-			}
-			glPopMatrix();
-
-		glEnable(GL_LIGHTING);
-		glPopMatrix();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(10,3,10);
+  // TRACK
+	glTranslatef(0,3,0);
 	glScalef(4,4,4);
-	bez[1].renderPoints();
-	bez[1].renderCage();
-	bez[1].renderCurve();
+  // BOARD
+	glPushMatrix();
+	glTranslatef(arcPos.getX(),arcPos.getY(),arcPos.getZ());
+	glRotatef(boardTheta+90,0,1,0);
+	glScalef(.25,.25,.25);
+	board.drawHero();
+	glDisable(GL_LIGHTING);
+	glPushMatrix();
+	glColor3f(1,1,1);
+	glTranslatef(-2,1,0);
+	glScalef(.01,.01,.01);
+	for(c="jacwilso"; *c!='\0'; c++)
+		glutStrokeCharacter(StrFont,*c);
+	glPopMatrix();
+	glEnable(GL_LIGHTING);
+	glPopMatrix();
+  // DONKEY
 	glPushMatrix();
 	glTranslatef(paramPos.getX(),paramPos.getY(),paramPos.getZ());
 	glScalef(.25,.25,.25);
@@ -671,7 +670,7 @@ void drawCharacters(){
 	glPushMatrix();
 	glColor3f(1,1,1);
 	glTranslatef(-4,3.5,0);
-                      //glRotatef(nameAngle(paramPos),0,1,0);
+  //glRotatef(nameAngle(paramPos),0,1,0);
 	glScalef(.01,.01,.01);
 	for(c="zhemingdeng"; *c!='\0'; c++)
 		glutStrokeCharacter(StrFont,*c);
@@ -689,7 +688,7 @@ void drawCharacters(){
 //
 ////////////////////////////////////////////////////////////////////////////////
 void renderScene(void)  {
-		//clear the render buffer
+  //clear the render buffer
 	glDrawBuffer( GL_BACK );
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -700,6 +699,7 @@ void renderScene(void)  {
 	glLoadIdentity();
 	wav.positionListener(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(),cam.getDirX(),cam.getDirY(),cam.getDirZ(),0,1,0);		
 	wav.positionSource(wav.sources[1],ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ());
+	
 	if(screen1SubjectNumber == 0){
 		cam.setSubjectPosition(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta());
 	}else if(screen1SubjectNumber == 1){
@@ -708,21 +708,6 @@ void renderScene(void)  {
 		cam.setSubjectPosition(4*paramPos.getX() + 10,4*paramPos.getY() + 3, 4*paramPos.getZ()+10, donkeyTheta);
 	}
 
-	if(screen2SubjectNumber == 0){
-		cam2.setSubjectPosition(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta());
-	}else if(screen2SubjectNumber == 1){
-		cam2.setSubjectPosition(4*arcPos.getX(), 4*arcPos.getY(), 4*arcPos.getZ(), boardTheta);
-	}else if(screen2SubjectNumber == 2){
-		cam2.setSubjectPosition(4*paramPos.getX() + 10,4*paramPos.getY() + 3, 4*paramPos.getZ()+10, donkeyTheta);
-	}
-
-	if(screen3SubjectNumber == 0){
-		cam3.setSubjectPosition(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta());
-	}else if(screen3SubjectNumber == 1){
-		cam3.setSubjectPosition(4*arcPos.getX(), 4*arcPos.getY(), 4*arcPos.getZ(), boardTheta);
-	}else if(screen3SubjectNumber == 2){
-		cam3.setSubjectPosition(4*paramPos.getX() + 10,4*paramPos.getY() + 3, 4*paramPos.getZ()+10, donkeyTheta);
-	}
 	cam.setCamera();
 
 
@@ -734,35 +719,47 @@ void renderScene(void)  {
 
 	ericCartman.drawHero();
 	drawCharacters();
-	// for(int i=0; i<surf.size(); i++){
-	// 	surf[i].renderGrid();
-	// 	surf[i].renderSurface();
-	// }
 	glCallList( env.environmentDL );
 
 
 	if(fpsOn == true){
 		drawFPS();
 	}
+
 	if(splitScreenOn == true){
+		if(screen2SubjectNumber == 0){
+			cam2.setSubjectPosition(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta());
+		}else if(screen2SubjectNumber == 1){
+			cam2.setSubjectPosition(4*arcPos.getX(), 4*arcPos.getY(), 4*arcPos.getZ(), boardTheta);
+		}else if(screen2SubjectNumber == 2){
+			cam2.setSubjectPosition(4*paramPos.getX() + 10,4*paramPos.getY() + 3, 4*paramPos.getZ()+10, donkeyTheta);
+		}
+		if(screen3SubjectNumber == 0){
+			cam3.setSubjectPosition(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta());
+		}else if(screen2SubjectNumber == 1){
+			cam3.setSubjectPosition(4*arcPos.getX(), 4*arcPos.getY(), 4*arcPos.getZ(), boardTheta);
+		}else if(screen2SubjectNumber == 2){
+			cam3.setSubjectPosition(4*paramPos.getX() + 10,4*paramPos.getY() + 3, 4*paramPos.getZ()+10, donkeyTheta);
+		}
+
 	/*** Viewport 2 ***/
-	View2();
-	cam2.setCamera();
-	ericCartman.drawHero();
-	drawCharacters();
+		View2();
+		cam2.setCamera();
+		ericCartman.drawHero();
+		drawCharacters();
  	//surf.renderGrid();
  	//surf.renderSurface();
- 	if(fpsOn == true){
-		drawFPS();
-	}
-	glCallList( env.environmentDL );
-	
+		if(fpsOn == true){
+			drawFPS();
+		}
+		glCallList( env.environmentDL );
+
 	/*** Viewport 3 ***/
-	View3();
-	cam3.setCamera();
-	ericCartman.drawHero();
-	drawCharacters();
-	glCallList( env.environmentDL );
+		View3();
+		cam3.setCamera();
+		ericCartman.drawHero();
+		drawCharacters();
+		glCallList( env.environmentDL );
 	//surf.renderGrid();
  	//surf.renderSurface();
 	}
@@ -792,31 +789,28 @@ bool loadControlPoints( char* filename ) {
   	/*** READ SURFACE ***/
   	file>>numPoints; // number of points
 
-  	for(int j=0; j<numPoints; j++){
-  		for(int i=0; i<numPoints*16; i++){
-  			file>>tempX>>c>>tempY>>c>>tempZ;
-    	tempP.push_back(Point(tempX,tempY,tempZ)); // pushes each value into a point into a vector
-    }
-    for(int i=0; i<numPoints*4; i++)
-    	tempBez.push_back(Bezier(tempP[4*i],tempP[4*i+1],tempP[4*i+2],tempP[4*i+3])); // pushes each set of 4 points into a bezier vector
-    for(int i=0; i<numPoints; i++){
-    	tempSurf.createSurface(tempBez[4*i],tempBez[4*i+1],tempBez[4*i+2],tempBez[4*i+3]);
-    	surf.push_back(tempSurf);
-    }
+  	for(int i=0; i<numPoints*16; i++){
+  		file>>tempX>>c>>tempY>>c>>tempZ;
+    tempP.push_back(Point(tempX,tempY,tempZ)); // pushes each value into a point into a vector
 }
+for(int i=0; i<numPoints*4; i++)
+    tempBez.push_back(Bezier(tempP[4*i],tempP[4*i+1],tempP[4*i+2],tempP[4*i+3])); // pushes each set of 4 points into a bezier vector
+for(int i=0; i<numPoints; i++){
+	tempSurf.createSurface(tempBez[4*i],tempBez[4*i+1],tempBez[4*i+2],tempBez[4*i+3]);
+	surf.push_back(tempSurf);
+}
+env.addSurface(surf);
 
   /*** READ TRACKS ***/
-for(int k=0; k<2; k++){
-	tempP.clear();
-	file>>numPoints;
-	for(int i=0; i<numPoints; i++){
-		file>>tempX>>c>>tempY>>c>>tempZ;
-      tempP.push_back(Point(tempX,tempY,tempZ)); // pushes each value into a point into a vector
-  }
-  for(int i=0; i<numPoints-3; i+=3)
-      bez[k].bezierConnect(Bezier(tempP[i],tempP[i+1],tempP[i+2],tempP[i+3])); // pushes each set of 4 points into a bezier vector
+tempP.clear();
+file>>numPoints;
+for(int i=0; i<numPoints; i++){
+	file>>tempX>>c>>tempY>>c>>tempZ;
+    tempP.push_back(Point(tempX,tempY,tempZ)); // pushes each value into a point into a vector
 }
-
+for(int i=0; i<numPoints-3; i+=3)
+    track.bezierConnect(Bezier(tempP[i],tempP[i+1],tempP[i+2],tempP[i+3])); // pushes each set of 4 points into a bezier vector
+env.addCurve(track);
 
   /*** READ OBJECTS ***/
   // Pass file to environment class
@@ -832,24 +826,24 @@ void cleanSound(){
 //
 ////////////////////////////////////////////////////////////////////////////////
 int main(int argc, char **argv) {
-	
+
 	if(argc!=2){
 		cerr<<"Usage: "<<argv[0]<<" <CSV_NAME>"<<endl;
 		return 0;
 	}
 	loadControlPoints(argv[1]);
-	// create a double-buffered GLUT window at (50,50) with predefined windowsize
+  // create a double-buffered GLUT window at (50,50) with predefined windowsize
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(50,50);
 	glutInitWindowSize(windowWidth,windowHeight);
 	glutCreateWindow("GuildWars");
 	wav.initializeOpenAL(argc,argv);
-		// give the camera a scenic starting point.
+  // give the camera a scenic starting point.
 	pipTheta = M_PI/1.25;
 	pipPhi = M_PI*0.7;
 
-		// register callback functions...
+  // register callback functions...
 	glutSetKeyRepeat(GLUT_KEY_REPEAT_ON);
 	glutKeyboardFunc(normalKeysDown);
 	glutKeyboardUpFunc( normalKeysUp);
@@ -858,12 +852,12 @@ int main(int argc, char **argv) {
 	glutMouseFunc(mouseCallback);
 	glutMotionFunc(mouseMotion);
 	glutTimerFunc( 1000/60, myTimer, 0);
-		// Special Function for Arrow Keys
+  // Special Function for Arrow Keys
 	glutSpecialFunc(SpecialKeys);
 
 	wav.positionSource(wav.sources[0],40,0,40);
-		// do some basic OpenGL setup
-		//env.placeObjectsInEnvironment(inFile);
+  // do some basic OpenGL setup
+  //env.placeObjectsInEnvironment(inFile);
 
 	initScene();
 
@@ -871,7 +865,7 @@ int main(int argc, char **argv) {
 	alSourcePlay( wav.sources[0] );
 
 	createMenus();
-				// and enter the GLUT loop, never to exit.
+  // and enter the GLUT loop, never to exit.
 	glutMainLoop();
 
 	return(0);

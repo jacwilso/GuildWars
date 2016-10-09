@@ -17,18 +17,32 @@
 #include <iostream>
 #include <stdlib.h>
 #include <string>
+#include <vector>
+
+#include "Bezier.h"
+#include "BezierSurface.h"
+using namespace std;
+
 class Environment{
 private:
 	const static float DEG_RAD = 3.14159/180;
+        vector<BezierSurface> surf;
+        Bezier track;
+
+	void drawGrid();
+	void drawGround();
+	void drawTree();
+        void drawHut();
+        void drawSurface();
+        void drawCurve();
+        void drawBox();
 public:
 	Environment();
 	void placeObjectsInEnvironment(std::ifstream& inFile);
 	void generateEnvironmentDL(std::ifstream& inFile);
-	void drawEnvironment();
-	void drawGrid();
-	void drawGround();
-	void drawTree();
-	void drawTrees();
+
+        void addSurface(vector<BezierSurface> surf);
+        void addCurve(Bezier curve);
 
 	static GLUquadric* qobj;
     GLuint environmentDL;
