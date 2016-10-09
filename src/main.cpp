@@ -56,7 +56,7 @@ using namespace std;
 static size_t windowWidth  = 640;
 static size_t windowHeight = 720;
 static float aspectRatio;
-
+const float SPLITSCREEN_HEIGHT_RATIO = 3;
 GLint leftMouseButton; 		   	    // status of the mouse buttons
 int mouseX = 0, mouseY = 0;                 // last known X and Y of the mouse
 int pipMouseX = 0, pipMouseY = 0;			// Save for Picture in Picture section
@@ -425,10 +425,10 @@ void createMenus() {
 
 void mouseMotion(int x, int y) {
 	if(leftMouseButton == GLUT_DOWN) {
-		if(mouseX <= windowWidth/2 && (windowHeight-mouseY) <= windowHeight/2.5){
+		if(mouseX <=(signed int) windowWidth/2 && (windowHeight-mouseY) <= windowHeight/SPLITSCREEN_HEIGHT_RATIO ){
 			cam2.setCameraTheta(cam2.getCameraTheta() - (x-mouseX) * 0.005);
 			cam2.setCameraPhi(fmin(fmax((cam2.getCameraPhi() + (y - mouseY) * 0.005),0.01),M_PI));
-		}else if(mouseX > windowWidth/2 && (windowHeight-mouseY) <= windowHeight/2.5){
+		}else if(mouseX >(signed int) windowWidth/2 && (windowHeight-mouseY) <= windowHeight/SPLITSCREEN_HEIGHT_RATIO ){
 			cam3.setCameraTheta(cam3.getCameraTheta() - (x-mouseX) * 0.005);
 			cam3.setCameraPhi(fmin(fmax((cam3.getCameraPhi() + (y - mouseY) * 0.005),0.01),M_PI));					
 		}else{
@@ -563,11 +563,11 @@ void initScene()  {
   env.generateEnvironmentDL(file);
 }
 void View2(){
-	glViewport(0,0,windowWidth/2, windowHeight/2);
+	glViewport(0,0,windowWidth/2, windowHeight/SPLITSCREEN_HEIGHT_RATIO );
 
 
   // Portions within the scissor can now be modified.
-	glScissor(0,0,windowWidth/2, windowHeight/2);
+	glScissor(0,0,windowWidth/2, windowHeight/SPLITSCREEN_HEIGHT_RATIO );
 	glEnable(GL_SCISSOR_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glDisable( GL_SCISSOR_TEST);
@@ -597,11 +597,11 @@ void View2(){
 }
 
 void View3(){
-	glViewport(windowWidth/2, 0, windowWidth, windowHeight/2);
+	glViewport(windowWidth/2, 0, windowWidth, windowHeight/SPLITSCREEN_HEIGHT_RATIO );
 
 
   // Portions within the scissor can now be modified.
-	glScissor(windowWidth/2, 0, windowWidth, windowHeight/2);
+	glScissor(windowWidth/2, 0, windowWidth, windowHeight/SPLITSCREEN_HEIGHT_RATIO );
 	glEnable(GL_SCISSOR_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glDisable( GL_SCISSOR_TEST);

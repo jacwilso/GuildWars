@@ -10,6 +10,11 @@
 
 #include <math.h>
 #include "Point.h"
+
+
+// Constant Variables
+    const static float X_OFFSET = 0, Y_OFFSET = 3.3, Z_OFFSET = 0, SKYCAM_HEIGHT = 30;
+
 class Camera
 {
 private:
@@ -20,8 +25,6 @@ private:
     float cameraX,cameraY,cameraZ,cameraRad;
     float subjectPosX, subjectPosY, subjectPosZ, subjectPosTheta;
 
-// Constant Variables
-    const static float X_OFFSET = 0, Y_OFFSET = 3.3, Z_OFFSET = 0, SKYCAM_HEIGHT = 30;
 
 public:
     Camera();
