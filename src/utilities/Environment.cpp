@@ -1,8 +1,6 @@
 #include "Environment.h"
 
-Environment::Environment(){
-
-}
+Environment::Environment(){}
 
 void Environment::generateEnvironmentDL(std::ifstream& inFile) {
 	environmentDL = glGenLists( 1 );
@@ -12,8 +10,14 @@ void Environment::generateEnvironmentDL(std::ifstream& inFile) {
 	// Draw the figures
 	glPushMatrix(); {
 		placeObjectsInEnvironment(inFile);
+<<<<<<< HEAD
 		drawEnvironment();
                 drawHut();
+=======
+		//drawGrid();
+                drawSurface();
+                drawCurve();
+>>>>>>> jacwilso
 	}; glPopMatrix();
 	// Tell openGL to end displayiung lists
 	glEndList();
@@ -30,7 +34,7 @@ void Environment::placeObjectsInEnvironment(std::ifstream& inFile){
 	float objectX = 0, objectY = 0, objectZ = 0;
 	float orientX = 0, orientY = 0, orientZ = 0;
 	float objSize = 0;
-	char comments;
+	//char comments;
 	inFile >> numObjects;
 	for(int i = 0; i < numObjects ; i++){
 		std::string inValue;
@@ -73,7 +77,7 @@ void Environment::placeObjectsInEnvironment(std::ifstream& inFile){
 		glPushMatrix();
 		{
 			glTranslatef(objectX, objectY, objectZ);
-			glRotatef(orientZ, 0,0,1);
+			glRotatef(orientX, 0,0,1);
 			glRotatef(orientY, 0,1,0);
 			glRotatef(orientZ, 1,0,0);
 			glScalef(objSize, objSize, objSize);
@@ -93,12 +97,6 @@ void Environment::placeObjectsInEnvironment(std::ifstream& inFile){
 		glPopMatrix();
 	}
 
-}
-
-
-void Environment::drawEnvironment(){
-	drawGrid();
-	//drawTrees();
 }
 
 void Environment::drawGrid() {
@@ -183,3 +181,36 @@ void Environment::drawHut() {
 	gluCylinder(quadratic, 0, 3, 4, 32, 32);
 	glPopMatrix();
 }
+<<<<<<< HEAD
+=======
+
+void Environment::addSurface(vector<BezierSurface> surf){
+  for(unsigned int i=0; i<surf.size(); i++)
+    this->surf.push_back(surf[i]);
+}
+
+void Environment::drawSurface(){
+  for(unsigned int i=0; i<surf.size(); i++){
+          glPushMatrix();
+          glTranslatef(0,0,0);
+          glScalef(4,4,4);
+          surf[i].renderGrid();
+          surf[i].renderSurface();
+          glPopMatrix();
+  }
+}
+
+void Environment::addCurve(Bezier curve){
+  this->track=curve;
+}
+
+void Environment::drawCurve(){
+  glPushMatrix();
+	glTranslatef(0,3,0);
+        glScalef(4,4,4);
+        track.renderPoints();
+	track.renderCage();
+	track.renderCurve();
+  glPopMatrix();
+}
+>>>>>>> jacwilso

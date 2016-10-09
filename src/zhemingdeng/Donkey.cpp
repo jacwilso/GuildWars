@@ -124,9 +124,10 @@ void Donkey::drawHero() {
 	//drawing tail
 	glPushMatrix();
 	glTranslatef(0, 3, 3);
-	glRotatef(-40 + tailRotateAngle, 1, 0, 0);
+	glRotatef(40, 1, 0, 0);
+        glRotatef(cos(0.25*tailRotateAngle)*180/3.1415,0,1,0);
 	drawTail();
 	glPopMatrix();
 }
 
-void Donkey::animate(){}
+void Donkey::animate(){tailRotateAngle++;}
