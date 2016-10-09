@@ -129,7 +129,7 @@ endif
 all: $(TARGET)
 
 test: all
-	./$(TARGET) test2.csv
+	./$(TARGET) test.csv
 
 clean:
 	rm -f $(OBJECTS) $(TARGET)

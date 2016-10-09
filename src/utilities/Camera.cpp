@@ -4,7 +4,7 @@
  * Constructor
  */
 Camera::Camera(){
-	    viewMode = 0;
+	    viewMode = 5;
 
 
         cameraTheta = -M_PI / 3.0f;
@@ -15,6 +15,11 @@ Camera::Camera(){
         cameraY = 10;
         cameraZ = 10;
         cameraRad = 30;
+
+        subjectPosX = 0;
+        subjectPosY = 0;
+        subjectPosZ = 0;
+        subjectPosTheta = 0;
 }
 
 
@@ -53,6 +58,19 @@ void Camera::setDirZ(float item){
 }
 void Camera::setCameraRad(float item){
 	cameraRad = item;
+}
+void Camera::setSubjectPosX(float item){
+	subjectPosX = item;
+}
+void Camera::setSubjectPosY(float item){
+	subjectPosY = item;
+}
+void Camera::setSubjectPosZ(float item){
+	subjectPosZ = item;
+}
+
+void Camera:: setsubjectPosTheta(float item){
+	subjectPosTheta = item;
 }
 
 void Camera::moveForward(){
@@ -94,53 +112,83 @@ void Camera::recomputeOrientation(){
 	dirY = dirY/w;
 	dirZ = dirZ/w;
 }
+ void Camera::setSubjectPosition(float x, float y, float z, float theta){
+ 	setSubjectPosX(x);
+ 	setSubjectPosY(y);
+ 	setSubjectPosZ(z);
+ 	setsubjectPosTheta(theta);
+ }
 
+void Camera::setCamera(){
+	switch(viewMode){
+		case 0:
+			FreeCam();
+		break;
+		case 1:
+			ThirdPersonPOV();
+		break;
+		case 2:
+			FirstPersonPOV();
+		break;
+		case 3:
+			ReversePOV();
+		break;
+		case 4:
+			SkyCam();
+		break;
+		case 5:
+			ArcBall();
+		break;
+		default:
+			ArcBall();
+			break;
+	}
+}
+void Camera::ThirdPersonPOV(  ){
+	gluLookAt( -15*cos(subjectPosTheta*(M_PI/180)) + subjectPosZ, 
+			subjectPosY + Y_OFFSET,
+			15*sin(subjectPosTheta*(M_PI/180)) + subjectPosZ,
+			subjectPosX,
+			subjectPosY,
+			subjectPosZ,
+			0,1,0);
+}
+void Camera::FirstPersonPOV( ){
+	gluLookAt( subjectPosX + 4.2*cos(subjectPosTheta*(M_PI/180)), 
+			Y_OFFSET + subjectPosY, 
+			subjectPosZ - 4.2*sin(subjectPosTheta*(M_PI/180)),
+			20*cos(subjectPosTheta*(M_PI/180)) + subjectPosX, 
+			3.3 + subjectPosY,
+			-20*sin(subjectPosTheta*(M_PI/180)) + subjectPosZ,
+			0,1,0);
+}
+void Camera::ReversePOV( ){
+gluLookAt( 15*cos(subjectPosTheta*(M_PI/180)) + subjectPosX,
+			subjectPosY + Y_OFFSET,
+			-15*sin(subjectPosTheta*(M_PI/180)) + subjectPosZ,
+			subjectPosX, 
+			subjectPosY,
+			subjectPosZ,
+			0,1,0);
+}
+void Camera::SkyCam (){
+gluLookAt( -cos(subjectPosTheta*(M_PI/180)) + subjectPosX,
+			subjectPosY + SKYCAM_HEIGHT, 
+			sin(subjectPosTheta*(M_PI/180)) + subjectPosZ,
+			subjectPosX, 
+			subjectPosY,
+			subjectPosZ,
+			0,1,0);
+}
 
-void Camera::ThirdPersonPOV(float x, float y, float z, float thetaInRad){
-	gluLookAt( -15*cos(thetaInRad*(M_PI/180)) + z, 
-			y + Y_OFFSET,
-			15*sin(thetaInRad*(M_PI/180)) + z,
-			x,
-			y,
-			z,
-			0,1,0);
-}
-void Camera::FirstPersonPOV(float x, float y, float z, float thetaInRad){
-	gluLookAt( x + 4.2*cos(thetaInRad*(M_PI/180)), 
-			Y_OFFSET + y, 
-			z - 4.2*sin(thetaInRad*(M_PI/180)),
-			20*cos(thetaInRad*(M_PI/180)) + x, 
-			3.3 + y,
-			-20*sin(thetaInRad*(M_PI/180)) +z,
-			0,1,0);
-}
-void Camera::ReversePOV(float x, float y, float z, float thetaInRad){
-gluLookAt( 15*cos(thetaInRad*(M_PI/180)) + x,
-			y + Y_OFFSET,
-			-15*sin(thetaInRad*(M_PI/180)) + z,
-			x, 
-			y,
-			z,
-			0,1,0);
-}
-void Camera::SkyCam (float x, float y, float z, float thetaInRad){
-gluLookAt( -cos(thetaInRad*(M_PI/180)) + x,
-			y + SKYCAM_HEIGHT, 
-			sin(thetaInRad*(M_PI/180)) + z,
-			x, 
-			y,
-			z,
-			0,1,0);
-}
-
-void Camera::ArcBall(float x, float y, float z){
+void Camera::ArcBall( ){
 	gluLookAt(
-		dirZ*cameraRad + x,
-		dirY*cameraRad + y, 
-		dirX*cameraRad + z,
-		x,
-		y,
-		z,
+		dirZ*cameraRad + subjectPosX,
+		dirY*cameraRad + subjectPosY, 
+		dirX*cameraRad + subjectPosZ,
+		subjectPosX,
+		subjectPosY,
+		subjectPosZ,
 		0,1,0);
 }
 

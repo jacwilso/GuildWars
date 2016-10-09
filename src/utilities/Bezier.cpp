@@ -105,7 +105,7 @@ void Bezier::populateTable(){
       paramArc[t]=dist;
       arcParam[dist]=t;
     }
-    cout<<arcSize()<<endl;
+    //cout<<arcSize()<<endl;
 }
 
 void Bezier::popTab(float arc){
