@@ -1,6 +1,6 @@
 # Midterm Project: GuildWars #
 ## Guild Info ##
-Name: Undercity Community College
+Name: ***Undercity Community College***
 Member Information:
 
 Name          | Hero Name            | Email
@@ -15,12 +15,12 @@ The project runs a program in which three heroes (created by each member of the 
 ## How to Run ##
 Depending on what system you are running the program. Enter one of the following:
 ### Windows ###
-'gmake'
+`gmake`
 
-'.\\GuildWars.exe <CSVFile>'
+`.\\GuildWars.exe <CSVFile>`
 ### macOS/Linux ###
-'make'
-'./GuildWars \<CSVFile\>'
+`make`
+`./GuildWars \<CSVFile\>`
 
 where \<CSVFile\> is replaced with some CSV file of a particular format (See file format for more details. It is important to note that the CSV file must be in the same directory as the executable. 
 
@@ -66,9 +66,9 @@ The following options only appear when the split screen view is turned on
 ## Bug Report ##
 No Know at this time
 
-## File Format ## 
+## File Format ##
 The file format is set in the following way
-' 
+`
  \< N Number of Bezier Surfaces for the Ground \>
  p1x, p1y, p1z
  p2x, p2y, p2z
@@ -82,8 +82,8 @@ The file format is set in the following way
 
  \<number of Objects \>
  \<object type\>, \<object position x\>, \<object position y\>, \<object position z\>, \<object orientation x\>, \<object orientation y\> ,\<object orientation z\>, \<object size\>
-'
-It is important to note the following:
+`
+it is important to note the following:
 For Bezier surface, there must be N\*16 points in total otherwise the program will close.
 For Bezier curves, there must be exactly N\*4 points in total otherwise the program will close.
 For Object types, use the following numbers to clasify a type:
@@ -95,14 +95,14 @@ The orientation of the object is read in degrees rather than radians.
 To keep it easy to read, break up the bezier surface/curves into block of 4 points for readability. The program will automatically skip empty lines without causing issues.
 
 ## Contributions ##
-Name          | Contribution \%       
+Name          | Contribution %       
 --------------|----------------------
 Kento Okamoto | CONTRIBUTION PERC         
 Jacob Wilson  | CONTRIBUTION PERC  
 Zheming Deng  | CONTRIBUTION PERC    
 
 
-## Other Things ## 
-Time spent on Assignment: Too long .............................
-Help from lab: \<INSERT RATING HERE \>
-Funness of lab: \<INSERT FUNNESS LEVEL HERE\> I'm aware funness is not a word
+## Other Things ##
+* Time spent on Assignment: Too long .............................
+* Help from lab: \<INSERT RATING HERE \>
+* Funness of lab: \<INSERT FUNNESS LEVEL HERE\> I'm aware funness is not a word
