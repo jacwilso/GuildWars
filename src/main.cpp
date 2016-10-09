@@ -79,7 +79,7 @@ map<unsigned char,bool> keyState;
 const int RESOLUTION=100;
 vector<Point> controlPoints;
 vector<BezierSurface> surf;
-Bezier bez[2];
+Bezier track;
 int arc = 0, param = 0;
 
 /*** Models ***/
@@ -110,90 +110,90 @@ void recomputeOrientation() {
 }
 
 void resizeWindow(int w, int h) {
-	aspectRatio = w / (float)h;
+  aspectRatio = w / (float)h;
 
-	windowWidth = w;
-	windowHeight = h;
+  windowWidth = w;
+  windowHeight = h;
 
-		//update the viewport to fill the window
-	glViewport(0, 0, w, h);
+  //update the viewport to fill the window
+  glViewport(0, 0, w, h);
 
-		//update the projection matrix with the new window properties
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective(45.0,aspectRatio,0.1,100000);
+  //update the projection matrix with the new window properties
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  gluPerspective(45.0,aspectRatio,0.1,100000);
 }
 
 void calculateFPS(){
-	frameCount++;
-	currentTime = glutGet(GLUT_ELAPSED_TIME);
-	int timeInterval = currentTime - previousTime;
-	if(timeInterval > 1000){
-		fps = frameCount/(timeInterval/1000.0f);
-		previousTime=currentTime;
-		frameCount=0;
-	}
+  frameCount++;
+  currentTime = glutGet(GLUT_ELAPSED_TIME);
+  int timeInterval = currentTime - previousTime;
+  if(timeInterval > 1000){
+    fps = frameCount/(timeInterval/1000.0f);
+    previousTime=currentTime;
+    frameCount=0;
+  }
 }
 
 void bitmapText(const char *string,float x,float y,float z){
-	const char* c;
-	glRasterPos3f(x,y,z);
-	for(c=string; *c!='\0'; c++){
-		glutBitmapCharacter(RasFont,*c);
-	}
+  const char* c;
+  glRasterPos3f(x,y,z);
+  for(c=string; *c!='\0'; c++){
+    glutBitmapCharacter(RasFont,*c);
+  }
 }
 
 char* floatToChar(float i){
-	ostringstream ss;
-	ss << i;
-	string str = ss.str();
-	cstr = new char[str.length()-1];
-	strcpy(cstr,str.c_str());
-	return cstr;
+  ostringstream ss;
+  ss << i;
+  string str = ss.str();
+  cstr = new char[str.length()-1];
+  strcpy(cstr,str.c_str());
+  return cstr;
 } 
 
 void drawFPS(){
-	glDisable(GL_LIGHTING);
-	glDisable(GL_TEXTURE_2D);
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-	glLoadIdentity();
-	gluOrtho2D(0,windowWidth,0,windowHeight);
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	glLoadIdentity();
-	glColor3f(1,1,1);
-	bitmapText("FPS: ",20,20,0);
-	glColor3f(1,1,1);
-	bitmapText(floatToChar(fps),100,20,0);
-	delete cstr;
-	glMatrixMode(GL_PROJECTION);
-	glPopMatrix();
-	glMatrixMode(GL_MODELVIEW);
-	glPopMatrix();
-	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_LIGHTING);
+  glDisable(GL_LIGHTING);
+  glDisable(GL_TEXTURE_2D);
+  glMatrixMode(GL_PROJECTION);
+  glPushMatrix();
+  glLoadIdentity();
+  gluOrtho2D(0,windowWidth,0,windowHeight);
+  glMatrixMode(GL_MODELVIEW);
+  glPushMatrix();
+  glLoadIdentity();
+  glColor3f(1,1,1);
+  bitmapText("FPS: ",20,20,0);
+  glColor3f(1,1,1);
+  bitmapText(floatToChar(fps),100,20,0);
+  delete cstr;
+  glMatrixMode(GL_PROJECTION);
+  glPopMatrix();
+  glMatrixMode(GL_MODELVIEW);
+  glPopMatrix();
+  glEnable(GL_TEXTURE_2D);
+  glEnable(GL_LIGHTING);
 }
 
-void animationTrack(Bezier curve, bool parametric){
-	Point tmpC, tmpD;
-	if(parametric){
-		tmpC=curve.parametricCurve(param);
+void animationTrack(bool parametric){
+  Point tmpC, tmpD;
+  if(parametric){
+    tmpC=track.parametricCurve(param);
 
-                tmpD=curve.paramDerivative(param);
-                donkeyTheta=atan2(tmpD.getX(),tmpD.getZ())*180/3.1415;
-		param++;
-		if(param+1>curve.resSize()) param=0;
-                paramPos=tmpC;
-	}else{
-                tmpC=curve.arcLengthCurve(arc);
-                //cout<<"TEMP: "<<temp.getX()<<", "<<temp.getZ()<<endl<<"ARC++ "<<arc<<endl;
-                tmpD=curve.arcDerivative(arc);
-                boardTheta=atan2(tmpD.getX(),tmpD.getZ())*180/3.1415;
-		arc++;
-		if(arc+1>curve.resSize()) arc=0;
-                arcPos=tmpC;
-	}
+    tmpD=track.paramDerivative(param);
+    donkeyTheta=atan2(tmpD.getX(),tmpD.getZ())*180/3.1415;
+    param++;
+    if(param+1>track.resSize()) param=0;
+    paramPos=tmpC;
+  }else{
+    tmpC=track.arcLengthCurve(arc);
+    //cout<<"TEMP: "<<temp.getX()<<", "<<temp.getZ()<<endl<<"ARC++ "<<arc<<endl;
+    tmpD=track.arcDerivative(arc);
+    boardTheta=atan2(tmpD.getX(),tmpD.getZ())*180/3.1415;
+    arc++;
+    if(arc+1>track.resSize()) arc=0;
+    arcPos=tmpC;
+  }
 }
 
 float nameAngle(Point pos){
@@ -206,289 +206,293 @@ float nameAngle(Point pos){
 }
 
 void mouseCallback(int button, int state, int thisX, int thisY) {
-		// update the left mouse button states, if applicable
-	if(button == GLUT_LEFT_BUTTON){
-		leftMouseButton = state;
-		if(leftMouseButton == GLUT_DOWN){
-			mouseX = thisX;
-			mouseY = thisY;
-		}
-	}
+  // update the left mouse button states, if applicable
+  if(button == GLUT_LEFT_BUTTON){
+    leftMouseButton = state;
+    if(leftMouseButton == GLUT_DOWN){
+      mouseX = thisX;
+      mouseY = thisY;
+    }
+  }
 
 }
 void myMenu( int value ) {
-	switch (value){
-		case 0:
-		exit(0);
-		break;
-		case 1:
-		break;
-		case 2:
-		break;
-		default:
-		break;
-	}
+  switch (value){
+    case 0:
+      exit(0);
+      break;
+    case 1:
+      break;
+    case 2:
+      break;
+    default:
+      break;
+  }
 }
 
 void createMenus() {
-	glutCreateMenu( myMenu );
-	glutAddMenuEntry( "Quit", 0 );
-	glutAddMenuEntry( "Toggle Eric 1st Person POV", 1);
-	glutAttachMenu(GLUT_RIGHT_BUTTON);
+  glutCreateMenu( myMenu );
+  glutAddMenuEntry( "Quit", 0 );
+  glutAddMenuEntry( "Toggle Eric 1st Person POV", 1);
+  glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
 
 void mouseMotion(int x, int y) {
-	if(leftMouseButton == GLUT_DOWN) {
-		if(mouseX <= windowWidth/2 && (windowHeight-mouseY) <= windowHeight/2.5){
-			cam2.setCameraTheta(cam2.getCameraTheta() - (x-mouseX) * 0.005);
-			cam2.setCameraPhi(fmin(fmax((cam2.getCameraPhi() + (y - mouseY) * 0.005),0.01),M_PI));
-		}else if(mouseX > windowWidth/2 && (windowHeight-mouseY) <= windowHeight/2.5){
-			cam3.setCameraTheta(cam3.getCameraTheta() - (x-mouseX) * 0.005);
-			cam3.setCameraPhi(fmin(fmax((cam3.getCameraPhi() + (y - mouseY) * 0.005),0.01),M_PI));					
-		}else{
-			cam.setCameraTheta(cam.getCameraTheta() - (x-mouseX) * 0.005);
-			cam.setCameraPhi(fmin(fmax((cam.getCameraPhi() + (y - mouseY) * 0.005),0.01),M_PI));
-		}
-		mouseX = x;
-		mouseY = y;
-				cam.recomputeOrientation();     // update camera (x,y,z) based on (radius,theta,phi)
-				cam2.recomputeOrientation();
-				cam3.recomputeOrientation();
-			}
+  if(leftMouseButton == GLUT_DOWN) {
+    if(mouseX <= windowWidth/2 && (windowHeight-mouseY) <= windowHeight/2.5){
+      cam2.setCameraTheta(cam2.getCameraTheta() - (x-mouseX) * 0.005);
+      cam2.setCameraPhi(fmin(fmax((cam2.getCameraPhi() + (y - mouseY) * 0.005),0.01),M_PI));
+    }else if(mouseX > windowWidth/2 && (windowHeight-mouseY) <= windowHeight/2.5){
+      cam3.setCameraTheta(cam3.getCameraTheta() - (x-mouseX) * 0.005);
+      cam3.setCameraPhi(fmin(fmax((cam3.getCameraPhi() + (y - mouseY) * 0.005),0.01),M_PI));					
+    }else{
+      cam.setCameraTheta(cam.getCameraTheta() - (x-mouseX) * 0.005);
+      cam.setCameraPhi(fmin(fmax((cam.getCameraPhi() + (y - mouseY) * 0.005),0.01),M_PI));
+    }
+    mouseX = x;
+    mouseY = y;
+    cam.recomputeOrientation();     // update camera (x,y,z) based on (radius,theta,phi)
+    cam2.recomputeOrientation();
+    cam3.recomputeOrientation();
+  }
 
 
-		glutPostRedisplay();	    // redraw our scene from our new camera POV
-	}
+  glutPostRedisplay();	    // redraw our scene from our new camera POV
+}
 
 
-	void normalKeysDown(unsigned char key, int x, int y) {
-		keyState[key]=true;
-		if(key <= 57 && key >= 48){
-			cam.setViewMode((int)key - 48);
-		}
+void normalKeysDown(unsigned char key, int x, int y) {
+  keyState[key]=true;
+  if(key <= 57 && key >= 48){
+    cam.setViewMode((int)key - 48);
+  }
 
-		if(key == 'q' || key == 'Q' || key == 27){
-			exit(0);
-		}		glutPostRedisplay();		// redraw our scene from our new camera POV
-	}
+  if(key == 'q' || key == 'Q' || key == 27){
+    exit(0);
+  }		glutPostRedisplay();		// redraw our scene from our new camera POV
+}
 
-	void normalKeysUp(unsigned char key, int x, int y){
-		keyState[key]=false;
-		if( !keyState['w'] || !keyState['W'] ||
-			!keyState['s'] || !keyState['S'] ||
-			!keyState['a'] || !keyState['A'] ||
-			!keyState['d'] || !keyState['D']  )
-			alSourcePause( wav.sources[1] );
-	}
+void normalKeysUp(unsigned char key, int x, int y){
+  keyState[key]=false;
+  if( !keyState['w'] || !keyState['W'] ||
+      !keyState['s'] || !keyState['S'] ||
+      !keyState['a'] || !keyState['A'] ||
+      !keyState['d'] || !keyState['D']  )
+    alSourcePause( wav.sources[1] );
+}
 
-	void normalKeys(){
-		if( keyState['w'] || keyState['W']){
-			ericCartman.moveEricForward();
-			ALenum sourceState;
-			alGetSourcei( wav.sources[1], AL_SOURCE_STATE, &sourceState );
-			if(sourceState != AL_PLAYING){
-				alSourcePlay( wav.sources[1] );
-			}
-		}
-		if(keyState['s'] || keyState['S']){
-			ericCartman.moveEricBackward();
-			ALenum sourceState;
-			alGetSourcei( wav.sources[1], AL_SOURCE_STATE, &sourceState );
-			if(sourceState != AL_PLAYING)
-				alSourcePlay( wav.sources[1] );
-		}
-		if(keyState['a'] || keyState['A']){
-			ericCartman.turnEricLeft();
-			ALenum sourceState;
-			alGetSourcei( wav.sources[1], AL_SOURCE_STATE, &sourceState );
-			if(sourceState != AL_PLAYING)
-				alSourcePlay( wav.sources[1] );
-		}
-		if(keyState['d'] || keyState['D']){
-			ericCartman.turnEricRight();
-			ALenum sourceState;
-			alGetSourcei( wav.sources[1], AL_SOURCE_STATE, &sourceState );
-			if(sourceState != AL_PLAYING)
-				alSourcePlay( wav.sources[1] );
-		}
+void normalKeys(){
+  if( keyState['w'] || keyState['W']){
+    ericCartman.moveEricForward();
+    ALenum sourceState;
+    alGetSourcei( wav.sources[1], AL_SOURCE_STATE, &sourceState );
+    if(sourceState != AL_PLAYING){
+      alSourcePlay( wav.sources[1] );
+    }
+  }
+  if(keyState['s'] || keyState['S']){
+    ericCartman.moveEricBackward();
+    ALenum sourceState;
+    alGetSourcei( wav.sources[1], AL_SOURCE_STATE, &sourceState );
+    if(sourceState != AL_PLAYING)
+      alSourcePlay( wav.sources[1] );
+  }
+  if(keyState['a'] || keyState['A']){
+    ericCartman.turnEricLeft();
+    ALenum sourceState;
+    alGetSourcei( wav.sources[1], AL_SOURCE_STATE, &sourceState );
+    if(sourceState != AL_PLAYING)
+      alSourcePlay( wav.sources[1] );
+  }
+  if(keyState['d'] || keyState['D']){
+    ericCartman.turnEricRight();
+    ALenum sourceState;
+    alGetSourcei( wav.sources[1], AL_SOURCE_STATE, &sourceState );
+    if(sourceState != AL_PLAYING)
+      alSourcePlay( wav.sources[1] );
+  }
 
-	}
+}
 
 // Special key being pressed like arrowkeys
 
-	void SpecialKeys(int key, int x, int y)
-	{
-		switch (key)
-		{
-			case GLUT_KEY_LEFT:
-			break;
-			case GLUT_KEY_RIGHT:
-			break;
-			case GLUT_KEY_UP:
-			break;
-			case GLUT_KEY_DOWN:
-			break;
-		}
-		glutPostRedisplay();
-	}
+void SpecialKeys(int key, int x, int y)
+{
+  switch (key)
+  {
+    case GLUT_KEY_LEFT:
+      break;
+    case GLUT_KEY_RIGHT:
+      break;
+    case GLUT_KEY_UP:
+      break;
+    case GLUT_KEY_DOWN:
+      break;
+  }
+  glutPostRedisplay();
+}
 
 // Timer function
-	void myTimer( int value ){
-		normalKeys();
-		calculateFPS();
-		ericCartman.animate();
-		animationTrack(bez[0],false);
-        animationTrack(bez[1],true);
+void myTimer( int value ){
+  normalKeys();
+  calculateFPS();
 
-		glutPostRedisplay();
-		glutTimerFunc( 1000/60, myTimer, 0);
-	}
+  ericCartman.animate();
+  board.animate();
+  donkey.animate();
 
-	void initScene()  {
-		glEnable(GL_DEPTH_TEST);
+  animationTrack(false);
+  animationTrack(true);
 
-		//******************************************************************
-		// this is some code to enable a default light for the scene;
-		// feel free to play around with this, but we won't talk about
-		// lighting in OpenGL for another couple of weeks yet.
-		float lightCol[4] = { 1, 1, 1, 1};
-		float ambientCol[4] = { 0.0, 0.0, 0.0, 1.0 };
-		float lPosition[4] = { 10, 10, 10, 1 };
-		glLightfv( GL_LIGHT0, GL_POSITION,lPosition );
-		glLightfv( GL_LIGHT0, GL_DIFFUSE,lightCol );
-		glLightfv( GL_LIGHT0, GL_AMBIENT, ambientCol );
-		glEnable( GL_LIGHTING );
-		glEnable( GL_LIGHT0 );
 
-		// tell OpenGL not to use the material system; just use whatever we 
-		// pass with glColor*()
-		glEnable( GL_COLOR_MATERIAL );
-		glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
-		//******************************************************************
+  glutPostRedisplay();
+  glutTimerFunc( 1000/60, myTimer, 0);
+}
 
-		glShadeModel(GL_FLAT);
+void initScene()  {
+  glEnable(GL_DEPTH_TEST);
 
-	srand( time(NULL) );	// seed our random number generator
-	env.generateEnvironmentDL(file);
+  //******************************************************************
+  // this is some code to enable a default light for the scene;
+  // feel free to play around with this, but we won't talk about
+  // lighting in OpenGL for another couple of weeks yet.
+  float lightCol[4] = { 1, 1, 1, 1};
+  float ambientCol[4] = { 0.0, 0.0, 0.0, 1.0 };
+  float lPosition[4] = { 10, 10, 10, 1 };
+  glLightfv( GL_LIGHT0, GL_POSITION,lPosition );
+  glLightfv( GL_LIGHT0, GL_DIFFUSE,lightCol );
+  glLightfv( GL_LIGHT0, GL_AMBIENT, ambientCol );
+  glEnable( GL_LIGHTING );
+  glEnable( GL_LIGHT0 );
+
+  // tell OpenGL not to use the material system; just use whatever we 
+  // pass with glColor*()
+  glEnable( GL_COLOR_MATERIAL );
+  glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
+  //******************************************************************
+
+  glShadeModel(GL_FLAT);
+
+  srand( time(NULL) );	// seed our random number generator
+  env.generateEnvironmentDL(file);
 }
 void View2(){
-	glViewport(0,0,windowWidth/2, windowHeight/2);
+  glViewport(0,0,windowWidth/2, windowHeight/2);
 
 
-		// Portions within the scissor can now be modified.
-	glScissor(0,0,windowWidth/2, windowHeight/2);
-	glEnable(GL_SCISSOR_TEST);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glDisable( GL_SCISSOR_TEST);
+  // Portions within the scissor can now be modified.
+  glScissor(0,0,windowWidth/2, windowHeight/2);
+  glEnable(GL_SCISSOR_TEST);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glDisable( GL_SCISSOR_TEST);
 
 
-	glMatrixMode(GL_MODELVIEW);
+  glMatrixMode(GL_MODELVIEW);
 
-	glPushMatrix();
-	{
-		glLoadIdentity();
-		glMatrixMode(GL_PROJECTION);
-		glPushMatrix();
-		glLoadIdentity();
-		glColor3f(1,1,1);
-		glLineWidth(5);
-		glBegin(GL_LINE_LOOP);
-		glVertex3f(-1,-1,0);
-		glVertex3f(-1,1,0);
-		glVertex3f(1,1,0);
-		glVertex3f(1,-1,0);
-		glEnd();
-		glPopMatrix();
-		glMatrixMode(GL_MODELVIEW);
-	}
-	glPopMatrix();
-	glLoadIdentity();
+  glPushMatrix();
+  {
+    glLoadIdentity();
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    glColor3f(1,1,1);
+    glLineWidth(5);
+    glBegin(GL_LINE_LOOP);
+    glVertex3f(-1,-1,0);
+    glVertex3f(-1,1,0);
+    glVertex3f(1,1,0);
+    glVertex3f(1,-1,0);
+    glEnd();
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+  }
+  glPopMatrix();
+  glLoadIdentity();
 }
 
 void View3(){
-	glViewport(windowWidth/2, 0, windowWidth, windowHeight/2);
+  glViewport(windowWidth/2, 0, windowWidth, windowHeight/2);
 
 
-		// Portions within the scissor can now be modified.
-	glScissor(windowWidth/2, 0, windowWidth, windowHeight/2);
-	glEnable(GL_SCISSOR_TEST);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glDisable( GL_SCISSOR_TEST);
+  // Portions within the scissor can now be modified.
+  glScissor(windowWidth/2, 0, windowWidth, windowHeight/2);
+  glEnable(GL_SCISSOR_TEST);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glDisable( GL_SCISSOR_TEST);
 
 
-	glMatrixMode(GL_MODELVIEW);
+  glMatrixMode(GL_MODELVIEW);
 
 
-	glPushMatrix();
-	{
-		glLoadIdentity();
-		glMatrixMode(GL_PROJECTION);
-		glPushMatrix();
-		glLoadIdentity();
-		glColor3f(1,1,1);
-		glLineWidth(5);
-		glBegin(GL_LINE_LOOP);
-		glVertex3f(-1,-1,0);
-		glVertex3f(-1,1,0);
-		glVertex3f(1,1,0);
-		glVertex3f(1,-1,0);
-		glEnd();
-		glPopMatrix();
-		glMatrixMode(GL_MODELVIEW);
-	}
-	glPopMatrix();
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+  glPushMatrix();
+  {
+    glLoadIdentity();
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    glColor3f(1,1,1);
+    glLineWidth(5);
+    glBegin(GL_LINE_LOOP);
+    glVertex3f(-1,-1,0);
+    glVertex3f(-1,1,0);
+    glVertex3f(1,1,0);
+    glVertex3f(1,-1,0);
+    glEnd();
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+  }
+  glPopMatrix();
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
 }
 
 void drawCharacters(){
-	const char* c;
-		glPushMatrix();
-		  glTranslatef(0,3,0);
-		  glScalef(4,4,4);
-		  bez[0].renderPoints();
-		  bez[0].renderCage();
-		  bez[0].renderCurve();
-                  glPushMatrix();
-                    glTranslatef(arcPos.getX(),arcPos.getY(),arcPos.getZ());
-                    glRotatef(boardTheta+90,0,1,0);
-                    glScalef(.25,.25,.25);
-                    board.drawHero();
-		    glDisable(GL_LIGHTING);
-		    glPushMatrix();
-		      glColor3f(1,1,1);
-		      glTranslatef(-2,1,0);
-		      glScalef(.01,.01,.01);
-		      for(c="jacwilso"; *c!='\0'; c++)
-		      	glutStrokeCharacter(StrFont,*c);
-		    glPopMatrix();
-		    glEnable(GL_LIGHTING);
-                  glPopMatrix();
-                glPopMatrix();
-		glPushMatrix();
-		  glTranslatef(10,3,10);
-		  glScalef(4,4,4);
-		  bez[1].renderPoints();
-		  bez[1].renderCage();
-		  bez[1].renderCurve();
-                  glPushMatrix();
-                    glTranslatef(paramPos.getX(),paramPos.getY(),paramPos.getZ());
-                    glScalef(.25,.25,.25);
-                    glRotatef(donkeyTheta-180,0,1,0);
-                    donkey.drawHero();
-		    glDisable(GL_LIGHTING);
-		    glPushMatrix();
-		      glColor3f(1,1,1);
-		      glTranslatef(-4,3.5,0);
-                      //glRotatef(nameAngle(paramPos),0,1,0);
-		      glScalef(.01,.01,.01);
-		      for(c="zhemingdeng"; *c!='\0'; c++)
-		        glutStrokeCharacter(StrFont,*c);
-	            glPopMatrix();
-		    glEnable(GL_LIGHTING);
-                  glPopMatrix();
-                glPopMatrix();
+  const char* c;
+  /*
+     Point temp=surf.evaluateSurface(u,v);
+     Point axis=surf.rotationAxis(u,v);
+     float surfAngle=surf.rotationAngle(u,v);
+     Point norm = surf.normal(u,v);
+   */
+  glPushMatrix();
+  // TRACK
+  glTranslatef(0,3,0);
+  glScalef(4,4,4);
+  // BOARD
+  glPushMatrix();
+  glTranslatef(arcPos.getX(),arcPos.getY(),arcPos.getZ());
+  glRotatef(boardTheta+90,0,1,0);
+  glScalef(.25,.25,.25);
+  board.drawHero();
+  glDisable(GL_LIGHTING);
+  glPushMatrix();
+  glColor3f(1,1,1);
+  glTranslatef(-2,1,0);
+  glScalef(.01,.01,.01);
+  for(c="jacwilso"; *c!='\0'; c++)
+    glutStrokeCharacter(StrFont,*c);
+  glPopMatrix();
+  glEnable(GL_LIGHTING);
+  glPopMatrix();
+  // DONKEY
+  glPushMatrix();
+  glTranslatef(paramPos.getX(),paramPos.getY(),paramPos.getZ());
+  glScalef(.25,.25,.25);
+  glRotatef(donkeyTheta-180,0,1,0);
+  donkey.drawHero();
+  glDisable(GL_LIGHTING);
+  glPushMatrix();
+  glColor3f(1,1,1);
+  glTranslatef(-4,3.5,0);
+  //glRotatef(nameAngle(paramPos),0,1,0);
+  glScalef(.01,.01,.01);
+  for(c="zhemingdeng"; *c!='\0'; c++)
+    glutStrokeCharacter(StrFont,*c);
+  glPopMatrix();
+  glEnable(GL_LIGHTING);
+  glPopMatrix();
+  glPopMatrix();
 }
 
 // renderScene() ///////////////////////////////////////////////////////////////
@@ -499,53 +503,45 @@ void drawCharacters(){
 //
 ////////////////////////////////////////////////////////////////////////////////
 void renderScene(void)  {
-		//clear the render buffer
-	glDrawBuffer( GL_BACK );
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  //clear the render buffer
+  glDrawBuffer( GL_BACK );
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		//First Viewport: Take up the entire screen
-	glViewport(0,0,windowWidth,windowHeight);
-		//update the modelview matrix based on the camera's position
-	glMatrixMode(GL_MODELVIEW);              //make sure we aren't changing the projection matrix!
-	glLoadIdentity();
-	wav.positionListener(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(),cam.getDirX(),cam.getDirY(),cam.getDirZ(),0,1,0);		
-	wav.positionSource(wav.sources[1],ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ());
-	cam.ArcBall(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ());
-
-
-	glPushMatrix();
-	glTranslatef(40,0,40);
-	glutSolidTeapot(1);
-	glPopMatrix();
+  //First Viewport: Take up the entire screen
+  glViewport(0,0,windowWidth,windowHeight);
+  //update the modelview matrix based on the camera's position
+  glMatrixMode(GL_MODELVIEW);              //make sure we aren't changing the projection matrix!
+  glLoadIdentity();
+  wav.positionListener(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(),cam.getDirX(),cam.getDirY(),cam.getDirZ(),0,1,0);		
+  wav.positionSource(wav.sources[1],ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ());
+  cam.ArcBall(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ());
 
 
-	ericCartman.drawHero();
-	drawCharacters();
-        for(int i=0; i<surf.size(); i++){
-          surf[i].renderGrid();
-          surf[i].renderSurface();
-        }
-	glCallList( env.environmentDL );
-	// Viewport 2
-	//View2();
-	//cam2.FreeCam();
-	//ericCartman.drawHero();
-	// drawCharacters();
- //    //surf.renderGrid();
- //    surf.renderSurface();
- //    drawFPS();
-	//glCallList( env.environmentDL );
-	// Viewport 3
-	// View3();
-	
-	//  cam3.FreeCam();
-	//  ericCartman.drawHero();
-	// drawCharacters();
-	glCallList( env.environmentDL );
-	// //surf.renderGrid();
- //    surf.renderSurface();
-	//push the back buffer to the screen
-	glutSwapBuffers();
+  glPushMatrix();
+  glTranslatef(40,0,40);
+  glutSolidTeapot(1);
+  glPopMatrix();
+
+
+  ericCartman.drawHero();
+  drawCharacters();
+  glCallList( env.environmentDL );
+  // Viewport 2
+  //View2();
+  //cam2.FreeCam();
+  //ericCartman.drawHero();
+  // drawCharacters();
+  //    drawFPS();
+  //glCallList( env.environmentDL );
+  // Viewport 3
+  // View3();
+
+  //  cam3.FreeCam();
+  //  ericCartman.drawHero();
+  // drawCharacters();
+  glCallList( env.environmentDL );
+  //push the back buffer to the screen
+  glutSwapBuffers();
 }
 
 // loadControlPoints() /////////////////////////////////////////////////////////
@@ -554,47 +550,43 @@ void renderScene(void)  {
 //
 ////////////////////////////////////////////////////////////////////////////////
 bool loadControlPoints( char* filename ) {
-	file.open(filename);
-	if(!file.is_open()){
-		cerr<<"ERROR. Could not find/ read file. Check spelling."<<endl;
-		return false;
-	}
-	int numPoints;
-	char c;
-	float tempX,tempY,tempZ;
-	vector<Point> tempP;
-	vector<Bezier> tempBez;
-        BezierSurface tempSurf;
+  file.open(filename);
+  if(!file.is_open()){
+    cerr<<"ERROR. Could not find/ read file. Check spelling."<<endl;
+    return false;
+  }
+  int numPoints;
+  char c;
+  float tempX,tempY,tempZ;
+  vector<Point> tempP;
+  vector<Bezier> tempBez;
+  BezierSurface tempSurf;
 
   /*** READ SURFACE ***/
   file>>numPoints; // number of points
 
-  for(int j=0; j<numPoints; j++){
   for(int i=0; i<numPoints*16; i++){
-  	file>>tempX>>c>>tempY>>c>>tempZ;
+    file>>tempX>>c>>tempY>>c>>tempZ;
     tempP.push_back(Point(tempX,tempY,tempZ)); // pushes each value into a point into a vector
   }
   for(int i=0; i<numPoints*4; i++)
     tempBez.push_back(Bezier(tempP[4*i],tempP[4*i+1],tempP[4*i+2],tempP[4*i+3])); // pushes each set of 4 points into a bezier vector
   for(int i=0; i<numPoints; i++){
-	tempSurf.createSurface(tempBez[4*i],tempBez[4*i+1],tempBez[4*i+2],tempBez[4*i+3]);
-        surf.push_back(tempSurf);
-  }
+    tempSurf.createSurface(tempBez[4*i],tempBez[4*i+1],tempBez[4*i+2],tempBez[4*i+3]);
+    surf.push_back(tempSurf);
   }
   env.addSurface(surf);
 
   /*** READ TRACKS ***/
-  for(int k=0; k<2; k++){
-	tempP.clear();
-	file>>numPoints;
-	for(int i=0; i<numPoints; i++){
-		file>>tempX>>c>>tempY>>c>>tempZ;
-      tempP.push_back(Point(tempX,tempY,tempZ)); // pushes each value into a point into a vector
+  tempP.clear();
+  file>>numPoints;
+  for(int i=0; i<numPoints; i++){
+    file>>tempX>>c>>tempY>>c>>tempZ;
+    tempP.push_back(Point(tempX,tempY,tempZ)); // pushes each value into a point into a vector
   }
   for(int i=0; i<numPoints-3; i+=3)
-      bez[k].bezierConnect(Bezier(tempP[i],tempP[i+1],tempP[i+2],tempP[i+3])); // pushes each set of 4 points into a bezier vector
-}
-
+    track.bezierConnect(Bezier(tempP[i],tempP[i+1],tempP[i+2],tempP[i+3])); // pushes each set of 4 points into a bezier vector
+  env.addCurve(track);
 
   /*** READ OBJECTS ***/
   // Pass file to environment class
@@ -602,7 +594,7 @@ bool loadControlPoints( char* filename ) {
 }
 
 void cleanSound(){
-	wav.cleanupOpenAL();
+  wav.cleanupOpenAL();
 }
 // main() //////////////////////////////////////////////////////////////////////
 //
@@ -610,47 +602,47 @@ void cleanSound(){
 //
 ////////////////////////////////////////////////////////////////////////////////
 int main(int argc, char **argv) {
-	
-	if(argc!=2){
-		cerr<<"Usage: "<<argv[0]<<" <CSV_NAME>"<<endl;
-		return 0;
-	}
-	loadControlPoints(argv[1]);
-	// create a double-buffered GLUT window at (50,50) with predefined windowsize
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
-	glutInitWindowPosition(50,50);
-	glutInitWindowSize(windowWidth,windowHeight);
-	glutCreateWindow("GuildWars");
-	wav.initializeOpenAL(argc,argv);
-		// give the camera a scenic starting point.
-	pipTheta = M_PI/1.25;
-	pipPhi = M_PI*0.7;
 
-		// register callback functions...
-	glutSetKeyRepeat(GLUT_KEY_REPEAT_ON);
-	glutKeyboardFunc(normalKeysDown);
-	glutKeyboardUpFunc( normalKeysUp);
-	glutDisplayFunc(renderScene);
-	glutReshapeFunc(resizeWindow);
-	glutMouseFunc(mouseCallback);
-	glutMotionFunc(mouseMotion);
-	glutTimerFunc( 1000/60, myTimer, 0);
-		// Special Function for Arrow Keys
-	glutSpecialFunc(SpecialKeys);
+  if(argc!=2){
+    cerr<<"Usage: "<<argv[0]<<" <CSV_NAME>"<<endl;
+    return 0;
+  }
+  loadControlPoints(argv[1]);
+  // create a double-buffered GLUT window at (50,50) with predefined windowsize
+  glutInit(&argc, argv);
+  glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
+  glutInitWindowPosition(50,50);
+  glutInitWindowSize(windowWidth,windowHeight);
+  glutCreateWindow("GuildWars");
+  wav.initializeOpenAL(argc,argv);
+  // give the camera a scenic starting point.
+  pipTheta = M_PI/1.25;
+  pipPhi = M_PI*0.7;
 
-	wav.positionSource(wav.sources[0],40,0,40);
-		// do some basic OpenGL setup
-		//env.placeObjectsInEnvironment(inFile);
+  // register callback functions...
+  glutSetKeyRepeat(GLUT_KEY_REPEAT_ON);
+  glutKeyboardFunc(normalKeysDown);
+  glutKeyboardUpFunc( normalKeysUp);
+  glutDisplayFunc(renderScene);
+  glutReshapeFunc(resizeWindow);
+  glutMouseFunc(mouseCallback);
+  glutMotionFunc(mouseMotion);
+  glutTimerFunc( 1000/60, myTimer, 0);
+  // Special Function for Arrow Keys
+  glutSpecialFunc(SpecialKeys);
 
-	initScene();
+  wav.positionSource(wav.sources[0],40,0,40);
+  // do some basic OpenGL setup
+  //env.placeObjectsInEnvironment(inFile);
 
-	atexit( cleanSound);
-	alSourcePlay( wav.sources[0] );
+  initScene();
 
-	createMenus();
-				// and enter the GLUT loop, never to exit.
-	glutMainLoop();
+  atexit( cleanSound);
+  alSourcePlay( wav.sources[0] );
 
-	return(0);
+  createMenus();
+  // and enter the GLUT loop, never to exit.
+  glutMainLoop();
+
+  return(0);
 }
