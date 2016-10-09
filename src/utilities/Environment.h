@@ -32,23 +32,17 @@ private:
 	void drawGrid();
 	void drawGround();
 	void drawTree();
-	void drawTrees();
+        void drawHut();
         void drawSurface();
         void drawCurve();
+        void drawBox();
 public:
 	Environment();
 	void placeObjectsInEnvironment(std::ifstream& inFile);
 	void generateEnvironmentDL(std::ifstream& inFile);
-	void drawEnvironment();
-<<<<<<< HEAD
-	void drawGrid();
-	void drawGround();
-	void drawTree();
-        void drawHut();
-=======
+
         void addSurface(vector<BezierSurface> surf);
         void addCurve(Bezier curve);
->>>>>>> jacwilso
 
 	static GLUquadric* qobj;
     GLuint environmentDL;

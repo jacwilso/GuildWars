@@ -10,14 +10,9 @@ void Environment::generateEnvironmentDL(std::ifstream& inFile) {
 	// Draw the figures
 	glPushMatrix(); {
 		placeObjectsInEnvironment(inFile);
-<<<<<<< HEAD
-		drawEnvironment();
-                drawHut();
-=======
 		//drawGrid();
                 drawSurface();
                 drawCurve();
->>>>>>> jacwilso
 	}; glPopMatrix();
 	// Tell openGL to end displayiung lists
 	glEndList();
@@ -181,8 +176,6 @@ void Environment::drawHut() {
 	gluCylinder(quadratic, 0, 3, 4, 32, 32);
 	glPopMatrix();
 }
-<<<<<<< HEAD
-=======
 
 void Environment::addSurface(vector<BezierSurface> surf){
   for(unsigned int i=0; i<surf.size(); i++)
@@ -213,4 +206,70 @@ void Environment::drawCurve(){
 	track.renderCurve();
   glPopMatrix();
 }
->>>>>>> jacwilso
+
+void Environment::drawBox(){
+  glColor3ub(181,166,66); // Brass color
+  // BOTTOM SQUARE
+  glPushMatrix();
+    glTranslatef(0,0,-5);
+    glScalef(10,1,1);
+    glutSolidCube(1);
+  glPopMatrix();
+  glPushMatrix();
+    glTranslatef(-5,0,0);
+    glScalef(1,1,10);
+    glutSolidCube(1);
+  glPopMatrix();
+  glPushMatrix();
+    glTranslatef(0,0,5);
+    glScalef(10,1,1);
+    glutSolidCube(1);
+  glPopMatrix();
+  glPushMatrix();
+    glTranslatef(5,0,0);
+    glScalef(1,1,10);
+    glutSolidCube(1);
+  glPopMatrix();
+  // TOP SQUARE
+  glPushMatrix();
+    glTranslatef(0,10,-5);
+    glScalef(10,1,1);
+    glutSolidCube(1);
+  glPopMatrix();
+  glPushMatrix();
+    glTranslatef(-5,10,0);
+    glScalef(1,1,10);
+    glutSolidCube(1);
+  glPopMatrix();
+  glPushMatrix();
+    glTranslatef(0,10,5);
+    glScalef(10,1,1);
+    glutSolidCube(1);
+  glPopMatrix();
+  glPushMatrix();
+    glTranslatef(5,10,0);
+    glScalef(1,1,10);
+    glutSolidCube(1);
+  glPopMatrix();
+  // PILLARS
+  glPushMatrix();
+    glTranslatef(5,5,-5);
+    glScalef(1,11,1);
+    glutSolidCube(1);
+  glPopMatrix();
+  glPushMatrix();
+    glTranslatef(-5,5,-5);
+    glScalef(1,11,1);
+    glutSolidCube(1);
+  glPopMatrix();
+  glPushMatrix();
+    glTranslatef(5,5,5);
+    glScalef(1,11,1);
+    glutSolidCube(1);
+  glPopMatrix();
+  glPushMatrix();
+    glTranslatef(-5,5,5);
+    glScalef(1,11,1);
+    glutSolidCube(1);
+  glPopMatrix();
+}
