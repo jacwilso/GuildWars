@@ -41,7 +41,7 @@ The mouse is mostly used to adjust the view the window. Here are he basic contro
   * Quit: Exits the program.
 
 The following options only appear when the split screen view is turned on
-  * Main Screen /Screen 2/ Screen 3: All three of these options have the following options which change the view for a given screen.
+  * Main Screen/Screen 2/Screen 3: All three of these options have the following options which change the view for a given screen.
    * Eric: ArcBall: Sets the screen to arcball mode with the focus on Eric Cartman.
    * Eric: 1st Person: Sets the screen to 1st person POV with the focus on Eric Cartman.
    * Eric: Sky Cam: Sets the screen to top/down view with the focus on Eric Cartman.
@@ -71,13 +71,13 @@ No Know at this time
 ## File Format ##
 The file format is set in the following way
 ```
-< N Number of Bezier Surfaces for the Ground \>
+< N Number of Bezier Surfaces for the Ground >
  p1x, p1y, p1z
  p2x, p2y, p2z
  ...
  p(N*16)x, p(N*16)y, p(N*16)
 
- < M Number of Control Points for Bezier Curve\>
+ < M Number of Control Points for Bezier Curve>
  <1 control points x>,<1 control point y>, <1 control point z>
  ...
  <(M*4) control points x > ,<(M*4) control points y > ,<(M*4) control points z > 
