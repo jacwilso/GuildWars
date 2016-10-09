@@ -185,8 +185,9 @@ void Environment::addSurface(vector<BezierSurface> surf){
 void Environment::drawSurface(){
   for(unsigned int i=0; i<surf.size(); i++){
           glPushMatrix();
-          glTranslatef(0,0,0);
-          glScalef(4,4,4);
+          float scale=103.0/12;
+          glScalef(scale,scale,scale);
+          glTranslatef(0,-1.95,0);
           surf[i].renderGrid();
           surf[i].renderSurface();
           glPopMatrix();
