@@ -13,6 +13,7 @@ void Environment::generateEnvironmentDL(std::ifstream& inFile) {
 	glPushMatrix(); {
 		placeObjectsInEnvironment(inFile);
 		drawEnvironment();
+                drawHut();
 	}; glPopMatrix();
 	// Tell openGL to end displayiung lists
 	glEndList();
@@ -81,6 +82,9 @@ void Environment::placeObjectsInEnvironment(std::ifstream& inFile){
 				case 0:
 					drawTree();
 					break;	
+                                case 1:
+                                        drawHut();
+                                        break;
 				default:
 					drawTree();
 					break;
@@ -162,83 +166,9 @@ void Environment::drawTree(){
 		glPopMatrix();
 	}
 	glPopMatrix();
-
 }
 
-void Environment::drawTrees(){
-	glPushMatrix();
-	glTranslatef(20,0,25);
-	drawTree();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-25,0,-20);
-	drawTree();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-40,0,-30);
-	drawTree();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-50,0,-50);
-	drawTree();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-70,0,-80);
-	drawTree();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-65,0,-93);
-	drawTree();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-15,0,-65);
-	drawTree();
-	glPopMatrix();	
-
-	glPushMatrix();
-	glTranslatef(-82,0,-77);
-	drawTree();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(0,0,-77);
-	drawTree();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(10,0,-44);
-	drawTree();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(22,0,90);
-	drawTree();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(90,0,90);
-	drawTree();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-82,0,20);
-	drawTree();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-40,0,-23);
-	drawTree();
-	glPopMatrix();
-
-}
-
-void Environment::drawBarn() {
+void Environment::drawHut() {
 	glPushMatrix();
 	glRotatef(-90, 1, 0, 0);
 	glColor3f(0.55, 0.55, 0.57);
@@ -253,62 +183,3 @@ void Environment::drawBarn() {
 	gluCylinder(quadratic, 0, 3, 4, 32, 32);
 	glPopMatrix();
 }
-
-void Environment::drawBarns() {
-	glPushMatrix();
-	glTranslatef(15, 0, 35);
-	drawTree();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-35, 0, -10);
-	drawTree();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-20, 0, -30);
-	drawTree();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-70, 0, -55);
-	drawTree();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-64, 0, -80);
-	drawTree();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-93, 0, -40);
-	drawTree();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-15, 0, -65);
-	drawTree();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-77, 0, -84);
-	drawTree();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-77, 0,0 );
-	drawTree();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-30, 0, 14);
-	drawTree();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(80, 0, 22);
-	drawTree();
-	glPopMatrix();
-
-}
-

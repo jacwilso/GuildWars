@@ -28,7 +28,7 @@ public:
 	void drawGrid();
 	void drawGround();
 	void drawTree();
-	void drawTrees();
+        void drawHut();
 
 	static GLUquadric* qobj;
     GLuint environmentDL;
