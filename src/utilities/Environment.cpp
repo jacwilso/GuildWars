@@ -238,3 +238,77 @@ void Environment::drawTrees(){
 
 }
 
+void Environment::drawBarn() {
+	glPushMatrix();
+	glRotatef(-90, 1, 0, 0);
+	glColor3f(0.55, 0.55, 0.57);
+	GLUquadricObj *quadratic;
+	quadratic = gluNewQuadric();
+	gluCylinder(quadratic, 2, 2, 4, 32, 32);
+	glPopMatrix();
+	glPushMatrix();
+	glRotatef(90, 1, 0, 0);
+	glTranslatef(0, 0, -7);
+	glColor3f(0.5, 0.5, 0);
+	gluCylinder(quadratic, 0, 3, 4, 32, 32);
+	glPopMatrix();
+}
+
+void Environment::drawBarns() {
+	glPushMatrix();
+	glTranslatef(15, 0, 35);
+	drawTree();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-35, 0, -10);
+	drawTree();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-20, 0, -30);
+	drawTree();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-70, 0, -55);
+	drawTree();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-64, 0, -80);
+	drawTree();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-93, 0, -40);
+	drawTree();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-15, 0, -65);
+	drawTree();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-77, 0, -84);
+	drawTree();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-77, 0,0 );
+	drawTree();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-30, 0, 14);
+	drawTree();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(80, 0, 22);
+	drawTree();
+	glPopMatrix();
+
+}
+
