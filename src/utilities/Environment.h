@@ -22,10 +22,11 @@
 #include "Bezier.h"
 #include "BezierSurface.h"
 using namespace std;
+// Constant Variables
+const static float DEG_RAD = 3.14159/180;
 
 class Environment{
 private:
-	const static float DEG_RAD = 3.14159/180;
         vector<BezierSurface> surf;
         Bezier track;
 
