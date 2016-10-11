@@ -188,7 +188,7 @@ void Environment::drawSurface(){
           float scale=100.0/12;
           glScalef(scale,scale,scale);
           glTranslatef(0,-1.95,0);
-          surf[i].renderGrid();
+          //surf[i].renderGrid();
           surf[i].renderSurface();
           glPopMatrix();
   }
@@ -202,8 +202,8 @@ void Environment::drawCurve(){
   glPushMatrix();
 	glTranslatef(0,3,0);
         glScalef(4,4,4);
-        track.renderPoints();
-	track.renderCage();
+        //track.renderPoints();
+	//track.renderCage();
 	track.renderCurve();
   glPopMatrix();
 }
