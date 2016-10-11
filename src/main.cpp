@@ -503,35 +503,41 @@ void normalKeys(){
 	// Which quad is eric in?	
 	Point surfPos;
 	float uVector, vVector;
-	if(ericCartman.getHeroPositionX() < 0 && ericCartman.getHeroPositionZ() < 0){//1
-			std::cout << "1" << std::endl; 
-			uVector = (0.01)*ericCartman.getHeroPositionX() + 1;
+
+	uVector = (0.01)* ericCartman.getHeroPositionX() +  1;
+	vVector = (-0.01) * ericCartman.getHeroPositionZ() + 1;
+	int bezierListIndex = 2*((int)floor(vVector)) + (int)floor(uVector);
+	std::cout << uVector << " " << bezierListIndex << " " << vVector << std::endl;
+	surfPos = surf[bezierListIndex].evaluateSurface(uVector - floor(uVector) ,vVector - floor(vVector)); 
+	/*if(ericCartman.getHeroPositionX() >= 0 && ericCartman.getHeroPositionZ() < 0){//1
+			uVector = (-0.01)*ericCartman.getHeroPositionX() + 1;
 			 vVector = (0.01)*ericCartman.getHeroPositionZ() + 1;
 
 			surfPos = surf[0].evaluateSurface(uVector/100, vVector/100);
 	}else if(ericCartman.getHeroPositionX() >= 0 && ericCartman.getHeroPositionZ() >= 0){//2
-			std::cout << "2" << std::endl; 
-			uVector = (0.01)*ericCartman.getHeroPositionX();
+			uVector = (-0.01)*ericCartman.getHeroPositionX() + 1;
 			 vVector = (0.01)*ericCartman.getHeroPositionZ();
 
 			surfPos = surf[1].evaluateSurface(uVector/100, vVector/100);
-	}else if(ericCartman.getHeroPositionX() >= 0 && ericCartman.getHeroPositionZ() < 0){//3
-			std::cout << "3" << std::endl; 
-			uVector = (0.01)*ericCartman.getHeroPositionX() ;
+	}else if(ericCartman.getHeroPositionX() < 0 && ericCartman.getHeroPositionZ() < 0){//3
+			uVector = (-0.01)*ericCartman.getHeroPositionX() ;
 			 vVector = (0.01)*ericCartman.getHeroPositionZ()+1;
 
 			surfPos = surf[2].evaluateSurface(uVector/100, vVector/100);
 	}else{
-			std::cout << "4" << std::endl;
 			 uVector = (0.01)*ericCartman.getHeroPositionX() + 1;
 			 vVector = (0.01)*ericCartman.getHeroPositionZ();
 
 			surfPos = surf[3].evaluateSurface(uVector/100, vVector/100);
 	}
+	
+	*/	
+	 //uVector = (0.01)*ericCartman.getHeroPositionX() + 1;
+	 //vVector = (0.01)*ericCartman.getHeroPositionZ();
 
-		
-		std::cout << uVector << " "<< surfPos.getY() << " " << vVector << std::endl;
-		ericCartman.setHeroPos(ericCartman.getHeroPositionX(), surfPos.getY()  , ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta(), ericCartman.getHeroPhi());
+	//surfPos = surf[0].evaluateSurface(uVector/100, vVector/100)
+	//std::cout << ericCartman.getHeroPositionX() << " "<< "" << " " << ericCartman.getHeroPositionZ() << std::endl;
+	ericCartman.setHeroPos(ericCartman.getHeroPositionX(), (surfPos.getY()-1.59)*100.0/12  , ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta(), ericCartman.getHeroPhi());
 
 
 }
@@ -609,12 +615,12 @@ void View2(){
 		glDisable( GL_SCISSOR_TEST);
 
 
-		//glMatrixMode(GL_PROJECTION);
-		//glLoadIdentity();
-		//gluPerspective(45.0, (float) (windowWidth/2)/(windowHeight/SPLITSCREEN_HEIGHT_RATIO), 0.1, 100000);
-		//glMatrixMode(GL_MODELVIEW);
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		gluPerspective(45.0, (float) (windowWidth/2)/(windowHeight/SPLITSCREEN_HEIGHT_RATIO), 0.1, 100000);
+		glMatrixMode(GL_MODELVIEW);
 
-		glPushMatrix();
+	/*	glPushMatrix();
 		{
 				glLoadIdentity();
 				glMatrixMode(GL_PROJECTION);
@@ -632,7 +638,7 @@ void View2(){
 				glMatrixMode(GL_MODELVIEW);
 		}
 		glPopMatrix();
-		glLoadIdentity();
+		glLoadIdentity();*/
 }
 
 void View3(){
@@ -645,8 +651,12 @@ void View3(){
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glDisable( GL_SCISSOR_TEST);
 
-
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		gluPerspective(45.0, (float) (windowWidth/2)/(windowHeight/SPLITSCREEN_HEIGHT_RATIO), 0.1, 100000);
 		glMatrixMode(GL_MODELVIEW);
+
+		/*glMatrixMode(GL_MODELVIEW);
 
 
 		glPushMatrix();
@@ -668,7 +678,7 @@ void View3(){
 		}
 		glPopMatrix();
 		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
+		glLoadIdentity();*/
 }
 
 void drawCharacters(){
