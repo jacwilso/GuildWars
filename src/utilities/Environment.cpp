@@ -185,7 +185,7 @@ void Environment::addSurface(vector<BezierSurface> surf){
 void Environment::drawSurface(){
   for(unsigned int i=0; i<surf.size(); i++){
           glPushMatrix();
-          float scale=103.0/12;
+          float scale=100.0/12;
           glScalef(scale,scale,scale);
           glTranslatef(0,-1.95,0);
           surf[i].renderGrid();

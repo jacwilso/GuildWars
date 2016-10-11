@@ -145,7 +145,7 @@ void Camera::setCamera(){
 	}
 }
 void Camera::ThirdPersonPOV(  ){
-	gluLookAt( -15*cos(subjectPosTheta*(M_PI/180)) + subjectPosZ, 
+	gluLookAt( -15*cos(subjectPosTheta*(M_PI/180)) + subjectPosX, 
 			subjectPosY + Y_OFFSET,
 			15*sin(subjectPosTheta*(M_PI/180)) + subjectPosZ,
 			subjectPosX,

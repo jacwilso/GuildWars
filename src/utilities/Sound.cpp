@@ -28,9 +28,9 @@ void Sound::initializeOpenAL( int argc, char *argv[] ) {
     //positionSource(sources[0],0,0,0);
 // WAV #2 -- NEED TO CHANGE ON PROGRAM BASIS
     #ifdef __APPLE__
-      alutLoadWAVFile((ALbyte*)"src/SoundFiles/cCartmanPoker_Face.wav",&format,&data,&size,&freq);
+      alutLoadWAVFile((ALbyte*)"src/SoundFiles/CartmanPoker_Face.wav",&format,&data,&size,&freq);
     #else
-      alutLoadWAVFile((ALbyte*)"src/SoundFiles/cCartmanPoker_Face.wav",&format,&data,&size,&freq,&loop);
+      alutLoadWAVFile((ALbyte*)"src/SoundFiles/CartmanPoker_Face.wav",&format,&data,&size,&freq,&loop);
     #endif
       alBufferData(buffers[1],format,data,size,freq);
     alutUnloadWAV(format,data,size,freq);

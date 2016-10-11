@@ -118,385 +118,421 @@ void recomputeOrientation() {
 }
 
 void resizeWindow(int w, int h) {
-	aspectRatio = w / (float)h;
+		aspectRatio = w / (float)h;
 
-	windowWidth = w;
-	windowHeight = h;
+		windowWidth = w;
+		windowHeight = h;
 
-  //update the viewport to fill the window
-	glViewport(0, 0, w, h);
+		//update the viewport to fill the window
+		glViewport(0, 0, w, h);
 
-  //update the projection matrix with the new window properties
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective(45.0,aspectRatio,0.1,100000);
+		//update the projection matrix with the new window properties
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		gluPerspective(45.0,aspectRatio,0.1,100000);
 }
 
 void calculateFPS(){
-	frameCount++;
-	currentTime = glutGet(GLUT_ELAPSED_TIME);
-	int timeInterval = currentTime - previousTime;
-	if(timeInterval > 1000){
-		fps = frameCount/(timeInterval/1000.0f);
-		previousTime=currentTime;
-		frameCount=0;
-	}
+		frameCount++;
+		currentTime = glutGet(GLUT_ELAPSED_TIME);
+		int timeInterval = currentTime - previousTime;
+		if(timeInterval > 1000){
+				fps = frameCount/(timeInterval/1000.0f);
+				previousTime=currentTime;
+				frameCount=0;
+		}
 }
 
 void bitmapText(const char *string,float x,float y,float z){
-	const char* c;
-	glRasterPos3f(x,y,z);
-	for(c=string; *c!='\0'; c++){
-		glutBitmapCharacter(RasFont,*c);
-	}
+		const char* c;
+		glRasterPos3f(x,y,z);
+		for(c=string; *c!='\0'; c++){
+				glutBitmapCharacter(RasFont,*c);
+		}
 }
 
 char* floatToChar(float i){
-	ostringstream ss;
-	ss << i;
-	string str = ss.str();
-	cstr = new char[str.length()-1];
-	strcpy(cstr,str.c_str());
-	return cstr;
+		ostringstream ss;
+		ss << i;
+		string str = ss.str();
+		cstr = new char[str.length()-1];
+		strcpy(cstr,str.c_str());
+		return cstr;
 } 
 
 void drawFPS(){
-	glDisable(GL_LIGHTING);
-	glDisable(GL_TEXTURE_2D);
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-	glLoadIdentity();
-	gluOrtho2D(0,windowWidth,0,windowHeight);
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	glLoadIdentity();
-	glColor3f(1,1,1);
-	bitmapText("FPS: ",20,20,0);
-	glColor3f(1,1,1);
-	bitmapText(floatToChar(fps),100,20,0);
-	delete cstr;
-	glMatrixMode(GL_PROJECTION);
-	glPopMatrix();
-	glMatrixMode(GL_MODELVIEW);
-	glPopMatrix();
-	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_LIGHTING);
+		glDisable(GL_LIGHTING);
+		glDisable(GL_TEXTURE_2D);
+		glMatrixMode(GL_PROJECTION);
+		glPushMatrix();
+		glLoadIdentity();
+		gluOrtho2D(0,windowWidth,0,windowHeight);
+		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
+		glLoadIdentity();
+		glColor3f(1,1,1);
+		bitmapText("FPS: ",20,20,0);
+		glColor3f(1,1,1);
+		bitmapText(floatToChar(fps),100,20,0);
+		delete cstr;
+		glMatrixMode(GL_PROJECTION);
+		glPopMatrix();
+		glMatrixMode(GL_MODELVIEW);
+		glPopMatrix();
+		glEnable(GL_TEXTURE_2D);
+		glEnable(GL_LIGHTING);
 }
 
 void animationTrack(bool parametric){
-	Point tmpC, tmpD;
-	if(parametric){
-		tmpC=track.parametricCurve(param);
+		Point tmpC, tmpD;
+		if(parametric){
+				tmpC=track.parametricCurve(param);
 
-		tmpD=track.paramDerivative(param);
-		donkeyTheta=atan2(tmpD.getX(),tmpD.getZ())*180/3.1415;
-		param++;
-		if(param+1>track.resSize()) param=0;
-		paramPos=tmpC;
-	}else{
-		tmpC=track.arcLengthCurve(arc);
-    //cout<<"TEMP: "<<temp.getX()<<", "<<temp.getZ()<<endl<<"ARC++ "<<arc<<endl;
-		tmpD=track.arcDerivative(arc);
-		boardTheta=atan2(tmpD.getX(),tmpD.getZ())*180/3.1415;
-		arc++;
-		if(arc+1>track.resSize()) arc=0;
-		arcPos=tmpC;
-	}
+				tmpD=track.paramDerivative(param);
+				donkeyTheta=atan2(tmpD.getX(),tmpD.getZ())*180/3.1415;
+				param++;
+				if(param+1>track.resSize()) param=0;
+				paramPos=tmpC;
+		}else{
+				tmpC=track.arcLengthCurve(arc);
+				//cout<<"TEMP: "<<temp.getX()<<", "<<temp.getZ()<<endl<<"ARC++ "<<arc<<endl;
+				tmpD=track.arcDerivative(arc);
+				boardTheta=atan2(tmpD.getX(),tmpD.getZ())*180/3.1415;
+				arc++;
+				if(arc+1>track.resSize()) arc=0;
+				arcPos=tmpC;
+		}
 }
 
 float nameAngle(Point pos){
-	Point dif=pos-cam.getCameraPos();
-	dif.normalize();
-	Point camDir=cam.getDir();
-	camDir.normalize();
-	float dot=dif.getX()*camDir.getX()+dif.getY()*camDir.getY()+dif.getZ()*camDir.getZ();
-	return 180-acos(dot)*180/3.1415;
+		Point dif=pos-cam.getCameraPos();
+		dif.normalize();
+		Point camDir=cam.getDir();
+		camDir.normalize();
+		float dot=dif.getX()*camDir.getX()+dif.getY()*camDir.getY()+dif.getZ()*camDir.getZ();
+		return 180-acos(dot)*180/3.1415;
 }
 
 void mouseCallback(int button, int state, int thisX, int thisY) {
-  // update the left mouse button states, if applicable
-	if(button == GLUT_LEFT_BUTTON){
-		leftMouseButton = state;
-		if(leftMouseButton == GLUT_DOWN){
-			mouseX = thisX;
-			mouseY = thisY;
+		// update the left mouse button states, if applicable
+		if(button == GLUT_LEFT_BUTTON){
+				leftMouseButton = state;
+				if(leftMouseButton == GLUT_DOWN){
+						mouseX = thisX;
+						mouseY = thisY;
+				}
 		}
-	}
 
 }
 void processEricMenu( int value ) {
-	screen1SubjectNumber = 0;
-	switch (value){
-		case 0: // Arcball
-		cam.setViewMode(6);
-		break;
-		case 1: // 1st Person
-		cam.setViewMode(2);
-		break;
-		case 2: // SkyCam
-		cam.setViewMode(4);
-		break;
-		break;
-		default:
-		break;
-	}
+		screen1SubjectNumber = 0;
+		switch (value){
+				case 0: // Arcball
+						cam.setViewMode(6);
+						break;
+				case 1: // 1st Person
+						cam.setViewMode(2);
+						break;
+				case 2: // SkyCam
+						cam.setViewMode(4);
+						break;
+						break;
+				default:
+						break;
+		}
 }
 void processBoardMenu( int value ) {
-	screen1SubjectNumber = 1;
-	switch (value){
-		case 0:
-		cam.setViewMode(6);
-		break;
-		case 1:
-		cam.setViewMode(2);
-		break;
-		case 2:
-		cam.setViewMode(4);
-		break;
-		default:
-		break;
-	}
+		screen1SubjectNumber = 1;
+		switch (value){
+				case 0:
+						cam.setViewMode(6);
+						break;
+				case 1:
+						cam.setViewMode(2);
+						break;
+				case 2:
+						cam.setViewMode(4);
+						break;
+				default:
+						break;
+		}
 }
 void processDonkeyMenu( int value ) {
-	screen1SubjectNumber = 2;
-	switch (value){
-		case 0:
-		cam.setViewMode(6);
-		break;
-		case 1:
-		cam.setViewMode(2);
-		break;
-		case 2:
-		cam.setViewMode(4);
-		break;
-		default:
-		break;
-	}
+		screen1SubjectNumber = 2;
+		switch (value){
+				case 0:
+						cam.setViewMode(6);
+						break;
+				case 1:
+						cam.setViewMode(2);
+						break;
+				case 2:
+						cam.setViewMode(4);
+						break;
+				default:
+						break;
+		}
 }
 
 void processScreen1Menu(int value){
-	screen1SubjectNumber = value/3;
-	switch(value%3){
-		case 0:
-		cam.setViewMode(6);
-		break;
-		case 1:
-		cam.setViewMode(2);	
-		break;
-		case 2:
-		cam.setViewMode(4);
-		break;
-		default:
-		cam.setViewMode(6);
-		break;
-	}
+		screen1SubjectNumber = value/3;
+		switch(value%3){
+				case 0:
+						cam.setViewMode(6);
+						break;
+				case 1:
+						cam.setViewMode(2);	
+						break;
+				case 2:
+						cam.setViewMode(4);
+						break;
+				default:
+						cam.setViewMode(6);
+						break;
+		}
 }
 
 void processScreen2Menu(int value){
-	screen2SubjectNumber = value/3;
-	switch(value%3){
-		case 0:
-		cam2.setViewMode(6);
-		break;
-		case 1:
-		cam2.setViewMode(2);	
-		break;
-		case 2:
-		cam2.setViewMode(4);
-		break;
-		default:
-		cam2.setViewMode(6);
-		break;
-	}
+		screen2SubjectNumber = value/3;
+		switch(value%3){
+				case 0:
+						cam2.setViewMode(6);
+						break;
+				case 1:
+						cam2.setViewMode(2);	
+						break;
+				case 2:
+						cam2.setViewMode(4);
+						break;
+				default:
+						cam2.setViewMode(6);
+						break;
+		}
 }
 
 void processScreen3Menu(int value){
-	screen3SubjectNumber = value/3;
-	switch(value%3){
-		case 0:
-		cam3.setViewMode(6);
-		break;
-		case 1:
-		cam3.setViewMode(2);	
-		break;
-		case 2:
-		cam3.setViewMode(4);
-		break;
-		default:
-		cam3.setViewMode(6);
-		break;
-	}
+		screen3SubjectNumber = value/3;
+		switch(value%3){
+				case 0:
+						cam3.setViewMode(6);
+						break;
+				case 1:
+						cam3.setViewMode(2);	
+						break;
+				case 2:
+						cam3.setViewMode(4);
+						break;
+				default:
+						cam3.setViewMode(6);
+						break;
+		}
 }
 
 void processMainMenu(int value){
-	switch (value){
-		case 1:
-		splitScreenOn = !splitScreenOn;
-		if(splitScreenOn == false){
-			glutChangeToMenuEntry(1,"Turn SplitScreen ON",1);
-			glutChangeToSubMenu(5,"Eric Cartman", ericMenu);
-			glutChangeToSubMenu(6,"Board", boardMenu);
-			glutChangeToSubMenu(7,"Donkey", donkeyMenu);
-		}else{
-			glutChangeToMenuEntry(1,"Turn SplitScreen OFF",1);
-			glutChangeToSubMenu(5,"Main Screen", screen1Menu );
-			glutChangeToSubMenu(6, "Screen 2", screen2Menu);
-			glutChangeToSubMenu(7, "Screen 3", screen3Menu);
+		switch (value){
+				case 1:
+						splitScreenOn = !splitScreenOn;
+						if(splitScreenOn == false){
+								glutChangeToMenuEntry(1,"Turn SplitScreen ON",1);
+								glutChangeToSubMenu(5,"Eric Cartman", ericMenu);
+								glutChangeToSubMenu(6,"Board", boardMenu);
+								glutChangeToSubMenu(7,"Donkey", donkeyMenu);
+						}else{
+								glutChangeToMenuEntry(1,"Turn SplitScreen OFF",1);
+								glutChangeToSubMenu(5,"Main Screen", screen1Menu );
+								glutChangeToSubMenu(6, "Screen 2", screen2Menu);
+								glutChangeToSubMenu(7, "Screen 3", screen3Menu);
 
+						}
+						break;
+				case 2:
+						cam.setViewMode(0);
+						break;
+				case 3:
+						fpsOn = !fpsOn;
+						if(fpsOn == false){
+								glutChangeToMenuEntry(3,"Turn FPS ON",3);
+						}else{
+								glutChangeToMenuEntry(3,"Turn FPS OFF",3);
+						}
+						break;
+				case 4:
+						exit(0);
+						break;
+				default:
+						break;
 		}
-		break;
-		case 2:
-			cam.setViewMode(0);
-		break;
-		case 3:
-		fpsOn = !fpsOn;
-		if(fpsOn == false){
-			glutChangeToMenuEntry(3,"Turn FPS ON",3);
-		}else{
-			glutChangeToMenuEntry(3,"Turn FPS OFF",3);
-		}
-		break;
-		case 4:
-		exit(0);
-		break;
-		default:
-		break;
-	}
 }
 void createMenus() {
-	ericMenu = glutCreateMenu( processEricMenu );
-	glutAddMenuEntry( "Eric: ArcBall", 0);
-	glutAddMenuEntry( "Eric: 1st Person", 1);
-	glutAddMenuEntry( "Eric: SkyCam", 2);
-	
-	boardMenu = glutCreateMenu(processBoardMenu);
-	glutAddMenuEntry( "Board: ArcBall", 0);
-	glutAddMenuEntry( "Board: 1st Person", 1);
-	glutAddMenuEntry( "Board: SkyCam", 2);
+		ericMenu = glutCreateMenu( processEricMenu );
+		glutAddMenuEntry( "Eric: ArcBall", 0);
+		glutAddMenuEntry( "Eric: 1st Person", 1);
+		glutAddMenuEntry( "Eric: SkyCam", 2);
 
-	donkeyMenu = glutCreateMenu(processDonkeyMenu);
-	glutAddMenuEntry( "Donkey: ArcBall", 0);
-	glutAddMenuEntry( "Donkey: 1st Person", 1);
-	glutAddMenuEntry( "Donkey: SkyCam", 2);	
+		boardMenu = glutCreateMenu(processBoardMenu);
+		glutAddMenuEntry( "Board: ArcBall", 0);
+		glutAddMenuEntry( "Board: 1st Person", 1);
+		glutAddMenuEntry( "Board: SkyCam", 2);
 
-	screen1Menu = glutCreateMenu(processScreen1Menu);
-	glutAddMenuEntry( "Eric: ArcBall", 0);
-	glutAddMenuEntry( "Eric: 1st Person", 1);
-	glutAddMenuEntry( "Eric: SkyCam", 2);
-	glutAddMenuEntry( "Board: ArcBall", 3);
-	glutAddMenuEntry( "Board: 1st Person", 4);
-	glutAddMenuEntry( "Board: SkyCam", 5);
-	glutAddMenuEntry( "Donkey: ArcBall", 6);
-	glutAddMenuEntry( "Donkey: 1st Person", 7);
-	glutAddMenuEntry( "Donkey: SkyCam", 8);	
-	screen2Menu = glutCreateMenu(processScreen2Menu);
-	glutAddMenuEntry( "Eric: ArcBall", 0);
-	glutAddMenuEntry( "Eric: 1st Person", 1);
-	glutAddMenuEntry( "Eric: SkyCam", 2);
-	glutAddMenuEntry( "Board: ArcBall", 3);
-	glutAddMenuEntry( "Board: 1st Person", 4);
-	glutAddMenuEntry( "Board: SkyCam", 5);
-	glutAddMenuEntry( "Donkey: ArcBall", 6);
-	glutAddMenuEntry( "Donkey: 1st Person", 7);
-	glutAddMenuEntry( "Donkey: SkyCam", 8);	
-	screen3Menu = glutCreateMenu(processScreen3Menu);
-	glutAddMenuEntry( "Eric: ArcBall", 0);
-	glutAddMenuEntry( "Eric: 1st Person", 1);
-	glutAddMenuEntry( "Eric: SkyCam", 2);
-	glutAddMenuEntry( "Board: ArcBall", 3);
-	glutAddMenuEntry( "Board: 1st Person", 4);
-	glutAddMenuEntry( "Board: SkyCam", 5);
-	glutAddMenuEntry( "Donkey: ArcBall", 6);
-	glutAddMenuEntry( "Donkey: 1st Person", 7);
-	glutAddMenuEntry( "Donkey: SkyCam", 8);	
+		donkeyMenu = glutCreateMenu(processDonkeyMenu);
+		glutAddMenuEntry( "Donkey: ArcBall", 0);
+		glutAddMenuEntry( "Donkey: 1st Person", 1);
+		glutAddMenuEntry( "Donkey: SkyCam", 2);	
 
-	mainMenu = glutCreateMenu(processMainMenu);
-	glutAddMenuEntry( "Turn SplitScreen ON", 1 );
-	glutAddMenuEntry("Free Cam", 2);
-	glutAddMenuEntry("Turn FPS ON", 3);
-	glutAddMenuEntry( "Quit",4);
-	glutAddSubMenu("Eric Cartman", ericMenu);
-	glutAddSubMenu("Board", boardMenu);
-	glutAddSubMenu("Donkey", donkeyMenu);
+		screen1Menu = glutCreateMenu(processScreen1Menu);
+		glutAddMenuEntry( "Eric: ArcBall", 0);
+		glutAddMenuEntry( "Eric: 1st Person", 1);
+		glutAddMenuEntry( "Eric: SkyCam", 2);
+		glutAddMenuEntry( "Board: ArcBall", 3);
+		glutAddMenuEntry( "Board: 1st Person", 4);
+		glutAddMenuEntry( "Board: SkyCam", 5);
+		glutAddMenuEntry( "Donkey: ArcBall", 6);
+		glutAddMenuEntry( "Donkey: 1st Person", 7);
+		glutAddMenuEntry( "Donkey: SkyCam", 8);	
+		screen2Menu = glutCreateMenu(processScreen2Menu);
+		glutAddMenuEntry( "Eric: ArcBall", 0);
+		glutAddMenuEntry( "Eric: 1st Person", 1);
+		glutAddMenuEntry( "Eric: SkyCam", 2);
+		glutAddMenuEntry( "Board: ArcBall", 3);
+		glutAddMenuEntry( "Board: 1st Person", 4);
+		glutAddMenuEntry( "Board: SkyCam", 5);
+		glutAddMenuEntry( "Donkey: ArcBall", 6);
+		glutAddMenuEntry( "Donkey: 1st Person", 7);
+		glutAddMenuEntry( "Donkey: SkyCam", 8);	
+		screen3Menu = glutCreateMenu(processScreen3Menu);
+		glutAddMenuEntry( "Eric: ArcBall", 0);
+		glutAddMenuEntry( "Eric: 1st Person", 1);
+		glutAddMenuEntry( "Eric: SkyCam", 2);
+		glutAddMenuEntry( "Board: ArcBall", 3);
+		glutAddMenuEntry( "Board: 1st Person", 4);
+		glutAddMenuEntry( "Board: SkyCam", 5);
+		glutAddMenuEntry( "Donkey: ArcBall", 6);
+		glutAddMenuEntry( "Donkey: 1st Person", 7);
+		glutAddMenuEntry( "Donkey: SkyCam", 8);	
 
-	glutAttachMenu(GLUT_RIGHT_BUTTON);
+		mainMenu = glutCreateMenu(processMainMenu);
+		glutAddMenuEntry( "Turn SplitScreen ON", 1 );
+		glutAddMenuEntry("Free Cam", 2);
+		glutAddMenuEntry("Turn FPS ON", 3);
+		glutAddMenuEntry( "Quit",4);
+		glutAddSubMenu("Eric Cartman", ericMenu);
+		glutAddSubMenu("Board", boardMenu);
+		glutAddSubMenu("Donkey", donkeyMenu);
+
+		glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
 
 void mouseMotion(int x, int y) {
-	if(leftMouseButton == GLUT_DOWN) {
-		if(mouseX <=(signed int) windowWidth/2 && (windowHeight-mouseY) <= windowHeight/SPLITSCREEN_HEIGHT_RATIO ){
-			cam2.setCameraTheta(cam2.getCameraTheta() - (x-mouseX) * 0.005);
-			cam2.setCameraPhi(fmin(fmax((cam2.getCameraPhi() + (y - mouseY) * 0.005),0.01),M_PI));
-		}else if(mouseX >(signed int) windowWidth/2 && (windowHeight-mouseY) <= windowHeight/SPLITSCREEN_HEIGHT_RATIO ){
-			cam3.setCameraTheta(cam3.getCameraTheta() - (x-mouseX) * 0.005);
-			cam3.setCameraPhi(fmin(fmax((cam3.getCameraPhi() + (y - mouseY) * 0.005),0.01),M_PI));					
-		}else{
-			cam.setCameraTheta(cam.getCameraTheta() - (x-mouseX) * 0.005);
-			cam.setCameraPhi(fmin(fmax((cam.getCameraPhi() + (y - mouseY) * 0.005),0.01),M_PI));
+		if(leftMouseButton == GLUT_DOWN) {
+				if(mouseX <=(signed int) windowWidth/2 && (windowHeight-mouseY) <= windowHeight/SPLITSCREEN_HEIGHT_RATIO ){
+						cam2.setCameraTheta(cam2.getCameraTheta() - (x-mouseX) * 0.005);
+						cam2.setCameraPhi(fmin(fmax((cam2.getCameraPhi() + (y - mouseY) * 0.005),0.01),M_PI));
+				}else if(mouseX >(signed int) windowWidth/2 && (windowHeight-mouseY) <= windowHeight/SPLITSCREEN_HEIGHT_RATIO ){
+						cam3.setCameraTheta(cam3.getCameraTheta() - (x-mouseX) * 0.005);
+						cam3.setCameraPhi(fmin(fmax((cam3.getCameraPhi() + (y - mouseY) * 0.005),0.01),M_PI));					
+				}else{
+						cam.setCameraTheta(cam.getCameraTheta() - (x-mouseX) * 0.005);
+						cam.setCameraPhi(fmin(fmax((cam.getCameraPhi() + (y - mouseY) * 0.005),0.01),M_PI));
+				}
+				mouseX = x;
+				mouseY = y;
+				cam.recomputeOrientation();     // update camera (x,y,z) based on (radius,theta,phi)
+				cam2.recomputeOrientation();
+				cam3.recomputeOrientation();
 		}
-		mouseX = x;
-		mouseY = y;
-    cam.recomputeOrientation();     // update camera (x,y,z) based on (radius,theta,phi)
-    cam2.recomputeOrientation();
-    cam3.recomputeOrientation();
-}
 
 
-  glutPostRedisplay();	    // redraw our scene from our new camera POV
+		glutPostRedisplay();	    // redraw our scene from our new camera POV
 }
 
 
 void normalKeysDown(unsigned char key, int x, int y) {
-	keyState[key]=true;
-	if(key <= 57 && key >= 48){
-		cam.setViewMode((int)key - 48);
-	}
+		keyState[key]=true;
+		if(key <= 57 && key >= 48){
+				cam.setViewMode((int)key - 48);
+		}
 
-	if(key == 'q' || key == 'Q' || key == 27){
-		exit(0);
-  }		glutPostRedisplay();		// redraw our scene from our new camera POV
+		if(key == 'q' || key == 'Q' || key == 27){
+				exit(0);
+		}		glutPostRedisplay();		// redraw our scene from our new camera POV
 }
 
 void normalKeysUp(unsigned char key, int x, int y){
-	keyState[key]=false;
-	if( !keyState['w'] || !keyState['W'] ||
-		!keyState['s'] || !keyState['S'] ||
-		!keyState['a'] || !keyState['A'] ||
-		!keyState['d'] || !keyState['D']  )
-		alSourcePause( wav.sources[1] );
+		keyState[key]=false;
+		if( !keyState['w'] || !keyState['W'] ||
+						!keyState['s'] || !keyState['S'] ||
+						!keyState['a'] || !keyState['A'] ||
+						!keyState['d'] || !keyState['D']  )
+				alSourcePause( wav.sources[1] );
 }
 
 void normalKeys(){
-	if( keyState['w'] || keyState['W']){
-		ericCartman.moveEricForward();
-		ALenum sourceState;
-		alGetSourcei( wav.sources[1], AL_SOURCE_STATE, &sourceState );
-		if(sourceState != AL_PLAYING){
-			alSourcePlay( wav.sources[1] );
+		if( keyState['w'] || keyState['W']){
+				ericCartman.moveEricForward();
+				// Use x and z 
+				// to get the height at that slope
+				
+				ALenum sourceState;
+				alGetSourcei( wav.sources[1], AL_SOURCE_STATE, &sourceState );
+				if(sourceState != AL_PLAYING){
+						alSourcePlay( wav.sources[1] );
+				}
 		}
+		if(keyState['s'] || keyState['S']){
+				ericCartman.moveEricBackward();
+				ALenum sourceState;
+				alGetSourcei( wav.sources[1], AL_SOURCE_STATE, &sourceState );
+				if(sourceState != AL_PLAYING)
+						alSourcePlay( wav.sources[1] );
+		}
+		if(keyState['a'] || keyState['A']){
+				ericCartman.turnEricLeft();
+				ALenum sourceState;
+				alGetSourcei( wav.sources[1], AL_SOURCE_STATE, &sourceState );
+				if(sourceState != AL_PLAYING)
+						alSourcePlay( wav.sources[1] );
+		}
+		if(keyState['d'] || keyState['D']){
+				ericCartman.turnEricRight();
+				ALenum sourceState;
+				alGetSourcei( wav.sources[1], AL_SOURCE_STATE, &sourceState );
+				if(sourceState != AL_PLAYING)
+						alSourcePlay( wav.sources[1] );
+		}
+	// Which quad is eric in?	
+	Point surfPos;
+	float uVector, vVector;
+	if(ericCartman.getHeroPositionX() < 0 && ericCartman.getHeroPositionZ() < 0){//1
+			std::cout << "1" << std::endl; 
+			uVector = (0.01)*ericCartman.getHeroPositionX() + 1;
+			 vVector = (0.01)*ericCartman.getHeroPositionZ() + 1;
+
+			surfPos = surf[0].evaluateSurface(uVector/100, vVector/100);
+	}else if(ericCartman.getHeroPositionX() >= 0 && ericCartman.getHeroPositionZ() >= 0){//2
+			std::cout << "2" << std::endl; 
+			uVector = (0.01)*ericCartman.getHeroPositionX();
+			 vVector = (0.01)*ericCartman.getHeroPositionZ();
+
+			surfPos = surf[1].evaluateSurface(uVector/100, vVector/100);
+	}else if(ericCartman.getHeroPositionX() >= 0 && ericCartman.getHeroPositionZ() < 0){//3
+			std::cout << "3" << std::endl; 
+			uVector = (0.01)*ericCartman.getHeroPositionX() ;
+			 vVector = (0.01)*ericCartman.getHeroPositionZ()+1;
+
+			surfPos = surf[2].evaluateSurface(uVector/100, vVector/100);
+	}else{
+			std::cout << "4" << std::endl;
+			 uVector = (0.01)*ericCartman.getHeroPositionX() + 1;
+			 vVector = (0.01)*ericCartman.getHeroPositionZ();
+
+			surfPos = surf[3].evaluateSurface(uVector/100, vVector/100);
 	}
-	if(keyState['s'] || keyState['S']){
-		ericCartman.moveEricBackward();
-		ALenum sourceState;
-		alGetSourcei( wav.sources[1], AL_SOURCE_STATE, &sourceState );
-		if(sourceState != AL_PLAYING)
-			alSourcePlay( wav.sources[1] );
-	}
-	if(keyState['a'] || keyState['A']){
-		ericCartman.turnEricLeft();
-		ALenum sourceState;
-		alGetSourcei( wav.sources[1], AL_SOURCE_STATE, &sourceState );
-		if(sourceState != AL_PLAYING)
-			alSourcePlay( wav.sources[1] );
-	}
-	if(keyState['d'] || keyState['D']){
-		ericCartman.turnEricRight();
-		ALenum sourceState;
-		alGetSourcei( wav.sources[1], AL_SOURCE_STATE, &sourceState );
-		if(sourceState != AL_PLAYING)
-			alSourcePlay( wav.sources[1] );
-	}
+
+		
+		std::cout << uVector << " "<< surfPos.getY() << " " << vVector << std::endl;
+		ericCartman.setHeroPos(ericCartman.getHeroPositionX(), surfPos.getY()  , ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta(), ericCartman.getHeroPhi());
+
 
 }
 
@@ -504,180 +540,183 @@ void normalKeys(){
 
 void SpecialKeys(int key, int x, int y)
 {
-	switch (key)
-	{
-		case GLUT_KEY_LEFT:
-		break;
-		case GLUT_KEY_RIGHT:
-		break;
-		case GLUT_KEY_UP:
-		break;
-		case GLUT_KEY_DOWN:
-		break;
-	}
-	glutPostRedisplay();
+		switch (key)
+		{
+				case GLUT_KEY_LEFT:
+						break;
+				case GLUT_KEY_RIGHT:
+						break;
+				case GLUT_KEY_UP:
+						break;
+				case GLUT_KEY_DOWN:
+						break;
+		}
+		glutPostRedisplay();
 }
 
 // Timer function
 void myTimer( int value ){
-	normalKeys();
-	calculateFPS();
+		normalKeys();
+		calculateFPS();
 
-	ericCartman.animate();
-	board.animate();
-	donkey.animate();
+		ericCartman.animate();
+		board.animate();
+		donkey.animate();
 
-	animationTrack(false);
-	animationTrack(true);
+		animationTrack(false);
+		animationTrack(true);
 
 
-	glutPostRedisplay();
-	glutTimerFunc( 1000/60, myTimer, 0);
+		glutPostRedisplay();
+		glutTimerFunc( 1000/60, myTimer, 0);
 }
 
 void initScene()  {
-	glEnable(GL_DEPTH_TEST);
+		glEnable(GL_DEPTH_TEST);
 
-  //******************************************************************
-  // this is some code to enable a default light for the scene;
-  // feel free to play around with this, but we won't talk about
-  // lighting in OpenGL for another couple of weeks yet.
-	float lightCol[4] = { 1, 1, 1, 1};
-	float ambientCol[4] = { 0.0, 0.0, 0.0, 1.0 };
-	float lPosition[4] = { 10, 10, 10, 1 };
-	glLightfv( GL_LIGHT0, GL_POSITION,lPosition );
-	glLightfv( GL_LIGHT0, GL_DIFFUSE,lightCol );
-	glLightfv( GL_LIGHT0, GL_AMBIENT, ambientCol );
-	glEnable( GL_LIGHTING );
-	glEnable( GL_LIGHT0 );
+		//******************************************************************
+		// this is some code to enable a default light for the scene;
+		// feel free to play around with this, but we won't talk about
+		// lighting in OpenGL for another couple of weeks yet.
+		float lightCol[4] = { 1, 1, 1, 1};
+		float ambientCol[4] = { 0.0, 0.0, 0.0, 1.0 };
+		float lPosition[4] = { 10, 10, 10, 1 };
+		glLightfv( GL_LIGHT0, GL_POSITION,lPosition );
+		glLightfv( GL_LIGHT0, GL_DIFFUSE,lightCol );
+		glLightfv( GL_LIGHT0, GL_AMBIENT, ambientCol );
+		glEnable( GL_LIGHTING );
+		glEnable( GL_LIGHT0 );
 
-  // tell OpenGL not to use the material system; just use whatever we 
-  // pass with glColor*()
-	glEnable( GL_COLOR_MATERIAL );
-	glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
-  //******************************************************************
+		// tell OpenGL not to use the material system; just use whatever we 
+		// pass with glColor*()
+		glEnable( GL_COLOR_MATERIAL );
+		glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
+		//******************************************************************
 
-	glShadeModel(GL_FLAT);
+		glShadeModel(GL_FLAT);
 
-  srand( time(NULL) );	// seed our random number generator
-  env.generateEnvironmentDL(file);
+		srand( time(NULL) );	// seed our random number generator
+		env.generateEnvironmentDL(file);
 }
 void View2(){
-	glViewport(0,0,windowWidth/2, windowHeight/SPLITSCREEN_HEIGHT_RATIO );
+		glViewport(0,0,windowWidth/2, windowHeight/SPLITSCREEN_HEIGHT_RATIO );
 
 
-  // Portions within the scissor can now be modified.
-	glScissor(0,0,windowWidth/2, windowHeight/SPLITSCREEN_HEIGHT_RATIO );
-	glEnable(GL_SCISSOR_TEST);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glDisable( GL_SCISSOR_TEST);
+		// Portions within the scissor can now be modified.
+		glScissor(0,0,windowWidth/2, windowHeight/SPLITSCREEN_HEIGHT_RATIO );
+		glEnable(GL_SCISSOR_TEST);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glDisable( GL_SCISSOR_TEST);
 
 
-	glMatrixMode(GL_MODELVIEW);
+		//glMatrixMode(GL_PROJECTION);
+		//glLoadIdentity();
+		//gluPerspective(45.0, (float) (windowWidth/2)/(windowHeight/SPLITSCREEN_HEIGHT_RATIO), 0.1, 100000);
+		//glMatrixMode(GL_MODELVIEW);
 
-	glPushMatrix();
-	{
-		glLoadIdentity();
-		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
-		glLoadIdentity();
-		glColor3f(1,1,1);
-		glLineWidth(5);
-		glBegin(GL_LINE_LOOP);
-		glVertex3f(-1,-1,0);
-		glVertex3f(-1,1,0);
-		glVertex3f(1,1,0);
-		glVertex3f(1,-1,0);
-		glEnd();
+		{
+				glLoadIdentity();
+				glMatrixMode(GL_PROJECTION);
+				glPushMatrix();
+				glLoadIdentity();
+				glColor3f(1,1,1);
+				glLineWidth(5);
+				glBegin(GL_LINE_LOOP);
+				glVertex3f(-1,-1,0);
+				glVertex3f(-1,1,0);
+				glVertex3f(1,1,0);
+				glVertex3f(1,-1,0);
+				glEnd();
+				glPopMatrix();
+				glMatrixMode(GL_MODELVIEW);
+		}
 		glPopMatrix();
-		glMatrixMode(GL_MODELVIEW);
-	}
-	glPopMatrix();
-	glLoadIdentity();
+		glLoadIdentity();
 }
 
 void View3(){
-	glViewport(windowWidth/2, 0, windowWidth, windowHeight/SPLITSCREEN_HEIGHT_RATIO );
+		glViewport(windowWidth/2, 0, windowWidth, windowHeight/SPLITSCREEN_HEIGHT_RATIO );
 
 
-  // Portions within the scissor can now be modified.
-	glScissor(windowWidth/2, 0, windowWidth, windowHeight/SPLITSCREEN_HEIGHT_RATIO );
-	glEnable(GL_SCISSOR_TEST);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glDisable( GL_SCISSOR_TEST);
+		// Portions within the scissor can now be modified.
+		glScissor(windowWidth/2, 0, windowWidth, windowHeight/SPLITSCREEN_HEIGHT_RATIO );
+		glEnable(GL_SCISSOR_TEST);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glDisable( GL_SCISSOR_TEST);
 
 
-	glMatrixMode(GL_MODELVIEW);
+		glMatrixMode(GL_MODELVIEW);
 
 
-	glPushMatrix();
-	{
-		glLoadIdentity();
-		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
-		glLoadIdentity();
-		glColor3f(1,1,1);
-		glLineWidth(5);
-		glBegin(GL_LINE_LOOP);
-		glVertex3f(-1,-1,0);
-		glVertex3f(-1,1,0);
-		glVertex3f(1,1,0);
-		glVertex3f(1,-1,0);
-		glEnd();
+		{
+				glLoadIdentity();
+				glMatrixMode(GL_PROJECTION);
+				glPushMatrix();
+				glLoadIdentity();
+				glColor3f(1,1,1);
+				glLineWidth(5);
+				glBegin(GL_LINE_LOOP);
+				glVertex3f(-1,-1,0);
+				glVertex3f(-1,1,0);
+				glVertex3f(1,1,0);
+				glVertex3f(1,-1,0);
+				glEnd();
+				glPopMatrix();
+				glMatrixMode(GL_MODELVIEW);
+		}
 		glPopMatrix();
 		glMatrixMode(GL_MODELVIEW);
-	}
-	glPopMatrix();
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+		glLoadIdentity();
 }
 
 void drawCharacters(){
-	const char* c;
-  /*
-     Point temp=surf.evaluateSurface(u,v);
-     Point axis=surf.rotationAxis(u,v);
-     float surfAngle=surf.rotationAngle(u,v);
-     Point norm = surf.normal(u,v);
-   */
-	glPushMatrix();
-  // TRACK
-	glTranslatef(0,3,0);
-	glScalef(4,4,4);
-  // BOARD
-	glPushMatrix();
-	glTranslatef(arcPos.getX(),arcPos.getY(),arcPos.getZ());
-	glRotatef(boardTheta+90,0,1,0);
-	glScalef(.25,.25,.25);
-	board.drawHero();
-	glDisable(GL_LIGHTING);
-	glPushMatrix();
-	glColor3f(1,1,1);
-	glTranslatef(-2,1,0);
-	glScalef(.01,.01,.01);
-	for(c="jacwilso"; *c!='\0'; c++)
-		glutStrokeCharacter(StrFont,*c);
-	glPopMatrix();
-	glEnable(GL_LIGHTING);
-	glPopMatrix();
-  // DONKEY
-	glPushMatrix();
-	glTranslatef(paramPos.getX(),paramPos.getY(),paramPos.getZ());
-	glScalef(.25,.25,.25);
-	glRotatef(donkeyTheta-180,0,1,0);
-	donkey.drawHero();
-	glDisable(GL_LIGHTING);
-	glPushMatrix();
-	glColor3f(1,1,1);
-	glTranslatef(-4,3.5,0);
-  //glRotatef(nameAngle(paramPos),0,1,0);
-	glScalef(.01,.01,.01);
-	for(c="zhemingdeng"; *c!='\0'; c++)
-		glutStrokeCharacter(StrFont,*c);
-	glPopMatrix();
-	glEnable(GL_LIGHTING);
-	glPopMatrix();
-	glPopMatrix();
+		const char* c;
+		/*
+		   Point temp=surf.evaluateSurface(u,v);
+		   Point axis=surf.rotationAxis(u,v);
+		   float surfAngle=surf.rotationAngle(u,v);
+		   Point norm = surf.normal(u,v);
+		   */
+		glPushMatrix();
+		// TRACK
+		glTranslatef(0,3,0);
+		glScalef(4,4,4);
+		// BOARD
+		glPushMatrix();
+		glTranslatef(arcPos.getX(),arcPos.getY(),arcPos.getZ());
+		glRotatef(boardTheta+90,0,1,0);
+		glScalef(.25,.25,.25);
+		board.drawHero();
+		glDisable(GL_LIGHTING);
+		glPushMatrix();
+		glColor3f(1,1,1);
+		glTranslatef(-2,1,0);
+		glScalef(.01,.01,.01);
+		for(c="jacwilso"; *c!='\0'; c++)
+				glutStrokeCharacter(StrFont,*c);
+		glPopMatrix();
+		glEnable(GL_LIGHTING);
+		glPopMatrix();
+		// DONKEY
+		glPushMatrix();
+		glTranslatef(paramPos.getX(),paramPos.getY(),paramPos.getZ());
+		glScalef(.25,.25,.25);
+		glRotatef(donkeyTheta-180,0,1,0);
+		donkey.drawHero();
+		glDisable(GL_LIGHTING);
+		glPushMatrix();
+		glColor3f(1,1,1);
+		glTranslatef(-4,3.5,0);
+		//glRotatef(nameAngle(paramPos),0,1,0);
+		glScalef(.01,.01,.01);
+		for(c="zhemingdeng"; *c!='\0'; c++)
+				glutStrokeCharacter(StrFont,*c);
+		glPopMatrix();
+		glEnable(GL_LIGHTING);
+		glPopMatrix();
+		glPopMatrix();
 }
 
 // renderScene() ///////////////////////////////////////////////////////////////
@@ -688,84 +727,83 @@ void drawCharacters(){
 //
 ////////////////////////////////////////////////////////////////////////////////
 void renderScene(void)  {
-  //clear the render buffer
-	glDrawBuffer( GL_BACK );
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		//clear the render buffer
+		glDrawBuffer( GL_BACK );
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//First Viewport: Take up the entire screen
-	glViewport(0,0,windowWidth,windowHeight);
+		glViewport(0,0,windowWidth,windowHeight);
 		//update the modelview matrix based on the camera's position
-	glMatrixMode(GL_MODELVIEW);              //make sure we aren't changing the projection matrix!
-	glLoadIdentity();
-	wav.positionListener(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(),cam.getDirX(),cam.getDirY(),cam.getDirZ(),0,1,0);		
-	wav.positionSource(wav.sources[1],ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ());
-	
-	if(screen1SubjectNumber == 0){
-		cam.setSubjectPosition(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta());
-	}else if(screen1SubjectNumber == 1){
-		cam.setSubjectPosition(4*arcPos.getX(), 4*arcPos.getY(), 4*arcPos.getZ(), boardTheta);
-	}else if(screen1SubjectNumber == 2){
-		cam.setSubjectPosition(4*paramPos.getX() + 10,4*paramPos.getY() + 3, 4*paramPos.getZ()+10, donkeyTheta);
-	}
+		glMatrixMode(GL_MODELVIEW);              //make sure we aren't changing the projection matrix!
+		glLoadIdentity();
+		wav.positionListener(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(),cam.getDirX(),cam.getDirY(),cam.getDirZ(),0,1,0);		
+		wav.positionSource(wav.sources[1],ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ());
 
-	cam.setCamera();
-
-
-	glPushMatrix();
-	glTranslatef(40,0,40);
-	glutSolidTeapot(1);
-	glPopMatrix();
-
-
-	ericCartman.drawHero();
-	drawCharacters();
-	glCallList( env.environmentDL );
-
-
-	if(fpsOn == true){
-		drawFPS();
-	}
-
-	if(splitScreenOn == true){
-		if(screen2SubjectNumber == 0){
-			cam2.setSubjectPosition(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta());
-		}else if(screen2SubjectNumber == 1){
-			cam2.setSubjectPosition(4*arcPos.getX(), 4*arcPos.getY(), 4*arcPos.getZ(), boardTheta);
-		}else if(screen2SubjectNumber == 2){
-			cam2.setSubjectPosition(4*paramPos.getX() + 10,4*paramPos.getY() + 3, 4*paramPos.getZ()+10, donkeyTheta);
-		}
-		if(screen3SubjectNumber == 0){
-			cam3.setSubjectPosition(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta());
-		}else if(screen2SubjectNumber == 1){
-			cam3.setSubjectPosition(4*arcPos.getX(), 4*arcPos.getY(), 4*arcPos.getZ(), boardTheta);
-		}else if(screen2SubjectNumber == 2){
-			cam3.setSubjectPosition(4*paramPos.getX() + 10,4*paramPos.getY() + 3, 4*paramPos.getZ()+10, donkeyTheta);
+		if(screen1SubjectNumber == 0){
+				cam.setSubjectPosition(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta());
+		}else if(screen1SubjectNumber == 1){
+				cam.setSubjectPosition(4*arcPos.getX(), 4*arcPos.getY(), 4*arcPos.getZ(), boardTheta);
+		}else if(screen1SubjectNumber == 2){
+				cam.setSubjectPosition(4*paramPos.getX() + 10,4*paramPos.getY() + 3, 4*paramPos.getZ()+10, donkeyTheta);
 		}
 
-	/*** Viewport 2 ***/
-		View2();
-		cam2.setCamera();
+		cam.setCamera();
+
+		glPushMatrix();
+		glTranslatef(40,0,40);
+		glutSolidTeapot(1);
+		glPopMatrix();
+
+
 		ericCartman.drawHero();
 		drawCharacters();
- 	//surf.renderGrid();
- 	//surf.renderSurface();
+		glCallList( env.environmentDL );
+
+
 		if(fpsOn == true){
-			drawFPS();
+				drawFPS();
 		}
-		glCallList( env.environmentDL );
 
-	/*** Viewport 3 ***/
-		View3();
-		cam3.setCamera();
-		ericCartman.drawHero();
-		drawCharacters();
-		glCallList( env.environmentDL );
-	//surf.renderGrid();
- 	//surf.renderSurface();
-	}
+		if(splitScreenOn == true){
+				if(screen2SubjectNumber == 0){
+						cam2.setSubjectPosition(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta());
+				}else if(screen2SubjectNumber == 1){
+						cam2.setSubjectPosition(4*arcPos.getX(), 4*arcPos.getY(), 4*arcPos.getZ(), boardTheta);
+				}else if(screen2SubjectNumber == 2){
+						cam2.setSubjectPosition(4*paramPos.getX() + 10,4*paramPos.getY() + 3, 4*paramPos.getZ()+10, donkeyTheta);
+				}
+				if(screen3SubjectNumber == 0){
+						cam3.setSubjectPosition(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta());
+				}else if(screen2SubjectNumber == 1){
+						cam3.setSubjectPosition(4*arcPos.getX(), 4*arcPos.getY(), 4*arcPos.getZ(), boardTheta);
+				}else if(screen2SubjectNumber == 2){
+						cam3.setSubjectPosition(4*paramPos.getX() + 10,4*paramPos.getY() + 3, 4*paramPos.getZ()+10, donkeyTheta);
+				}
 
-	//push the back buffer to the screen
-	glutSwapBuffers();
+				/*** Viewport 2 ***/
+				View2();
+				cam2.setCamera();
+				ericCartman.drawHero();
+				drawCharacters();
+				//surf.renderGrid();
+				//surf.renderSurface();
+				if(fpsOn == true){
+						drawFPS();
+				}
+				glCallList( env.environmentDL );
+
+				/*** Viewport 3 ***/
+				View3();
+				cam3.setCamera();
+				ericCartman.drawHero();
+				drawCharacters();
+				glCallList( env.environmentDL );
+				//surf.renderGrid();
+				//surf.renderSurface();
+		}
+
+		//push the back buffer to the screen
+		glutSwapBuffers();
 }
 
 // loadControlPoints() /////////////////////////////////////////////////////////
@@ -774,51 +812,52 @@ void renderScene(void)  {
 //
 ////////////////////////////////////////////////////////////////////////////////
 bool loadControlPoints( char* filename ) {
-	file.open(filename);
-	if(!file.is_open()){
-		cerr<<"ERROR. Could not find/ read file. Check spelling."<<endl;
-		return false;
-	}
-	int numPoints;
-	char c;
-	float tempX,tempY,tempZ;
-	vector<Point> tempP;
-	vector<Bezier> tempBez;
-	BezierSurface tempSurf;
+		file.open(filename);
+		if(!file.is_open()){
+				cerr<<"ERROR. Could not find/ read file. Check spelling."<<endl;
+				return false;
+		}
+		int numPoints;
+		char c;
+		float tempX,tempY,tempZ;
+		vector<Point> tempP;
+		vector<Bezier> tempBez;
+		BezierSurface tempSurf;
 
-  	/*** READ SURFACE ***/
-  	file>>numPoints; // number of points
+		/*** READ SURFACE ***/
+		file>>numPoints; // number of points
 
-  	for(int i=0; i<numPoints*16; i++){
-  		file>>tempX>>c>>tempY>>c>>tempZ;
-    tempP.push_back(Point(tempX,tempY,tempZ)); // pushes each value into a point into a vector
-}
-for(int i=0; i<numPoints*4; i++)
-    tempBez.push_back(Bezier(tempP[4*i],tempP[4*i+1],tempP[4*i+2],tempP[4*i+3])); // pushes each set of 4 points into a bezier vector
-for(int i=0; i<numPoints; i++){
-	tempSurf.createSurface(tempBez[4*i],tempBez[4*i+1],tempBez[4*i+2],tempBez[4*i+3]);
-	surf.push_back(tempSurf);
-}
-env.addSurface(surf);
+		for(int i=0; i<numPoints*16; i++){
+				file>>tempX>>c>>tempY>>c>>tempZ;
+				tempP.push_back(Point(tempX,tempY,tempZ)); // pushes each value into a point into a vector
+		}
+		for(int i=0; i<numPoints*4; i++){
+				tempBez.push_back(Bezier(tempP[4*i],tempP[4*i+1],tempP[4*i+2],tempP[4*i+3])); // pushes each set of 4 points into a bezier vector
+		}
+		for(int i=0; i<numPoints; i++){
+				tempSurf.createSurface(tempBez[4*i],tempBez[4*i+1],tempBez[4*i+2],tempBez[4*i+3]);
+				surf.push_back(tempSurf);
+		}
+		env.addSurface(surf);
 
-  /*** READ TRACKS ***/
-tempP.clear();
-file>>numPoints;
-for(int i=0; i<numPoints; i++){
-	file>>tempX>>c>>tempY>>c>>tempZ;
-    tempP.push_back(Point(tempX,tempY,tempZ)); // pushes each value into a point into a vector
-}
-for(int i=0; i<numPoints-3; i+=3)
-    track.bezierConnect(Bezier(tempP[i],tempP[i+1],tempP[i+2],tempP[i+3])); // pushes each set of 4 points into a bezier vector
-env.addCurve(track);
+		/*** READ TRACKS ***/
+		tempP.clear();
+		file>>numPoints;
+		for(int i=0; i<numPoints; i++){
+				file>>tempX>>c>>tempY>>c>>tempZ;
+				tempP.push_back(Point(tempX,tempY,tempZ)); // pushes each value into a point into a vector
+		}
+		for(int i=0; i<numPoints-3; i+=3)
+				track.bezierConnect(Bezier(tempP[i],tempP[i+1],tempP[i+2],tempP[i+3])); // pushes each set of 4 points into a bezier vector
+		env.addCurve(track);
 
-  /*** READ OBJECTS ***/
-  // Pass file to environment class
-  return true; // was able to read the file
+		/*** READ OBJECTS ***/
+		// Pass file to environment class
+		return true; // was able to read the file
 }
 
 void cleanSound(){
-	wav.cleanupOpenAL();
+		wav.cleanupOpenAL();
 }
 // main() //////////////////////////////////////////////////////////////////////
 //
@@ -827,46 +866,46 @@ void cleanSound(){
 ////////////////////////////////////////////////////////////////////////////////
 int main(int argc, char **argv) {
 
-	if(argc!=2){
-		cerr<<"Usage: "<<argv[0]<<" <CSV_NAME>"<<endl;
-		return 0;
-	}
-	loadControlPoints(argv[1]);
-  // create a double-buffered GLUT window at (50,50) with predefined windowsize
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
-	glutInitWindowPosition(50,50);
-	glutInitWindowSize(windowWidth,windowHeight);
-	glutCreateWindow("GuildWars");
-	wav.initializeOpenAL(argc,argv);
-  // give the camera a scenic starting point.
-	pipTheta = M_PI/1.25;
-	pipPhi = M_PI*0.7;
+		if(argc!=2){
+				cerr<<"Usage: "<<argv[0]<<" <CSV_NAME>"<<endl;
+				return 0;
+		}
+		loadControlPoints(argv[1]);
+		// create a double-buffered GLUT window at (50,50) with predefined windowsize
+		glutInit(&argc, argv);
+		glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
+		glutInitWindowPosition(50,50);
+		glutInitWindowSize(windowWidth,windowHeight);
+		glutCreateWindow("GuildWars");
+		wav.initializeOpenAL(argc,argv);
+		// give the camera a scenic starting point.
+		pipTheta = M_PI/1.25;
+		pipPhi = M_PI*0.7;
 
-  // register callback functions...
-	glutSetKeyRepeat(GLUT_KEY_REPEAT_ON);
-	glutKeyboardFunc(normalKeysDown);
-	glutKeyboardUpFunc( normalKeysUp);
-	glutDisplayFunc(renderScene);
-	glutReshapeFunc(resizeWindow);
-	glutMouseFunc(mouseCallback);
-	glutMotionFunc(mouseMotion);
-	glutTimerFunc( 1000/60, myTimer, 0);
-  // Special Function for Arrow Keys
-	glutSpecialFunc(SpecialKeys);
+		// register callback functions...
+		glutSetKeyRepeat(GLUT_KEY_REPEAT_ON);
+		glutKeyboardFunc(normalKeysDown);
+		glutKeyboardUpFunc( normalKeysUp);
+		glutDisplayFunc(renderScene);
+		glutReshapeFunc(resizeWindow);
+		glutMouseFunc(mouseCallback);
+		glutMotionFunc(mouseMotion);
+		glutTimerFunc( 1000/60, myTimer, 0);
+		// Special Function for Arrow Keys
+		glutSpecialFunc(SpecialKeys);
 
-	wav.positionSource(wav.sources[0],40,0,40);
-  // do some basic OpenGL setup
-  //env.placeObjectsInEnvironment(inFile);
+		wav.positionSource(wav.sources[0],40,0,40);
+		// do some basic OpenGL setup
+		//env.placeObjectsInEnvironment(inFile);
 
-	initScene();
+		initScene();
 
-	atexit( cleanSound);
-	alSourcePlay( wav.sources[0] );
+		atexit( cleanSound);
+		alSourcePlay( wav.sources[0] );
 
-	createMenus();
-  // and enter the GLUT loop, never to exit.
-	glutMainLoop();
+		createMenus();
+		// and enter the GLUT loop, never to exit.
+		glutMainLoop();
 
-	return(0);
+		return(0);
 }

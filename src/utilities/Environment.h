@@ -26,27 +26,27 @@ using namespace std;
 const static float DEG_RAD = 3.14159/180;
 
 class Environment{
-private:
-        vector<BezierSurface> surf;
-        Bezier track;
+		private:
+				vector<BezierSurface> surf;
+				Bezier track;
 
-	void drawGrid();
-	void drawGround();
-	void drawTree();
-        void drawHut();
-        void drawSurface();
-        void drawCurve();
-        void drawBox();
-public:
-	Environment();
-	void placeObjectsInEnvironment(std::ifstream& inFile);
-	void generateEnvironmentDL(std::ifstream& inFile);
+				void drawGrid();
+				void drawGround();
+				void drawTree();
+				void drawHut();
+				void drawSurface();
+				void drawCurve();
+				void drawBox();
+		public:
+				Environment();
+				void placeObjectsInEnvironment(std::ifstream& inFile);
+				void generateEnvironmentDL(std::ifstream& inFile);
 
-        void addSurface(vector<BezierSurface> surf);
-        void addCurve(Bezier curve);
+				void addSurface(vector<BezierSurface> surf);
+				void addCurve(Bezier curve);
 
-	static GLUquadric* qobj;
-    GLuint environmentDL;
+				static GLUquadric* qobj;
+				GLuint environmentDL;
 
 };
 
