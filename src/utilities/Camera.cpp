@@ -8,12 +8,12 @@ Camera::Camera(){
 
 
         cameraTheta = -M_PI / 3.0f;
-        cameraPhi = M_PI / 2.8f;
+        cameraPhi = M_PI/2;
 
         recomputeOrientation();
-        cameraX = 10;
+        cameraX = 0;
         cameraY = 10;
-        cameraZ = 10;
+        cameraZ = 0;
         cameraRad = 30;
 
         subjectPosX = 0;
@@ -202,5 +202,3 @@ void Camera::FreeCam(){
 		dirZ + cameraZ,
 		0,1,0);
 }
-
-

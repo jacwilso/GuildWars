@@ -186,23 +186,36 @@ void drawFPS(){
 
 void animationTrack(bool parametric){
 		Point tmpC, tmpD;
+	Point surfPos;
+	float uVector, vVector;
 		if(parametric){
 				tmpC=track.parametricCurve(param);
-
+	uVector = (0.01)* tmpC.getX() +  1;
+	vVector = (-0.01) * tmpC.getZ() + 1;
+	int bezierListIndex = 2*((int)floor(vVector)) + (int)floor(uVector);
+	surfPos = surf[bezierListIndex].evaluateSurface(uVector - floor(uVector) ,vVector - floor(vVector)); 
+        Point tmp(surfPos.getX()*100.0/12,(surfPos.getY()-2)*100.0/12,surfPos.getZ()*100.0/12);
+        cout<<tmp.getY()<<endl;
 				tmpD=track.paramDerivative(param);
 				donkeyTheta=atan2(tmpD.getX(),tmpD.getZ())*180/3.1415;
 				param++;
 				if(param+1>track.resSize()) param=0;
-				paramPos=tmpC;
+				paramPos=tmp;
 		}else{
 				tmpC=track.arcLengthCurve(arc);
 				//cout<<"TEMP: "<<temp.getX()<<", "<<temp.getZ()<<endl<<"ARC++ "<<arc<<endl;
+	uVector = (0.01)* tmpC.getX() +  1;
+	vVector = (-0.01) * tmpC.getZ() + 1;
+	int bezierListIndex = 2*((int)floor(vVector)) + (int)floor(uVector);
+	surfPos = surf[bezierListIndex].evaluateSurface(uVector - floor(uVector) ,vVector - floor(vVector)); 
+        Point tmp(tmpC.getX(),(surfPos.getY()-2),tmpC.getZ());
 				tmpD=track.arcDerivative(arc);
 				boardTheta=atan2(tmpD.getX(),tmpD.getZ())*180/3.1415;
 				arc++;
 				if(arc+1>track.resSize()) arc=0;
 				arcPos=tmpC;
 		}
+
 }
 
 float nameAngle(Point pos){
@@ -452,7 +465,7 @@ void mouseMotion(int x, int y) {
 						cam.recomputeOrientation();     // update camera (x,y,z) based on (radius,theta,phi)
 
 				}
-																	}
+		}
 
 
 		glutPostRedisplay();	    // redraw our scene from our new camera POV
@@ -512,6 +525,14 @@ void normalKeys(){
 				if(sourceState != AL_PLAYING)
 						alSourcePlay( wav.sources[1] );
 		}
+                // FREE CAM
+                if(cam.getViewMode()==0){
+                  if(keyState['i'] || keyState['I']) cam.moveForward();
+                  if(keyState['k'] || keyState['K']) cam.moveBackward();
+                  if(keyState['j'] || keyState['J']) cam.setCameraTheta(cam.getCameraTheta() - 0.05);
+                if(keyState['l'] || keyState['L']) cam.setCameraTheta(cam.getCameraTheta() + 0.05);
+                  cam.recomputeOrientation();
+                }
 	// Which quad is eric in?	
 	Point surfPos;
 	float uVector, vVector;
@@ -521,6 +542,9 @@ void normalKeys(){
 	int bezierListIndex = 2*((int)floor(vVector)) + (int)floor(uVector);
 	//std::cout << uVector << " " << bezierListIndex << " " << vVector << std::endl;
 	surfPos = surf[bezierListIndex].evaluateSurface(uVector - floor(uVector) ,vVector - floor(vVector)); 
+	ericCartman.setHeroPos(ericCartman.getHeroPositionX(), (surfPos.getY()-1.59)*100.0/12  , ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta(), ericCartman.getHeroPhi());
+
+
 	Point axis=surf[bezierListIndex].rotationAxis(uVector - floor(uVector) ,vVector - floor(vVector));
     float surfAngle=surf[bezierListIndex].rotationAngle(uVector - floor(uVector) ,vVector - floor(vVector));
  	ericCartman.setRotAxisX(axis.getX());
