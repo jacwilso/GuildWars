@@ -57,6 +57,11 @@ The following options only appear when the split screen view is turned on
  * s or S: Moves Eric Cartman Backward
  * a or A: Turns Eric Cartman Left
  * d or D: Turns Eric Cartman Right
+ In Free Cam mode:
+ * i or I: Moves Free Cam Forward
+ * k or K: Moves Free Cam Backward
+ * j or J: Shifts Free Cam view left
+ * l or L: Shifts Free Cam view right
  * q or Q or ESC: Quits the program
  * 0: Toggles main view to free cam mode.
  * 1: Toggles main view to 3rd Person on selected hero.
