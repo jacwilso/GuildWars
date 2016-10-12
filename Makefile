@@ -128,8 +128,11 @@ endif
 
 all: $(TARGET)
 
-run: all
-	./$(TARGET)
+file1: all
+	./$(TARGET) fileIO1.csv
+
+file2: all
+	./$(TARGET) fileIO2.csv
 
 clean:
 	rm -f $(OBJECTS) $(TARGET)
