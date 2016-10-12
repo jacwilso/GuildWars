@@ -20,6 +20,8 @@ Camera::Camera(){
         subjectPosY = 0;
         subjectPosZ = 0;
         subjectPosTheta = 0;
+		cameraPitch = 0;
+		cameraRoll = 0;
 }
 
 
@@ -69,10 +71,21 @@ void Camera::setSubjectPosZ(float item){
 	subjectPosZ = item;
 }
 
-void Camera:: setsubjectPosTheta(float item){
+void Camera:: setSubjectPosTheta(float item){
 	subjectPosTheta = item;
 }
 
+void Camera::setSubjectPosPhi(float item){
+	subjectPosPhi = item;
+}
+
+void Camera::setCameraPitch(float item){
+		cameraPitch = item;
+}
+
+void Camera::setCameraRoll(float item){
+		cameraRoll = item;
+}
 void Camera::moveForward(){
 	switch(viewMode){
 		case 0: //Free Cam Mode
@@ -116,7 +129,7 @@ void Camera::recomputeOrientation(){
  	setSubjectPosX(x);
  	setSubjectPosY(y);
  	setSubjectPosZ(z);
- 	setsubjectPosTheta(theta);
+ 	setSubjectPosTheta(theta);
  }
 
 void Camera::setCamera(){
@@ -145,11 +158,11 @@ void Camera::setCamera(){
 	}
 }
 void Camera::ThirdPersonPOV(  ){
-	gluLookAt( -15*cos(subjectPosTheta*(M_PI/180)) + subjectPosX, 
+		gluLookAt( -15*cos(subjectPosTheta*(M_PI/180)) + subjectPosX, 
 			subjectPosY + Y_OFFSET,
 			15*sin(subjectPosTheta*(M_PI/180)) + subjectPosZ,
 			subjectPosX,
-			subjectPosY,
+			subjectPosY ,
 			subjectPosZ,
 			0,1,0);
 }
@@ -158,9 +171,10 @@ void Camera::FirstPersonPOV( ){
 			Y_OFFSET + subjectPosY, 
 			subjectPosZ - 4.2*sin(subjectPosTheta*(M_PI/180)),
 			20*cos(subjectPosTheta*(M_PI/180)) + subjectPosX, 
-			3.3 + subjectPosY,
+			3.3+ subjectPosY,
 			-20*sin(subjectPosTheta*(M_PI/180)) + subjectPosZ,
 			0,1,0);
+	
 }
 void Camera::ReversePOV( ){
 gluLookAt( 15*cos(subjectPosTheta*(M_PI/180)) + subjectPosX,

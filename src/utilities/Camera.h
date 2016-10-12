@@ -24,7 +24,9 @@ private:
     float cameraTheta, cameraPhi;
     float cameraX,cameraY,cameraZ,cameraRad;
     float subjectPosX, subjectPosY, subjectPosZ, subjectPosTheta;
-
+	float subjectPosPhi;
+	float cameraPitch;
+	float cameraRoll;
 
 public:
     Camera();
@@ -129,10 +131,18 @@ public:
     float getSubjectPosZ()
     { return subjectPosZ; }
 
-    float getsubjectPosTheta()
+    float getSubjectPosTheta()
     { return subjectPosTheta;}    
+	
+	float getSubjectPosPhi()
+	{ return subjectPosPhi;}
+    
+	float getCameraPitch()
+	{ return cameraPitch;}
 
-    // Setters
+	float getCameraRoll()
+	{return cameraRoll;}
+	// Setters
     void setViewMode(int);
     void setCameraX(float);
     void setCameraY(float);
@@ -146,6 +156,8 @@ public:
     void setSubjectPosX(float item);
     void setSubjectPosY(float item);
     void setSubjectPosZ(float item);
-    void setsubjectPosTheta(float item);
-
+    void setSubjectPosTheta(float item);
+	void setSubjectPosPhi(float item);
+	void setCameraPitch(float item);
+	void setCameraRoll(float item);
 };

@@ -371,6 +371,16 @@ void processMainMenu(int value){
 						}
 						break;
 				case 4:
+						screen2On = !screen2On;
+						if(screen2On == false){
+							glutChangeToMenuEntry(4,"Show MiniWindow",4);
+						}else{
+							glutChangeToMenuEntry(4,"Hide MiniWindow",4);
+						}
+						screen2SubjectNumber = screen1SubjectNumber;
+						cam2.setViewMode(2);	
+						break;
+				case 5:
 						exit(0);
 						break;
 				default:
@@ -426,10 +436,10 @@ void createMenus() {
 
 		mainMenu = glutCreateMenu(processMainMenu);
 		glutAddMenuEntry( "Turn SplitScreen ON", 1 );
-
 		glutAddMenuEntry("Free Cam", 2);
 		glutAddMenuEntry("Turn FPS ON", 3);
-		glutAddMenuEntry( "Quit",4);
+		glutAddMenuEntry( "Show MiniWindow",4);
+		glutAddMenuEntry("Quit", 5);
 		glutAddSubMenu("Eric Cartman", ericMenu);
 		glutAddSubMenu("Board", boardMenu);
 		glutAddSubMenu("Donkey", donkeyMenu);
@@ -641,24 +651,6 @@ void View2(){
 		gluPerspective(45.0, (float) (windowWidth/2)/(windowHeight/SPLITSCREEN_HEIGHT_RATIO), 0.1, 100000);
 		glMatrixMode(GL_MODELVIEW);
 
-		/*glPushMatrix();
-		  {
-		  glLoadIdentity();
-		  glMatrixMode(GL_PROJECTION);
-		  glPushMatrix();
-		  glLoadIdentity();
-		  glColor3f(1,1,1);
-		  glLineWidth(5);
-		  glBegin(GL_LINE_LOOP);
-		  glVertex3f(-1,-1,0);
-		  glVertex3f(-1,1,0);
-		  glVertex3f(1,1,0);
-		  glVertex3f(1,-1,0);
-		  glEnd();
-		  glPopMatrix();
-		  glMatrixMode(GL_MODELVIEW);
-		  }*/
-		glPopMatrix();
 		glLoadIdentity();
 }
 
@@ -679,25 +671,6 @@ void View3(){
 
 
 
-		/*glPushMatrix();
-		  {
-		  glLoadIdentity();
-		  glMatrixMode(GL_PROJECTION);
-		  glPushMatrix();
-		  glLoadIdentity();
-		  glColor3f(1,1,1);
-		  glLineWidth(5);
-		  glBegin(GL_LINE_LOOP);
-		  glVertex3f(-1,-1,0);
-		  glVertex3f(-1,1,0);
-		  glVertex3f(1,1,0);
-		  glVertex3f(1,-1,0);
-		  glEnd();
-		  glPopMatrix();
-		  glMatrixMode(GL_MODELVIEW);
-		  }
-		  glPopMatrix();
-		  glMatrixMode(GL_MODELVIEW);*/
 		glLoadIdentity();
 }
 
