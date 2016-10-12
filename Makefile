@@ -131,6 +131,8 @@ all: $(TARGET)
 test: all
 	./$(TARGET) test.csv
 
+track: all
+	./$(TARGET) track1.csv
 clean:
 	rm -f $(OBJECTS) $(TARGET)
 

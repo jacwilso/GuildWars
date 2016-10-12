@@ -547,7 +547,7 @@ void normalKeys(){
 						alSourcePlay( wav.sources[1] );
 		}
 		// FREE CAM
-		if(cam.getViewMode()==0){
+		if(cam.getViewMode()==0 || cam.getViewMode() == 5){
 				if(keyState['i'] || keyState['I']) cam.moveForward();
 				if(keyState['k'] || keyState['K']) cam.moveBackward();
 				if(keyState['j'] || keyState['J']) cam.setCameraTheta(cam.getCameraTheta() - 0.05);
