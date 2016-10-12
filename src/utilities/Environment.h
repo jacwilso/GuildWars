@@ -39,6 +39,7 @@ class Environment{
 				void drawCurve();
 				void drawBox();
                                 void trackBox();
+                                void trackRoad();
 		public:
 				Environment();
 				void placeObjectsInEnvironment(std::ifstream& inFile);
