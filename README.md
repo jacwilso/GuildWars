@@ -104,6 +104,7 @@ To keep it easy to read, break up the bezier surface/curves into block of 4 poin
 The input files for compiling are:
  * track1.csv
  * track2.csv
+ 
 Each file contains the same 4 bezier surfaces and the bezier curve which comprises the track because they were hand crafted and really emphasize our programs abilities. However, each file differs in the number of objects and location, rotation, and size of those objects. 
 
 ## Contributions ##
