@@ -334,6 +334,11 @@ void Environment::trackBox(){
 void Environment::trackRoad(){
                               Point tmpC, tmpD, surfPos;
                               float uVector, vVector, theta;
+                              glPushMatrix();
+                              glTranslatef(0,5,0);
+                              glDisable(GL_LIGHTING);
+                              glColor3f(1,0,0);
+                              glBegin(GL_QUAD_STRIP);
                               for(int arc=0; arc<track.resSize(); arc+=3){
 				tmpC=track.arcLengthCurve(arc);
 	                        uVector = (0.01)* tmpC.getX() +  1;
@@ -345,13 +350,11 @@ void Environment::trackRoad(){
                                 Point tmp(surfPos.getX()*100.0/12,(surfPos.getY())*10.0,surfPos.getZ()*100.0/12);
 				tmpD=track.arcDerivative(arc);
 				theta=atan2(tmpD.getX(),tmpD.getZ())*180/3.1415;
-                                glPushMatrix();
-                                  glColor3f(1,0,0);
-                                  glTranslatef(0,8,0);
-                                  glTranslatef(tmp.getX(),(tmp.getY()-2),tmp.getZ());
-                                  glRotatef(10,1,0,0);
-                                  glScalef(1.5,.1,5);
-                                  glutSolidCube(1);
-                                glPopMatrix();
+                                
+                                glVertex3f(tmp.getX(),tmp.getY(),tmp.getZ()+5);
+                                glVertex3f(tmp.getX(),tmp.getY(),tmp.getZ()-5);
                               }
+                              glEnd();
+                              glEnable(GL_LIGHTING);
+                              glPopMatrix();
 }
