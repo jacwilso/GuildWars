@@ -21,7 +21,7 @@
 ## compile against.
 ########################################
 
-TARGET = GuildWars
+TARGET = guildWars
 
 SOURCES = $(shell find src -name '*.cpp')
 OBJECTS = $(SOURCES:src/%.cpp=bin/%.o)
