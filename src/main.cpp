@@ -193,8 +193,7 @@ void animationTrack(bool parametric){
 	vVector = (-0.01) * tmpC.getZ() + 1;
 	int bezierListIndex = 2*((int)floor(vVector)) + (int)floor(uVector);
 	surfPos = surf[bezierListIndex].evaluateSurface(uVector - floor(uVector) ,vVector - floor(vVector)); 
-        Point tmp(surfPos.getX()*100.0/12,(surfPos.getY()-2)*100.0/12,surfPos.getZ()*100.0/12);
-        cout<<tmp.getY()<<endl;
+        Point tmp(surfPos.getX()*100.0/12,(surfPos.getY()-2)*20.0,surfPos.getZ()*100.0/12);
 				tmpD=track.paramDerivative(param);
 				donkeyTheta=atan2(tmpD.getX(),tmpD.getZ())*180/3.1415;
 				param++;
@@ -207,12 +206,12 @@ void animationTrack(bool parametric){
 	vVector = (-0.01) * tmpC.getZ() + 1;
 	int bezierListIndex = 2*((int)floor(vVector)) + (int)floor(uVector);
 	surfPos = surf[bezierListIndex].evaluateSurface(uVector - floor(uVector) ,vVector - floor(vVector)); 
-        Point tmp(tmpC.getX(),(surfPos.getY()-2),tmpC.getZ());
+        Point tmp(surfPos.getX()*100.0/12,(surfPos.getY()-2)*20.0,surfPos.getZ()*100.0/12);
 				tmpD=track.arcDerivative(arc);
 				boardTheta=atan2(tmpD.getX(),tmpD.getZ())*180/3.1415;
 				arc++;
 				if(arc+1>track.resSize()) arc=0;
-				arcPos=tmpC;
+				arcPos=tmp;
 		}
 
 }
