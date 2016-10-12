@@ -145,4 +145,5 @@ void Bezier::operator=(Bezier bez){
   p.clear();
   for(unsigned int i=0; i<bez.p.size(); i++)
     p.push_back(bez.p[i]);
+  populateTable();
 }

@@ -33,6 +33,10 @@ class Bezier{
     
     Bezier(Point p0, Point p1, Point p2, Point p3); // constructor setting the points
     
+    int pSize()
+    {return p.size()/4;}
+    int resolution()
+    {return RESOLUTION;}
     int resSize() // sets the resolution size of the curve since it can be >4
     {return RESOLUTION*p.size()/4;}
     float arcSize()

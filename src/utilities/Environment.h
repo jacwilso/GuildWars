@@ -19,6 +19,7 @@
 #include <string>
 #include <vector>
 
+#include "Point.h"
 #include "Bezier.h"
 #include "BezierSurface.h"
 using namespace std;
@@ -37,6 +38,8 @@ class Environment{
 				void drawSurface();
 				void drawCurve();
 				void drawBox();
+                                void trackBox();
+                                void trackRoad();
 		public:
 				Environment();
 				void placeObjectsInEnvironment(std::ifstream& inFile);

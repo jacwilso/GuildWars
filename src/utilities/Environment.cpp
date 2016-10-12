@@ -10,9 +10,10 @@ void Environment::generateEnvironmentDL(std::ifstream& inFile) {
 		// Draw the figures
 		glPushMatrix(); {
 				placeObjectsInEnvironment(inFile);
-				//drawGrid();
+                                drawCurve();
 				drawSurface();
-				drawCurve();
+                                trackBox();
+                                trackRoad();
 		}; glPopMatrix();
 		// Tell openGL to end displayiung lists
 		glEndList();
@@ -201,11 +202,31 @@ void Environment::addCurve(Bezier curve){
 
 void Environment::drawCurve(){
 		glPushMatrix();
-		glTranslatef(0,3,0);
-		glScalef(4,4,4);
+		glTranslatef(0,10,0);
+		//glScalef(4,4,4);
 		//track.renderPoints();
 		//track.renderCage();
-		track.renderCurve();
+		//track.renderCurve();
+	        Point surfPos;
+	        float uVector, vVector;
+                glDisable(GL_LIGHTING);
+                glColor3f(0,0,1.0f);
+                glLineWidth(3.0f);
+                glBegin(GL_LINE_STRIP);
+                for(unsigned int j=0; j<track.pSize(); j++){ // goes through each bezier curve if multiple joined
+                  for(int i=0; i<=track.resolution(); i++){ 
+                    Point temp=track.evaluateCurve(4*j,(float)(i)/track.resolution());
+
+	            uVector = (0.01)* temp.getX() +  1;
+	            vVector = (-0.01) * temp.getZ() + 1;
+	            int bezierListIndex = 2*((int)floor(vVector)) + (int)floor(uVector);
+	            surfPos = surf[bezierListIndex].evaluateSurface(uVector - floor(uVector) ,vVector - floor(vVector)); 
+                    //glVertex3f(surfPos.getX()*100.0/12,(surfPos.getY()-2)*50.0,surfPos.getZ()*100.0/12);
+                    glVertex3f(surfPos.getX()*100.0/12,(surfPos.getY())*10.0,surfPos.getZ()*100.0/12);
+                  }
+                }
+                glEnd();
+                glEnable(GL_LIGHTING);
 		glPopMatrix();
 }
 
@@ -274,4 +295,53 @@ void Environment::drawBox(){
 		glScalef(1,11,1);
 		glutSolidCube(1);
 		glPopMatrix();
+}
+
+void Environment::trackBox(){
+                              Point tmpC, tmpD, surfPos;
+                              float uVector, vVector, theta;
+                              for(int arc=0; arc<track.resSize(); arc+=30){
+				tmpC=track.arcLengthCurve(arc);
+	                        uVector = (0.01)* tmpC.getX() +  1;
+	                        vVector = (-0.01) * tmpC.getZ() + 1;
+	                        int bezierListIndex = 2*((int)floor(vVector)) + (int)floor(uVector);
+                                
+	                        surfPos = surf[bezierListIndex].evaluateSurface(uVector - floor(uVector) ,vVector - floor(vVector)); 
+                                //Point tmp(surfPos.getX()*100.0/12,(surfPos.getY()-2)*20.0,surfPos.getZ()*100.0/12);
+                                Point tmp(surfPos.getX()*100.0/12,(surfPos.getY())*10.0,surfPos.getZ()*100.0/12);
+				tmpD=track.arcDerivative(arc);
+				theta=atan2(tmpD.getX(),tmpD.getZ())*180/3.1415;
+                                glPushMatrix();
+                                  glTranslatef(0,10,0);
+                                  glTranslatef(tmp.getX(),(tmp.getY()-2),tmp.getZ());
+                                  glRotatef(theta,0,1,0);
+                                  glScalef(.4,.4,.4);
+                                  drawBox();
+                                glPopMatrix();
+                              }
+}
+
+void Environment::trackRoad(){
+                              Point tmpC, tmpD, surfPos;
+                              float uVector, vVector, theta;
+                              for(int arc=0; arc<track.resSize(); arc+=3){
+				tmpC=track.arcLengthCurve(arc);
+	                        uVector = (0.01)* tmpC.getX() +  1;
+	                        vVector = (-0.01) * tmpC.getZ() + 1;
+	                        int bezierListIndex = 2*((int)floor(vVector)) + (int)floor(uVector);
+                                
+	                        surfPos = surf[bezierListIndex].evaluateSurface(uVector - floor(uVector) ,vVector - floor(vVector)); 
+                                //Point tmp(surfPos.getX()*100.0/12,(surfPos.getY()-2)*20.0,surfPos.getZ()*100.0/12);
+                                Point tmp(surfPos.getX()*100.0/12,(surfPos.getY())*10.0,surfPos.getZ()*100.0/12);
+				tmpD=track.arcDerivative(arc);
+				theta=atan2(tmpD.getX(),tmpD.getZ())*180/3.1415;
+                                glPushMatrix();
+                                  glColor3f(1,0,0);
+                                  glTranslatef(0,8,0);
+                                  glTranslatef(tmp.getX(),(tmp.getY()-2),tmp.getZ());
+                                  glRotatef(10,1,0,0);
+                                  glScalef(1.5,.1,5);
+                                  glutSolidCube(1);
+                                glPopMatrix();
+                              }
 }

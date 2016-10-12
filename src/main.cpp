@@ -194,7 +194,8 @@ void animationTrack(bool parametric){
 				vVector = (-0.01) * tmpC.getZ() + 1;
 				int bezierListIndex = 2*((int)floor(vVector)) + (int)floor(uVector);
 				surfPos = surf[bezierListIndex].evaluateSurface(uVector - floor(uVector) ,vVector - floor(vVector)); 
-				Point tmp(surfPos.getX()*100.0/12,(surfPos.getY()-2)*20.0,surfPos.getZ()*100.0/12);
+				//Point tmp(surfPos.getX()*100.0/12,(surfPos.getY()-2)*20.0,surfPos.getZ()*100.0/12);
+				Point tmp(surfPos.getX()*100.0/12,(surfPos.getY())*10.0,surfPos.getZ()*100.0/12);
 				tmpD=track.paramDerivative(param);
 				donkeyTheta=atan2(tmpD.getX(),tmpD.getZ())*180/3.1415;
 				param++;
@@ -207,7 +208,7 @@ void animationTrack(bool parametric){
 				vVector = (-0.01) * tmpC.getZ() + 1;
 				int bezierListIndex = 2*((int)floor(vVector)) + (int)floor(uVector);
 				surfPos = surf[bezierListIndex].evaluateSurface(uVector - floor(uVector) ,vVector - floor(vVector)); 
-				Point tmp(surfPos.getX()*100.0/12,(surfPos.getY()-2)*20.0,surfPos.getZ()*100.0/12);
+				Point tmp(surfPos.getX()*100.0/12,(surfPos.getY())*10.0,surfPos.getZ()*100.0/12);
 				tmpD=track.arcDerivative(arc);
 				boardTheta=atan2(tmpD.getX(),tmpD.getZ())*180/3.1415;
 				arc++;
@@ -684,41 +685,41 @@ void drawCharacters(){
 		   */
 		glPushMatrix();
 		// TRACK
-		glTranslatef(0,3,0);
-		glScalef(4,4,4);
-		// BOARD
-		glPushMatrix();
-		glTranslatef(arcPos.getX(),arcPos.getY(),arcPos.getZ());
-		glRotatef(boardTheta+90,0,1,0);
-		glScalef(.25,.25,.25);
-		board.drawHero();
-		glDisable(GL_LIGHTING);
-		glPushMatrix();
-		glColor3f(1,1,1);
-		glTranslatef(-2,1,0);
-		glScalef(.01,.01,.01);
-		for(c="jacwilso"; *c!='\0'; c++)
-				glutStrokeCharacter(StrFont,*c);
-		glPopMatrix();
-		glEnable(GL_LIGHTING);
-		glPopMatrix();
-		// DONKEY
-		glPushMatrix();
-		glTranslatef(paramPos.getX(),paramPos.getY(),paramPos.getZ());
-		glScalef(.25,.25,.25);
-		glRotatef(donkeyTheta-180,0,1,0);
-		donkey.drawHero();
-		glDisable(GL_LIGHTING);
-		glPushMatrix();
-		glColor3f(1,1,1);
-		glTranslatef(-4,3.5,0);
-		//glRotatef(nameAngle(paramPos),0,1,0);
-		glScalef(.01,.01,.01);
-		for(c="zhemingdeng"; *c!='\0'; c++)
-				glutStrokeCharacter(StrFont,*c);
-		glPopMatrix();
-		glEnable(GL_LIGHTING);
-		glPopMatrix();
+		  glTranslatef(0,10,0);
+		  //glScalef(4,4,4);
+		  // BOARD
+		  glPushMatrix();
+		    glTranslatef(arcPos.getX(),arcPos.getY(),arcPos.getZ());
+		    glRotatef(boardTheta+90,0,1,0);
+		    //glScalef(.25,.25,.25);
+		    board.drawHero();
+		    glDisable(GL_LIGHTING);
+		    glPushMatrix();
+		      glColor3f(1,1,1);
+		      glTranslatef(-2,1,0);
+                      glScalef(.01,.01,.01);
+		      for(c="jacwilso"; *c!='\0'; c++)
+		    		glutStrokeCharacter(StrFont,*c);
+		    glPopMatrix();
+		    glEnable(GL_LIGHTING);
+		  glPopMatrix();
+		  // DONKEY
+		  glPushMatrix();
+		    glTranslatef(paramPos.getX(),paramPos.getY(),paramPos.getZ());
+		    //glScalef(.25,.25,.25);
+		    glRotatef(donkeyTheta-180,0,1,0);
+		    donkey.drawHero();
+		    glDisable(GL_LIGHTING);
+		    glPushMatrix();
+		      glColor3f(1,1,1);
+		      glTranslatef(-4,3.5,0);
+		      //glRotatef(nameAngle(paramPos),0,1,0);
+		      glScalef(.01,.01,.01);
+		      for(c="zhemingdeng"; *c!='\0'; c++)
+		    		glutStrokeCharacter(StrFont,*c);
+		    glPopMatrix();
+		    glEnable(GL_LIGHTING);
+		  glPopMatrix();
 		glPopMatrix();
 }
 
