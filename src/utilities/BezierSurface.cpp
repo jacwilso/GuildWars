@@ -49,7 +49,7 @@ Point BezierSurface::evaluateSurface(float u,float v){
 }
 
 void BezierSurface::renderGrid(){
-	renderPoints();
+	//renderPoints();
 	glDisable(GL_LIGHTING);
 	glColor3f(.9,.9,.9);
 	glLineWidth(3.0f);
