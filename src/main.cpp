@@ -525,6 +525,12 @@ void normalKeys(){
 	ericCartman.setHeroPos(ericCartman.getHeroPositionX(), (surfPos.getY()-1.59)*100.0/12  , ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta(), ericCartman.getHeroPhi());
 
 
+	Point axis=surf[bezierListIndex].rotationAxis(uVector - floor(uVector) ,vVector - floor(vVector));
+    float surfAngle=surf[bezierListIndex].rotationAngle(uVector - floor(uVector) ,vVector - floor(vVector));
+ 	ericCartman.setRotAxisX(axis.getX());
+   	ericCartman.setRotAxisZ(axis.getZ());	
+	//std::cout << ericCartman.getHeroPositionX() << " "<< "" << " " << ericCartman.getHeroPositionZ() << std::endl;
+	ericCartman.setHeroPos(ericCartman.getHeroPositionX(), (surfPos.getY()-1.59)*100.0/12  , ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta(), surfAngle);
 }
 
 // Special key being pressed like arrowkeys
@@ -749,9 +755,13 @@ void renderScene(void)  {
 		glutSolidTeapot(1);
 		glPopMatrix();
 
-
-		
                 ericCartman.drawHero();
+		glPushMatrix();
+		{
+				ericCartman.drawHero();
+		}
+		glPopMatrix();
+>>>>>>> 981a2be19f3a8cbeb802190b8a63b4f8e1c09c6c
 		drawCharacters();
 		glCallList( env.environmentDL );
 

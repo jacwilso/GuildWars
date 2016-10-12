@@ -66,7 +66,12 @@ float EricCartman::getSwingAngle(){
 float EricCartman::getEricHeadBobAngle(){
 		return ericHeadBobAngle;
 }
-
+float EricCartman::getRotAxisX(){
+		return rotAxisX;
+}
+float EricCartman::getRotAxisZ(){
+		return rotAxisZ;
+}
 
 // Setters
 void EricCartman::setSwingAngle(float item){
@@ -75,12 +80,22 @@ void EricCartman::setSwingAngle(float item){
 void EricCartman::setEricHeadBobAngle(float item){
 		ericHeadBobAngle = item;
 }
+void EricCartman::setRotAxisX(float item){
+	rotAxisX = item;
+}
+void EricCartman::setRotAxisZ(float item){
+	rotAxisZ = item;
+}
+
 
 void EricCartman::drawHero(){
 		glPushMatrix();
 		{
 				glTranslatef(heroPosX, heroPosY, heroPosZ);
+				glRotatef(getHeroPhi(), getRotAxisX(), 0, getRotAxisZ());		
+
 				glRotatef(heroTheta, 0,1,0);
+				
 				glScalef(0.8,0.8,0.8);
                                 void *StrFont = GLUT_STROKE_ROMAN;
 		                const char* c;
