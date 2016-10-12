@@ -93,7 +93,7 @@ void Camera::moveForward(){
 			cameraY += dirY;
 			cameraZ += dirZ;
 			break;
-		case 6: //ArcBall Mode 
+		case 5: //ArcBall Mode 
 			cameraRad += 2;
 			break;
 		default:
@@ -108,7 +108,7 @@ void Camera::moveBackward(){
 			cameraY -= dirY;
 			cameraZ -= dirZ;
 			break;
-		case 6: //ArcBall Mode 
+		case 5: //ArcBall Mode 
 			cameraRad -= 2;
 			break;
 		default:

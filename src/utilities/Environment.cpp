@@ -72,10 +72,20 @@ void Environment::placeObjectsInEnvironment(std::ifstream& inFile){
 				//
 				glPushMatrix();
 				{
-						glTranslatef(objectX, objectY, objectZ);
-						glRotatef(orientX, 0,0,1);
-						glRotatef(orientY, 0,1,0);
-						glRotatef(orientZ, 1,0,0);
+					float uVector = (0.01)* objectX +  1;
+					float vVector = (-0.01) * objectZ + 1;
+					int bezierListIndex = 2*((int)floor(vVector)) + (int)floor(uVector);
+					Point surfPos = surf[bezierListIndex].evaluateSurface(uVector - floor(uVector) ,vVector - floor(vVector)); 
+					 Point axis=surf[bezierListIndex].rotationAxis(uVector - floor(uVector) ,vVector - floor(vVector));
+					 float surfAngle=surf[bezierListIndex].rotationAngle(uVector - floor(uVector) ,vVector - floor(vVector));
+
+						
+						
+						glTranslatef(objectX,( surfPos.getY()-1.95)*100.0/12, objectZ);
+						glRotatef(surfAngle,axis.getX(), 0, axis.getZ());
+						//glRotatef(orientX, 0,0,1);
+						//glRotatef(orientY, 0,1,0);
+						//glRotatef(orientZ, 1,0,0);
 						glScalef(objSize, objSize, objSize);
 
 						switch(objType){
