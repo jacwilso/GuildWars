@@ -103,7 +103,8 @@ ifstream file;
 
 /*** MENU OPTIONS ***/
 int ericMenu, donkeyMenu, boardMenu, screen1Menu, screen2Menu, screen3Menu, mainMenu;
-bool splitScreenOn = false;
+bool screen2On = false;
+bool screen3On = false;
 bool fpsOn = false;
 int screen1SubjectNumber = 0;
 int screen2SubjectNumber = 1;
@@ -185,15 +186,15 @@ void drawFPS(){
 
 void animationTrack(bool parametric){
 		Point tmpC, tmpD;
-	Point surfPos;
-	float uVector, vVector;
+		Point surfPos;
+		float uVector, vVector;
 		if(parametric){
 				tmpC=track.parametricCurve(param);
-	                        uVector = (0.01)* tmpC.getX() +  1;
-	                        vVector = (-0.01) * tmpC.getZ() + 1;
-	                        int bezierListIndex = 2*((int)floor(vVector)) + (int)floor(uVector);
-	                        surfPos = surf[bezierListIndex].evaluateSurface(uVector - floor(uVector) ,vVector - floor(vVector)); 
-                                Point tmp(surfPos.getX()*100.0/12,(surfPos.getY()-2)*50.0,surfPos.getZ()*100.0/12);
+				uVector = (0.01)* tmpC.getX() +  1;
+				vVector = (-0.01) * tmpC.getZ() + 1;
+				int bezierListIndex = 2*((int)floor(vVector)) + (int)floor(uVector);
+				surfPos = surf[bezierListIndex].evaluateSurface(uVector - floor(uVector) ,vVector - floor(vVector)); 
+				Point tmp(surfPos.getX()*100.0/12,(surfPos.getY()-2)*20.0,surfPos.getZ()*100.0/12);
 				tmpD=track.paramDerivative(param);
 				donkeyTheta=atan2(tmpD.getX(),tmpD.getZ())*180/3.1415;
 				param++;
@@ -202,11 +203,11 @@ void animationTrack(bool parametric){
 		}else{
 				tmpC=track.arcLengthCurve(arc);
 				//cout<<"TEMP: "<<temp.getX()<<", "<<temp.getZ()<<endl<<"ARC++ "<<arc<<endl;
-	                        uVector = (0.01)* tmpC.getX() +  1;
-	                        vVector = (-0.01) * tmpC.getZ() + 1;
-	                        int bezierListIndex = 2*((int)floor(vVector)) + (int)floor(uVector);
-	                        surfPos = surf[bezierListIndex].evaluateSurface(uVector - floor(uVector) ,vVector - floor(vVector)); 
-                                Point tmp(surfPos.getX()*100.0/12,(surfPos.getY()-2)*20.0,surfPos.getZ()*100.0/12);
+				uVector = (0.01)* tmpC.getX() +  1;
+				vVector = (-0.01) * tmpC.getZ() + 1;
+				int bezierListIndex = 2*((int)floor(vVector)) + (int)floor(uVector);
+				surfPos = surf[bezierListIndex].evaluateSurface(uVector - floor(uVector) ,vVector - floor(vVector)); 
+				Point tmp(surfPos.getX()*100.0/12,(surfPos.getY()-2)*20.0,surfPos.getZ()*100.0/12);
 				tmpD=track.arcDerivative(arc);
 				boardTheta=atan2(tmpD.getX(),tmpD.getZ())*180/3.1415;
 				arc++;
@@ -343,8 +344,9 @@ void processScreen3Menu(int value){
 void processMainMenu(int value){
 		switch (value){
 				case 1:
-						splitScreenOn = !splitScreenOn;
-						if(splitScreenOn == false){
+						screen2On = !screen3On;
+						screen3On = !screen3On;
+						if(screen3On == false){
 								glutChangeToMenuEntry(1,"Turn SplitScreen ON",1);
 								glutChangeToSubMenu(5,"Eric Cartman", ericMenu);
 								glutChangeToSubMenu(6,"Board", boardMenu);
@@ -424,6 +426,7 @@ void createMenus() {
 
 		mainMenu = glutCreateMenu(processMainMenu);
 		glutAddMenuEntry( "Turn SplitScreen ON", 1 );
+
 		glutAddMenuEntry("Free Cam", 2);
 		glutAddMenuEntry("Turn FPS ON", 3);
 		glutAddMenuEntry( "Quit",4);
@@ -437,23 +440,43 @@ void createMenus() {
 
 void mouseMotion(int x, int y) {
 		if(leftMouseButton == GLUT_DOWN) {
-				if(mouseX <=(signed int) windowWidth/2 && (windowHeight-mouseY) <= windowHeight/SPLITSCREEN_HEIGHT_RATIO ){
-						cam2.setCameraTheta(cam2.getCameraTheta() - (x-mouseX) * 0.008);
-						cam2.setCameraPhi(fmin(fmax((cam2.getCameraPhi() + (y - mouseY) * 0.008),0.01),M_PI));
-				}else if(mouseX >(signed int) windowWidth/2 && (windowHeight-mouseY) <= windowHeight/SPLITSCREEN_HEIGHT_RATIO ){
-						cam3.setCameraTheta(cam3.getCameraTheta() - (x-mouseX) * 0.008);
-						cam3.setCameraPhi(fmin(fmax((cam3.getCameraPhi() + (y - mouseY) * 0.008),0.01),M_PI));					
-				}else{
-						cam.setCameraTheta(cam.getCameraTheta() - (x-mouseX) * 0.008);
-						cam.setCameraPhi(fmin(fmax((cam.getCameraPhi() + (y - mouseY) * 0.008),0.01),M_PI));
-				}
-				mouseX = x;
-				mouseY = y;
-				cam.recomputeOrientation();     // update camera (x,y,z) based on (radius,theta,phi)
-				cam2.recomputeOrientation();
-				cam3.recomputeOrientation();
-		}
+				if(screen2On == false || screen3On == false){
+						cam.setCameraTheta(cam.getCameraTheta() - (x-mouseX) * 0.005);
+						cam.setCameraPhi(fmin(fmax((cam.getCameraPhi() + (y - mouseY) * 0.005),0.01),M_PI));
+						mouseX = x;
+						mouseY = y;
 
+						cam.recomputeOrientation();     // update camera (x,y,z) based on (radius,theta,phi)
+
+
+				}else{
+
+						if(mouseX <=(signed int) windowWidth/2 && (windowHeight-mouseY) <= windowHeight/SPLITSCREEN_HEIGHT_RATIO ){
+								cam2.setCameraTheta(cam2.getCameraTheta() - (x-mouseX) * 0.005);
+								cam2.setCameraPhi(fmin(fmax((cam2.getCameraPhi() + (y - mouseY) * 0.005),0.01),M_PI));
+								mouseX = x;
+								mouseY = y;
+								cam2.recomputeOrientation();
+
+						}else if(mouseX >(signed int) windowWidth/2 && (windowHeight-mouseY) <= windowHeight/SPLITSCREEN_HEIGHT_RATIO ){
+
+								cam3.setCameraTheta(cam3.getCameraTheta() - (x-mouseX) * 0.005);
+								cam3.setCameraPhi(fmin(fmax((cam3.getCameraPhi() + (y - mouseY) * 0.005),0.01),M_PI));					
+								mouseX = x;
+								mouseY = y;
+								cam3.recomputeOrientation();
+
+						}else{
+								cam.setCameraTheta(cam.getCameraTheta() - (x-mouseX) * 0.005);
+								cam.setCameraPhi(fmin(fmax((cam.getCameraPhi() + (y - mouseY) * 0.005),0.01),M_PI));
+								mouseX = x;
+								mouseY = y;
+
+								cam.recomputeOrientation();     // update camera (x,y,z) based on (radius,theta,phi)
+
+						}
+				}
+		}
 
 		glutPostRedisplay();	    // redraw our scene from our new camera POV
 }
@@ -484,7 +507,7 @@ void normalKeys(){
 				ericCartman.moveEricForward();
 				// Use x and z 
 				// to get the height at that slope
-				
+
 				ALenum sourceState;
 				alGetSourcei( wav.sources[1], AL_SOURCE_STATE, &sourceState );
 				if(sourceState != AL_PLAYING){
@@ -512,32 +535,32 @@ void normalKeys(){
 				if(sourceState != AL_PLAYING)
 						alSourcePlay( wav.sources[1] );
 		}
-                // FREE CAM
-                if(cam.getViewMode()==0){
-                  if(keyState['i'] || keyState['I']) cam.moveForward();
-                  if(keyState['k'] || keyState['K']) cam.moveBackward();
-                  if(keyState['j'] || keyState['J']) cam.setCameraTheta(cam.getCameraTheta() - 0.05);
-                if(keyState['l'] || keyState['L']) cam.setCameraTheta(cam.getCameraTheta() + 0.05);
-                  cam.recomputeOrientation();
-                }
-	// Which quad is eric in?	
-	Point surfPos;
-	float uVector, vVector;
+		// FREE CAM
+		if(cam.getViewMode()==0){
+				if(keyState['i'] || keyState['I']) cam.moveForward();
+				if(keyState['k'] || keyState['K']) cam.moveBackward();
+				if(keyState['j'] || keyState['J']) cam.setCameraTheta(cam.getCameraTheta() - 0.05);
+				if(keyState['l'] || keyState['L']) cam.setCameraTheta(cam.getCameraTheta() + 0.05);
+				cam.recomputeOrientation();
+		}
+		// Which quad is eric in?	
+		Point surfPos;
+		float uVector, vVector;
 
-	uVector = (0.01)* ericCartman.getHeroPositionX() +  1;
-	vVector = (-0.01) * ericCartman.getHeroPositionZ() + 1;
-	int bezierListIndex = 2*((int)floor(vVector)) + (int)floor(uVector);
-	//std::cout << uVector << " " << bezierListIndex << " " << vVector << std::endl;
-	surfPos = surf[bezierListIndex].evaluateSurface(uVector - floor(uVector) ,vVector - floor(vVector)); 
-	ericCartman.setHeroPos(ericCartman.getHeroPositionX(), (surfPos.getY()-1.59)*100.0/12  , ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta(), ericCartman.getHeroPhi());
+		uVector = (0.01)* ericCartman.getHeroPositionX() +  1;
+		vVector = (-0.01) * ericCartman.getHeroPositionZ() + 1;
+		int bezierListIndex = 2*((int)floor(vVector)) + (int)floor(uVector);
+		//std::cout << uVector << " " << bezierListIndex << " " << vVector << std::endl;
+		surfPos = surf[bezierListIndex].evaluateSurface(uVector - floor(uVector) ,vVector - floor(vVector)); 
+		ericCartman.setHeroPos(ericCartman.getHeroPositionX(), (surfPos.getY()-1.59)*100.0/12  , ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta(), ericCartman.getHeroPhi());
 
 
-	Point axis=surf[bezierListIndex].rotationAxis(uVector - floor(uVector) ,vVector - floor(vVector));
-    float surfAngle=surf[bezierListIndex].rotationAngle(uVector - floor(uVector) ,vVector - floor(vVector));
- 	ericCartman.setRotAxisX(axis.getX());
-   	ericCartman.setRotAxisZ(axis.getZ());	
-	//std::cout << ericCartman.getHeroPositionX() << " "<< "" << " " << ericCartman.getHeroPositionZ() << std::endl;
-	ericCartman.setHeroPos(ericCartman.getHeroPositionX(), (surfPos.getY()-1.59)*100.0/12  , ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta(), surfAngle);
+		Point axis=surf[bezierListIndex].rotationAxis(uVector - floor(uVector) ,vVector - floor(vVector));
+		float surfAngle=surf[bezierListIndex].rotationAngle(uVector - floor(uVector) ,vVector - floor(vVector));
+		ericCartman.setRotAxisX(axis.getX());
+		ericCartman.setRotAxisZ(axis.getZ());	
+		//std::cout << ericCartman.getHeroPositionX() << " "<< "" << " " << ericCartman.getHeroPositionZ() << std::endl;
+		ericCartman.setHeroPos(ericCartman.getHeroPositionX(), (surfPos.getY()-1.59)*100.0/12  , ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta(), surfAngle);
 }
 
 // Special key being pressed like arrowkeys
@@ -618,33 +641,33 @@ void View2(){
 		gluPerspective(45.0, (float) (windowWidth/2)/(windowHeight/SPLITSCREEN_HEIGHT_RATIO), 0.1, 100000);
 		glMatrixMode(GL_MODELVIEW);
 
-	/*	glPushMatrix();
-		{
-				glLoadIdentity();
-				glMatrixMode(GL_PROJECTION);
-				glPushMatrix();
-				glLoadIdentity();
-				glColor3f(1,1,1);
-				glLineWidth(5);
-				glBegin(GL_LINE_LOOP);
-				glVertex3f(-1,-1,0);
-				glVertex3f(-1,1,0);
-				glVertex3f(1,1,0);
-				glVertex3f(1,-1,0);
-				glEnd();
-				glPopMatrix();
-				glMatrixMode(GL_MODELVIEW);
-		}
+		/*glPushMatrix();
+		  {
+		  glLoadIdentity();
+		  glMatrixMode(GL_PROJECTION);
+		  glPushMatrix();
+		  glLoadIdentity();
+		  glColor3f(1,1,1);
+		  glLineWidth(5);
+		  glBegin(GL_LINE_LOOP);
+		  glVertex3f(-1,-1,0);
+		  glVertex3f(-1,1,0);
+		  glVertex3f(1,1,0);
+		  glVertex3f(1,-1,0);
+		  glEnd();
+		  glPopMatrix();
+		  glMatrixMode(GL_MODELVIEW);
+		  }*/
 		glPopMatrix();
-		glLoadIdentity();*/
+		glLoadIdentity();
 }
 
 void View3(){
-		glViewport(windowWidth/2, 0, windowWidth, windowHeight/SPLITSCREEN_HEIGHT_RATIO );
+		glViewport(windowWidth/2, 0, windowWidth/2, windowHeight/SPLITSCREEN_HEIGHT_RATIO );
 
 
 		// Portions within the scissor can now be modified.
-		glScissor(windowWidth/2, 0, windowWidth, windowHeight/SPLITSCREEN_HEIGHT_RATIO );
+		glScissor(windowWidth/2, 0, windowWidth/2, windowHeight/SPLITSCREEN_HEIGHT_RATIO );
 		glEnable(GL_SCISSOR_TEST);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glDisable( GL_SCISSOR_TEST);
@@ -654,29 +677,28 @@ void View3(){
 		gluPerspective(45.0, (float) (windowWidth/2)/(windowHeight/SPLITSCREEN_HEIGHT_RATIO), 0.1, 100000);
 		glMatrixMode(GL_MODELVIEW);
 
-		/*glMatrixMode(GL_MODELVIEW);
 
 
-		glPushMatrix();
-		{
-				glLoadIdentity();
-				glMatrixMode(GL_PROJECTION);
-				glPushMatrix();
-				glLoadIdentity();
-				glColor3f(1,1,1);
-				glLineWidth(5);
-				glBegin(GL_LINE_LOOP);
-				glVertex3f(-1,-1,0);
-				glVertex3f(-1,1,0);
-				glVertex3f(1,1,0);
-				glVertex3f(1,-1,0);
-				glEnd();
-				glPopMatrix();
-				glMatrixMode(GL_MODELVIEW);
-		}
-		glPopMatrix();
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();*/
+		/*glPushMatrix();
+		  {
+		  glLoadIdentity();
+		  glMatrixMode(GL_PROJECTION);
+		  glPushMatrix();
+		  glLoadIdentity();
+		  glColor3f(1,1,1);
+		  glLineWidth(5);
+		  glBegin(GL_LINE_LOOP);
+		  glVertex3f(-1,-1,0);
+		  glVertex3f(-1,1,0);
+		  glVertex3f(1,1,0);
+		  glVertex3f(1,-1,0);
+		  glEnd();
+		  glPopMatrix();
+		  glMatrixMode(GL_MODELVIEW);
+		  }
+		  glPopMatrix();
+		  glMatrixMode(GL_MODELVIEW);*/
+		glLoadIdentity();
 }
 
 void drawCharacters(){
@@ -762,21 +784,15 @@ void renderScene(void)  {
 		glutSolidTeapot(1);
 		glPopMatrix();
 
-                ericCartman.drawHero();
-		glPushMatrix();
-		{
-				ericCartman.drawHero();
-		}
-		glPopMatrix();
+		ericCartman.drawHero();
 		drawCharacters();
 		glCallList( env.environmentDL );
-
 
 		if(fpsOn == true){
 				drawFPS();
 		}
 
-		if(splitScreenOn == true){
+		if(screen2On == true){
 				if(screen2SubjectNumber == 0){
 						cam2.setSubjectPosition(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta());
 				}else if(screen2SubjectNumber == 1){
@@ -784,14 +800,6 @@ void renderScene(void)  {
 				}else if(screen2SubjectNumber == 2){
 						cam2.setSubjectPosition(4*paramPos.getX() + 10,4*paramPos.getY() + 3, 4*paramPos.getZ()+10, donkeyTheta);
 				}
-				if(screen3SubjectNumber == 0){
-						cam3.setSubjectPosition(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta());
-				}else if(screen2SubjectNumber == 1){
-						cam3.setSubjectPosition(4*arcPos.getX(), 4*arcPos.getY(), 4*arcPos.getZ(), boardTheta);
-				}else if(screen2SubjectNumber == 2){
-						cam3.setSubjectPosition(4*paramPos.getX() + 10,4*paramPos.getY() + 3, 4*paramPos.getZ()+10, donkeyTheta);
-				}
-
 				/*** Viewport 2 ***/
 				View2();
 				cam2.setCamera();
@@ -804,6 +812,15 @@ void renderScene(void)  {
 				}
 				glCallList( env.environmentDL );
 
+		}
+		if(screen3On == true){
+				if(screen3SubjectNumber == 0){
+						cam3.setSubjectPosition(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta());
+				}else if(screen2SubjectNumber == 1){
+						cam3.setSubjectPosition(4*arcPos.getX(), 4*arcPos.getY(), 4*arcPos.getZ(), boardTheta);
+				}else if(screen2SubjectNumber == 2){
+						cam3.setSubjectPosition(4*paramPos.getX() + 10,4*paramPos.getY() + 3, 4*paramPos.getZ()+10, donkeyTheta);
+				}
 				/*** Viewport 3 ***/
 				View3();
 				cam3.setCamera();
@@ -812,6 +829,7 @@ void renderScene(void)  {
 				glCallList( env.environmentDL );
 				//surf.renderGrid();
 				//surf.renderSurface();
+
 		}
 
 		//push the back buffer to the screen
