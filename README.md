@@ -57,9 +57,8 @@ The following options only appear when the split screen view is turned on
  * s or S: Moves Eric Cartman Backward
  * a or A: Turns Eric Cartman Left
  * d or D: Turns Eric Cartman Right
- * In Free Cam mode:
- * i or I: Moves Free Cam Forward
- * k or K: Moves Free Cam Backward
+ * i or I: Moves Free Cam Forward/ Zooms In Arcball Cam
+ * k or K: Moves Free Cam Backward/ Zooms Out Arcball Cam
  * j or J: Shifts Free Cam view left
  * l or L: Shifts Free Cam view right
  * q or Q or ESC: Quits the program
@@ -72,6 +71,18 @@ The following options only appear when the split screen view is turned on
 
 ## Bug Report ##
 No Know at this time
+
+## Bezier Curves & Surfaces ##
+The track is closed, C^0 continuous, and C^1 continuous.
+The donkey hero moves along the track by equal parameteric steps, whereas the hoverboard moves along the track by equal arc-length parameterization -- moving at constant speed. The Eric Cartman hero moves freely along the surface with the controls described above. The terrain is composed of 4 meshed bezier curves.
+
+## 3D Drawing & Animation ##
+Heroes are animated & comprised of GLUT primitives / GLU quadrics. Scene is comprised of track (steps and hollow cubes) and other scenic objects (trees and huts). Each hero has some type of animation: Eric Cartman bobs his head while static and in movement has walking legs, the hoverboard projects hover disks from the board, and the donkey has a swaying tail.
+
+## Cameras, Menus, Text, & Viewports ##
+Arcball camera can follow each hero and rotates correctly; user can control rotation. Free camera is correctly implemented, can move around the scene, and is user-controllable. Camera is set up in Camera.h file. Camera from Hero's point of view works correctly; it is attached to the Hero and looks along the Hero's direction of movement.
+First-person camera view is placed in a separate viewport. User can toggle between cameras through use of a menu attached to the right mouse button. User can toggle between Heroes to follow through menu as well. See menu options above for more detail.
+Frames Per Second are rendered to screen. Hero name is displayed above Hero.
 
 ## File Format ##
 The file format is set in the following way
@@ -106,6 +117,9 @@ The input files for compiling are:
  * track2.csv
  
 Each file contains the same 4 bezier surfaces and the bezier curve which comprises the track because they were hand crafted and really emphasize our programs abilities. However, each file differs in the number of objects and location, rotation, and size of those objects. 
+
+## OpenAL ##
+Two wav files are used to generate sound: a bird chirping and Cartman singing poker-face. The bird chirping is tied to the teapot location (teapot used for visualization) and Carman's singing is tied to his movement.
 
 ## Contributions ##
 Name          | Contribution %       
