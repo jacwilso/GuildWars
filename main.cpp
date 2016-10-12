@@ -742,6 +742,9 @@ void renderScene(void)  {
 		//First Viewport: Take up the entire screen
 		glViewport(0,0,windowWidth,windowHeight);
 		//update the modelview matrix based on the camera's position
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		gluPerspective(45.0,aspectRatio,0.1,100000);
 		glMatrixMode(GL_MODELVIEW);              //make sure we aren't changing the projection matrix!
 		glLoadIdentity();
 		wav.positionListener(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(),cam.getDirX(),cam.getDirY(),cam.getDirZ(),0,1,0);		
