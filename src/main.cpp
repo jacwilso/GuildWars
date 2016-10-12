@@ -507,7 +507,7 @@ void normalKeys(){
 	uVector = (0.01)* ericCartman.getHeroPositionX() +  1;
 	vVector = (-0.01) * ericCartman.getHeroPositionZ() + 1;
 	int bezierListIndex = 2*((int)floor(vVector)) + (int)floor(uVector);
-	std::cout << uVector << " " << bezierListIndex << " " << vVector << std::endl;
+	//std::cout << uVector << " " << bezierListIndex << " " << vVector << std::endl;
 	surfPos = surf[bezierListIndex].evaluateSurface(uVector - floor(uVector) ,vVector - floor(vVector)); 
 	/*if(ericCartman.getHeroPositionX() >= 0 && ericCartman.getHeroPositionZ() < 0){//1
 			uVector = (-0.01)*ericCartman.getHeroPositionX() + 1;

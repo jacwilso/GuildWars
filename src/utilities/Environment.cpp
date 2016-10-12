@@ -188,7 +188,7 @@ void Environment::drawSurface(){
 				float scale=100.0/12;
 				glScalef(scale,scale,scale);
 				glTranslatef(0,-1.95,0);
-				//surf[i].renderGrid();
+				surf[i].renderGrid();
 				surf[i].renderSurface();
 				float u = 0, v = 0;
 				Point temp=surf[i].evaluateSurface(u,v);

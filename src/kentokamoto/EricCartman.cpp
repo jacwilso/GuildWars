@@ -314,15 +314,15 @@ void EricCartman::moveEricForward(){
 
 
 		// Set an invisible wall at borders of grid
-		if(getHeroPositionX() > 100){
-				heroPosX = 100;
-		}else if(getHeroPositionX() < -100){
-				heroPosX = -100;
+		if(getHeroPositionX() > 99){
+				heroPosX = 99;
+		}else if(getHeroPositionX() < -99){
+				heroPosX = -99;
 		}
-		if(getHeroPositionZ() > 100){
-				heroPosZ = 100;
-		}else if(getHeroPositionZ() < -100){
-				heroPosZ = -100;
+		if(getHeroPositionZ() > 99){
+				heroPosZ = 99;
+		}else if(getHeroPositionZ() < -99){
+				heroPosZ = -99;
 		}
 }
 void EricCartman::moveEricBackward(){
@@ -332,15 +332,15 @@ void EricCartman::moveEricBackward(){
 
 
 		// Set an invisible wall at borders of grid
-		if(getHeroPositionX() > 100){
-				heroPosX = 100;
-		}else if(getHeroPositionX() < -100){
-				heroPosX = -100;
+		if(getHeroPositionX() > 99){
+				heroPosX = 99;
+		}else if(getHeroPositionX() < -99){
+				heroPosX = -99;
 		}
-		if(getHeroPositionZ() > 100){
-				heroPosZ = 100;
-		}else if(getHeroPositionZ() < -100){
-				heroPosZ = -100;
+		if(getHeroPositionZ() > 99){
+				heroPosZ = 99;
+		}else if(getHeroPositionZ() < -99){
+				heroPosZ = -99;
 		}
 }
 void EricCartman::turnEricLeft(){
