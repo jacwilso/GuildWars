@@ -57,7 +57,7 @@ The following options only appear when the split screen view is turned on
  * s or S: Moves Eric Cartman Backward
  * a or A: Turns Eric Cartman Left
  * d or D: Turns Eric Cartman Right
- In Free Cam mode:
+ * In Free Cam mode:
  * i or I: Moves Free Cam Forward
  * k or K: Moves Free Cam Backward
  * j or J: Shifts Free Cam view left
