@@ -57,6 +57,11 @@ The following options only appear when the split screen view is turned on
  * s or S: Moves Eric Cartman Backward
  * a or A: Turns Eric Cartman Left
  * d or D: Turns Eric Cartman Right
+ * In Free Cam mode:
+ * i or I: Moves Free Cam Forward
+ * k or K: Moves Free Cam Backward
+ * j or J: Shifts Free Cam view left
+ * l or L: Shifts Free Cam view right
  * q or Q or ESC: Quits the program
  * 0: Toggles main view to free cam mode.
  * 1: Toggles main view to 3rd Person on selected hero.
@@ -95,6 +100,12 @@ For Object types, use the following numbers to clasify a type:
 The position of the object can be in decimal form
 The orientation of the object is read in degrees rather than radians. 
 To keep it easy to read, break up the bezier surface/curves into block of 4 points for readability. The program will automatically skip empty lines without causing issues.
+
+The input files for compiling are:
+ * track1.csv
+ * track2.csv
+ 
+Each file contains the same 4 bezier surfaces and the bezier curve which comprises the track because they were hand crafted and really emphasize our programs abilities. However, each file differs in the number of objects and location, rotation, and size of those objects. 
 
 ## Contributions ##
 Name          | Contribution %       
