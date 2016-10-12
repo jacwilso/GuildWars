@@ -190,39 +190,7 @@ void Environment::drawSurface(){
 				glTranslatef(0,-1.95,0);
 				surf[i].renderGrid();
 				surf[i].renderSurface();
-				float u = 0, v = 0;
-				Point temp=surf[i].evaluateSurface(u,v);
-				Point axis=surf[i].rotationAxis(u,v);
-				float surfAngle=surf[i].rotationAngle(u,v);
-				glDisable(GL_LIGHTING);
 								
-				glPushMatrix();
-				glTranslatef(temp.getX(), temp.getY(), temp.getZ());
-
-				glColor3f(1,1,1);
-				glRotatef(surfAngle, axis.getX(), axis.getY(), axis.getZ());
-				glBegin(GL_LINES);
-				glVertex3f(0,0,0);
-				glVertex3f(0,1,0);
-				glEnd();
-				glPopMatrix();	
-				
-				Point temp2=surf[i].evaluateSurface(1,1);
-				Point axis2=surf[i].rotationAxis(1,1);
-				float surfAngle2=surf[i].rotationAngle(1,1);
-				
-				glPushMatrix();
-				glTranslatef(temp2.getX(), temp2.getY(), temp2.getZ());
-				glRotatef(surfAngle, axis.getX(), axis.getY(), axis.getZ());
-
-				glColor3f(0,1,0);
-				glBegin(GL_LINES);
-				glVertex3f(0,0,0);
-				glVertex3f(0,1,0);	
-				glEnd();	
-				glPopMatrix();
-				glEnable(GL_LIGHTING);	
-				
 				glPopMatrix();
 		}
 }

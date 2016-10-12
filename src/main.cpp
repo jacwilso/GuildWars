@@ -103,7 +103,8 @@ ifstream file;
 
 /*** MENU OPTIONS ***/
 int ericMenu, donkeyMenu, boardMenu, screen1Menu, screen2Menu, screen3Menu, mainMenu;
-bool splitScreenOn = false;
+bool screen2On = false;
+bool screen3On = false;
 bool fpsOn = false;
 int screen1SubjectNumber = 0;
 int screen2SubjectNumber = 1;
@@ -331,8 +332,9 @@ void processScreen3Menu(int value){
 void processMainMenu(int value){
 		switch (value){
 				case 1:
-						splitScreenOn = !splitScreenOn;
-						if(splitScreenOn == false){
+						screen2On = !screen3On;
+						screen3On = !screen3On;
+						if(screen3On == false){
 								glutChangeToMenuEntry(1,"Turn SplitScreen ON",1);
 								glutChangeToSubMenu(5,"Eric Cartman", ericMenu);
 								glutChangeToSubMenu(6,"Board", boardMenu);
@@ -412,6 +414,7 @@ void createMenus() {
 
 		mainMenu = glutCreateMenu(processMainMenu);
 		glutAddMenuEntry( "Turn SplitScreen ON", 1 );
+		
 		glutAddMenuEntry("Free Cam", 2);
 		glutAddMenuEntry("Turn FPS ON", 3);
 		glutAddMenuEntry( "Quit",4);
@@ -428,19 +431,28 @@ void mouseMotion(int x, int y) {
 				if(mouseX <=(signed int) windowWidth/2 && (windowHeight-mouseY) <= windowHeight/SPLITSCREEN_HEIGHT_RATIO ){
 						cam2.setCameraTheta(cam2.getCameraTheta() - (x-mouseX) * 0.005);
 						cam2.setCameraPhi(fmin(fmax((cam2.getCameraPhi() + (y - mouseY) * 0.005),0.01),M_PI));
+						mouseX = x;
+						mouseY = y;
+					cam2.recomputeOrientation();
+
 				}else if(mouseX >(signed int) windowWidth/2 && (windowHeight-mouseY) <= windowHeight/SPLITSCREEN_HEIGHT_RATIO ){
+
 						cam3.setCameraTheta(cam3.getCameraTheta() - (x-mouseX) * 0.005);
 						cam3.setCameraPhi(fmin(fmax((cam3.getCameraPhi() + (y - mouseY) * 0.005),0.01),M_PI));					
+						mouseX = x;
+						mouseY = y;
+						cam3.recomputeOrientation();
+
 				}else{
 						cam.setCameraTheta(cam.getCameraTheta() - (x-mouseX) * 0.005);
 						cam.setCameraPhi(fmin(fmax((cam.getCameraPhi() + (y - mouseY) * 0.005),0.01),M_PI));
+						mouseX = x;
+						mouseY = y;
+
+						cam.recomputeOrientation();     // update camera (x,y,z) based on (radius,theta,phi)
+
 				}
-				mouseX = x;
-				mouseY = y;
-				cam.recomputeOrientation();     // update camera (x,y,z) based on (radius,theta,phi)
-				cam2.recomputeOrientation();
-				cam3.recomputeOrientation();
-		}
+																	}
 
 
 		glutPostRedisplay();	    // redraw our scene from our new camera POV
@@ -595,7 +607,7 @@ void View2(){
 		gluPerspective(45.0, (float) (windowWidth/2)/(windowHeight/SPLITSCREEN_HEIGHT_RATIO), 0.1, 100000);
 		glMatrixMode(GL_MODELVIEW);
 
-	/*	glPushMatrix();
+		/*glPushMatrix();
 		{
 				glLoadIdentity();
 				glMatrixMode(GL_PROJECTION);
@@ -611,9 +623,9 @@ void View2(){
 				glEnd();
 				glPopMatrix();
 				glMatrixMode(GL_MODELVIEW);
-		}
+		}*/
 		glPopMatrix();
-		glLoadIdentity();*/
+		glLoadIdentity();
 }
 
 void View3(){
@@ -631,10 +643,9 @@ void View3(){
 		gluPerspective(45.0, (float) (windowWidth/2)/(windowHeight/SPLITSCREEN_HEIGHT_RATIO), 0.1, 100000);
 		glMatrixMode(GL_MODELVIEW);
 
-		/*glMatrixMode(GL_MODELVIEW);
 
 
-		glPushMatrix();
+		/*glPushMatrix();
 		{
 				glLoadIdentity();
 				glMatrixMode(GL_PROJECTION);
@@ -652,8 +663,8 @@ void View3(){
 				glMatrixMode(GL_MODELVIEW);
 		}
 		glPopMatrix();
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();*/
+		glMatrixMode(GL_MODELVIEW);*/
+		glLoadIdentity();
 }
 
 void drawCharacters(){
@@ -738,21 +749,16 @@ void renderScene(void)  {
 		glTranslatef(40,0,40);
 		glutSolidTeapot(1);
 		glPopMatrix();
-
-		glPushMatrix();
-		{
-				ericCartman.drawHero();
-		}
-		glPopMatrix();
-		drawCharacters();
+		
+		//ericCartman.drawHero();
+		//drawCharacters();
 		glCallList( env.environmentDL );
-
 
 		if(fpsOn == true){
 				drawFPS();
 		}
 
-		if(splitScreenOn == true){
+		if(screen2On == true){
 				if(screen2SubjectNumber == 0){
 						cam2.setSubjectPosition(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta());
 				}else if(screen2SubjectNumber == 1){
@@ -760,6 +766,20 @@ void renderScene(void)  {
 				}else if(screen2SubjectNumber == 2){
 						cam2.setSubjectPosition(4*paramPos.getX() + 10,4*paramPos.getY() + 3, 4*paramPos.getZ()+10, donkeyTheta);
 				}
+		/*** Viewport 2 ***/
+				View2();
+				cam2.setCamera();
+				//ericCartman.drawHero();
+				//drawCharacters();
+				//surf.renderGrid();
+				//surf.renderSurface();
+				if(fpsOn == true){
+						drawFPS();
+				}
+			//	glCallList( env.environmentDL );
+
+		}
+		if(screen3On == true){
 				if(screen3SubjectNumber == 0){
 						cam3.setSubjectPosition(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta());
 				}else if(screen2SubjectNumber == 1){
@@ -767,27 +787,15 @@ void renderScene(void)  {
 				}else if(screen2SubjectNumber == 2){
 						cam3.setSubjectPosition(4*paramPos.getX() + 10,4*paramPos.getY() + 3, 4*paramPos.getZ()+10, donkeyTheta);
 				}
-
-				/*** Viewport 2 ***/
-				View2();
-				cam2.setCamera();
-				ericCartman.drawHero();
-				drawCharacters();
-				//surf.renderGrid();
-				//surf.renderSurface();
-				if(fpsOn == true){
-						drawFPS();
-				}
-				glCallList( env.environmentDL );
-
 				/*** Viewport 3 ***/
 				View3();
 				cam3.setCamera();
-				ericCartman.drawHero();
-				drawCharacters();
-				glCallList( env.environmentDL );
+				//ericCartman.drawHero();
+				//drawCharacters();
+				//glCallList( env.environmentDL );
 				//surf.renderGrid();
 				//surf.renderSurface();
+
 		}
 
 		//push the back buffer to the screen
