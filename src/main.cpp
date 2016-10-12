@@ -193,8 +193,8 @@ void animationTrack(bool parametric){
 	vVector = (-0.01) * tmpC.getZ() + 1;
 	int bezierListIndex = 2*((int)floor(vVector)) + (int)floor(uVector);
 	surfPos = surf[bezierListIndex].evaluateSurface(uVector - floor(uVector) ,vVector - floor(vVector)); 
-        //cout<<surfPos.getY()<<endl;
-        Point tmp(tmpC.getX(),(surfPos.getY()-2),tmpC.getZ());
+        Point tmp(surfPos.getX()*100.0/12,(surfPos.getY()-2)*100.0/12,surfPos.getZ()*100.0/12);
+        cout<<tmp.getY()<<endl;
 				tmpD=track.paramDerivative(param);
 				donkeyTheta=atan2(tmpD.getX(),tmpD.getZ())*180/3.1415;
 				param++;
@@ -439,14 +439,14 @@ void createMenus() {
 void mouseMotion(int x, int y) {
 		if(leftMouseButton == GLUT_DOWN) {
 				if(mouseX <=(signed int) windowWidth/2 && (windowHeight-mouseY) <= windowHeight/SPLITSCREEN_HEIGHT_RATIO ){
-						cam2.setCameraTheta(cam2.getCameraTheta() - (x-mouseX) * 0.005);
-						cam2.setCameraPhi(fmin(fmax((cam2.getCameraPhi() + (y - mouseY) * 0.005),0.01),M_PI));
+						cam2.setCameraTheta(cam2.getCameraTheta() - (x-mouseX) * 0.008);
+						cam2.setCameraPhi(fmin(fmax((cam2.getCameraPhi() + (y - mouseY) * 0.008),0.01),M_PI));
 				}else if(mouseX >(signed int) windowWidth/2 && (windowHeight-mouseY) <= windowHeight/SPLITSCREEN_HEIGHT_RATIO ){
-						cam3.setCameraTheta(cam3.getCameraTheta() - (x-mouseX) * 0.005);
-						cam3.setCameraPhi(fmin(fmax((cam3.getCameraPhi() + (y - mouseY) * 0.005),0.01),M_PI));					
+						cam3.setCameraTheta(cam3.getCameraTheta() - (x-mouseX) * 0.008);
+						cam3.setCameraPhi(fmin(fmax((cam3.getCameraPhi() + (y - mouseY) * 0.008),0.01),M_PI));					
 				}else{
-						cam.setCameraTheta(cam.getCameraTheta() - (x-mouseX) * 0.005);
-						cam.setCameraPhi(fmin(fmax((cam.getCameraPhi() + (y - mouseY) * 0.005),0.01),M_PI));
+						cam.setCameraTheta(cam.getCameraTheta() - (x-mouseX) * 0.008);
+						cam.setCameraPhi(fmin(fmax((cam.getCameraPhi() + (y - mouseY) * 0.008),0.01),M_PI));
 				}
 				mouseX = x;
 				mouseY = y;
@@ -513,6 +513,14 @@ void normalKeys(){
 				if(sourceState != AL_PLAYING)
 						alSourcePlay( wav.sources[1] );
 		}
+                // FREE CAM
+                if(cam.getViewMode()==0){
+                  if(keyState['i'] || keyState['I']) cam.moveForward();
+                  if(keyState['k'] || keyState['K']) cam.moveBackward();
+                  if(keyState['j'] || keyState['J']) cam.setCameraTheta(cam.getCameraTheta() - 0.05);
+                if(keyState['l'] || keyState['L']) cam.setCameraTheta(cam.getCameraTheta() + 0.05);
+                  cam.recomputeOrientation();
+                }
 	// Which quad is eric in?	
 	Point surfPos;
 	float uVector, vVector;
@@ -761,7 +769,6 @@ void renderScene(void)  {
 				ericCartman.drawHero();
 		}
 		glPopMatrix();
->>>>>>> 981a2be19f3a8cbeb802190b8a63b4f8e1c09c6c
 		drawCharacters();
 		glCallList( env.environmentDL );
 
