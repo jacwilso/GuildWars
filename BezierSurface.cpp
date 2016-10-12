@@ -125,10 +125,12 @@ Point BezierSurface::rotationAxis(float u,float v){
 	float Rx,Rz,mag;
 	Rx= N.getZ();
 	Rz= -N.getX();
-        //cout<<"R "<<Rx<<" "<<Rz<<endl;
+        // cout<<"R "<<Rx<<" "<<Rz<<endl;
         mag=pow(pow(Rx,2)+pow(Rz,2),.5);
-        //cout<<"MAG "<<mag<<endl;
-        Rx/=mag; Rz/=mag;
+        // cout<<"MAG "<<mag<<endl;
+        if(mag != 0){
+        	Rx/=mag; Rz/=mag;
+        }
         //cout<<"R "<<Rx<<" "<<Rz<<endl;
 	return Point(Rx,0,Rz);
 }

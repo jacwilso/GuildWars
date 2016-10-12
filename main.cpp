@@ -105,7 +105,7 @@ ifstream file;
 int ericMenu, donkeyMenu, boardMenu, screen1Menu, screen2Menu, screen3Menu, mainMenu;
 bool screen2On = false;
 bool screen3On = false;
-bool fpsOn = false;
+bool fpsOn = true;
 int screen1SubjectNumber = 0;
 int screen2SubjectNumber = 1;
 int screen3SubjectNumber = 2;
@@ -242,7 +242,7 @@ void processEricMenu( int value ) {
 		screen1SubjectNumber = 0;
 		switch (value){
 				case 0: // Arcball
-						cam.setViewMode(6);
+						cam.setViewMode(5);
 						break;
 				case 1: // 1st Person
 						cam.setViewMode(2);
@@ -252,6 +252,7 @@ void processEricMenu( int value ) {
 						break;
 						break;
 				default:
+						cam.setViewMode(5);	
 						break;
 		}
 }
@@ -259,7 +260,7 @@ void processBoardMenu( int value ) {
 		screen1SubjectNumber = 1;
 		switch (value){
 				case 0:
-						cam.setViewMode(6);
+						cam.setViewMode(5);
 						break;
 				case 1:
 						cam.setViewMode(2);
@@ -268,6 +269,7 @@ void processBoardMenu( int value ) {
 						cam.setViewMode(4);
 						break;
 				default:
+				cam.setViewMode(5);
 						break;
 		}
 }
@@ -275,7 +277,7 @@ void processDonkeyMenu( int value ) {
 		screen1SubjectNumber = 2;
 		switch (value){
 				case 0:
-						cam.setViewMode(6);
+						cam.setViewMode(5);
 						break;
 				case 1:
 						cam.setViewMode(2);
@@ -284,6 +286,7 @@ void processDonkeyMenu( int value ) {
 						cam.setViewMode(4);
 						break;
 				default:
+						cam.setViewMode(5);
 						break;
 		}
 }
@@ -292,7 +295,7 @@ void processScreen1Menu(int value){
 		screen1SubjectNumber = value/3;
 		switch(value%3){
 				case 0:
-						cam.setViewMode(6);
+						cam.setViewMode(5);
 						break;
 				case 1:
 						cam.setViewMode(2);	
@@ -301,7 +304,7 @@ void processScreen1Menu(int value){
 						cam.setViewMode(4);
 						break;
 				default:
-						cam.setViewMode(6);
+						cam.setViewMode(5);
 						break;
 		}
 }
@@ -310,7 +313,7 @@ void processScreen2Menu(int value){
 		screen2SubjectNumber = value/3;
 		switch(value%3){
 				case 0:
-						cam2.setViewMode(6);
+						cam2.setViewMode(5);
 						break;
 				case 1:
 						cam2.setViewMode(2);	
@@ -319,7 +322,7 @@ void processScreen2Menu(int value){
 						cam2.setViewMode(4);
 						break;
 				default:
-						cam2.setViewMode(6);
+						cam2.setViewMode(5);
 						break;
 		}
 }
@@ -328,7 +331,7 @@ void processScreen3Menu(int value){
 		screen3SubjectNumber = value/3;
 		switch(value%3){
 				case 0:
-						cam3.setViewMode(6);
+						cam3.setViewMode(5);
 						break;
 				case 1:
 						cam3.setViewMode(2);	
@@ -337,7 +340,7 @@ void processScreen3Menu(int value){
 						cam3.setViewMode(4);
 						break;
 				default:
-						cam3.setViewMode(6);
+						cam3.setViewMode(5);
 						break;
 		}
 }
@@ -563,6 +566,7 @@ void normalKeys(){
 		int bezierListIndex = 2*((int)floor(vVector)) + (int)floor(uVector);
 		//std::cout << uVector << " " << bezierListIndex << " " << vVector << std::endl;
 		surfPos = surf[bezierListIndex].evaluateSurface(uVector - floor(uVector) ,vVector - floor(vVector)); 
+		//cout << ericCartman.getHeroPositionX() << " " << (surfPos.getY()-1.59)*100.0/12 << " " << ericCartman.getHeroPositionZ() << std::endl;
 		ericCartman.setHeroPos(ericCartman.getHeroPositionX(), (surfPos.getY()-1.59)*100.0/12  , ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta(), ericCartman.getHeroPhi());
 
 
@@ -570,7 +574,7 @@ void normalKeys(){
 		float surfAngle=surf[bezierListIndex].rotationAngle(uVector - floor(uVector) ,vVector - floor(vVector));
 		ericCartman.setRotAxisX(axis.getX());
 		ericCartman.setRotAxisZ(axis.getZ());	
-		//std::cout << ericCartman.getHeroPositionX() << " "<< "" << " " << ericCartman.getHeroPositionZ() << std::endl;
+		//std::cout << axis.getX() << " "<< axis.getZ() << " " << surfAngle << std::endl;
 		ericCartman.setHeroPos(ericCartman.getHeroPositionX(), (surfPos.getY()-1.59)*100.0/12  , ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta(), surfAngle);
 }
 
@@ -746,9 +750,9 @@ void renderScene(void)  {
 		if(screen1SubjectNumber == 0){
 				cam.setSubjectPosition(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta());
 		}else if(screen1SubjectNumber == 1){
-				cam.setSubjectPosition(4*arcPos.getX(), 4*arcPos.getY(), 4*arcPos.getZ(), boardTheta);
+				cam.setSubjectPosition(arcPos.getX(), arcPos.getY() + 10, arcPos.getZ(), boardTheta);
 		}else if(screen1SubjectNumber == 2){
-				cam.setSubjectPosition(4*paramPos.getX() + 10,4*paramPos.getY() + 3, 4*paramPos.getZ()+10, donkeyTheta);
+				cam.setSubjectPosition(paramPos.getX(),paramPos.getY() +10, paramPos.getZ(), donkeyTheta);
 		}
 
 		cam.setCamera();
@@ -770,9 +774,9 @@ void renderScene(void)  {
 				if(screen2SubjectNumber == 0){
 						cam2.setSubjectPosition(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta());
 				}else if(screen2SubjectNumber == 1){
-						cam2.setSubjectPosition(4*arcPos.getX(), 4*arcPos.getY(), 4*arcPos.getZ(), boardTheta);
+						cam2.setSubjectPosition(arcPos.getX(), arcPos.getY() + 10, arcPos.getZ(), boardTheta);
 				}else if(screen2SubjectNumber == 2){
-						cam2.setSubjectPosition(4*paramPos.getX() + 10,4*paramPos.getY() + 3, 4*paramPos.getZ()+10, donkeyTheta);
+						cam2.setSubjectPosition(paramPos.getX(),paramPos.getY() + 10, paramPos.getZ(), donkeyTheta);
 				}
 				/*** Viewport 2 ***/
 				View2();
@@ -791,9 +795,9 @@ void renderScene(void)  {
 				if(screen3SubjectNumber == 0){
 						cam3.setSubjectPosition(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta());
 				}else if(screen2SubjectNumber == 1){
-						cam3.setSubjectPosition(4*arcPos.getX(), 4*arcPos.getY(), 4*arcPos.getZ(), boardTheta);
+						cam3.setSubjectPosition(arcPos.getX(), arcPos.getY()+10, arcPos.getZ(), boardTheta);
 				}else if(screen2SubjectNumber == 2){
-						cam3.setSubjectPosition(4*paramPos.getX() + 10,4*paramPos.getY() + 3, 4*paramPos.getZ()+10, donkeyTheta);
+						cam3.setSubjectPosition(paramPos.getX(),paramPos.getY() + 10, paramPos.getZ(), donkeyTheta);
 				}
 				/*** Viewport 3 ***/
 				View3();
