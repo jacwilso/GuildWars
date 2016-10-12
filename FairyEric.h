@@ -13,7 +13,7 @@
 #endif
 
 #include <cmath>
-#include "../../NC_files/Hero.h"
+#include "Hero.h"
 
 class FairyEric : public Hero {
   private:

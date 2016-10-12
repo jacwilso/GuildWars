@@ -23,9 +23,9 @@
 
 TARGET = guildWars
 
-SOURCES = $(shell find src -name '*.cpp')
-OBJECTS = $(SOURCES:src/%.cpp=bin/%.o)
-DEPS = $(SOURCES:src/%.cpp=bin/%.d)
+
+SOURCES = $(wildcard *.cpp)
+OBJECTS = $(SOURCES:.cpp=.o)
 
 LOCAL_INC_PATH = /opt/local/include
 LOCAL_LIB_PATH = /opt/local/lib
@@ -87,7 +87,7 @@ ifeq ($(USING_OPENGL), 1)
 
     # Mac builds
     else ifeq ($(shell uname), Darwin)
-	LIBS += -framework GLUT -framework OpenGL
+        LIBS += -framework GLUT -framework OpenGL
 
     # Linux and all other builds
     else
@@ -128,60 +128,35 @@ endif
 
 all: $(TARGET)
 
-test: all
-	./$(TARGET) test.csv
+run: all
+	./$(TARGET)
 
-track: all
-	./$(TARGET) track1.csv
 clean:
 	rm -f $(OBJECTS) $(TARGET)
 
 rebuild: clean all
 		./$(TARGET)
 
-#depend:
-#	rm -f Makefile.bak
-#	mv Makefile Makefile.bak
-#	sed '/^# DEPENDENCIES/,$$d' Makefile.bak > Makefile
-#	echo '# DEPENDENCIES' >> Makefile
-#	$(CXX) $(INCPATH) -MM *.cpp >> Makefile
+depend:
+	rm -f Makefile.bak
+	mv Makefile Makefile.bak
+	sed '/^# DEPENDENCIES/,$$d' Makefile.bak > Makefile
+	echo '# DEPENDENCIES' >> Makefile
+	$(CXX) $(INCPATH) -MM *.cpp >> Makefile
 
-#.c.o: 	
-#	$(CXX) $(CFLAGS) $(INCPATH) -c -o $@ $<
+.c.o: 	
+	$(CXX) $(CFLAGS) $(INCPATH) -c -o $@ $<
 
-#.cc.o: 	
-#	$(CXX) $(CFLAGS) $(INCPATH) -c -o $@ $<
+.cc.o: 	
+	$(CXX) $(CFLAGS) $(INCPATH) -c -o $@ $<
 
-#.cpp.o: 	
-#	$(CXX) $(CFLAGS) $(INCPATH) -c -o $@ $<
+.cpp.o: 	
+	$(CXX) $(CFLAGS) $(INCPATH) -c -o $@ $<
 
 $(TARGET): $(OBJECTS) 
 	$(CXX) $(CFLAGS) $(INCPATH) -o $@ $^ $(LIBPATH) $(LIBS)
 
-	#$(CXX) $(COMMONFLAGS) $^ -o $(NAME)
-#ensures the bin directory is created
-$(SOURCES): | bin
-
-
-bin:
-		mkdir -p $(shell find src -type d | sed "s/src/bin/")
-
-bin/%.o: src/%.cpp
-	$(CXX) $(CFLAGS) $(INCPATH) $^ -c -o $@ $(LIBPATH) $(LIBS)
-
- # if we are using OpenAL, then we need to copy the runtime
-    # files to our executable directory...and only if we are on
-    # Windows.  The other OSes should be set up globally.
-    ifeq ($(USING_OPENAL), 1 )
-        # Windows builds
-        ifeq ($(OS), Windows_NT)
-            cp $(LAB_BIN_PATH)/OpenAL32.dll .
-            cp $(LAB_BIN_PATH)/libalut.dll .
-        endif
-    endif
-
-
 
 # DEPENDENCIES
-#Auto dependency management.
--include $(DEPS)
+main.o: main.cpp
+

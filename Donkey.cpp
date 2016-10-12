@@ -1,5 +1,5 @@
 #include "Donkey.h"
-#include "../utilities/Point.h"
+#include "Point.h"
 using namespace std;
 
 Donkey::Donkey() {

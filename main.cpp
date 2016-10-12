@@ -31,22 +31,22 @@
 #include <map>
 
 // Created Classes
-#include "utilities/Camera.h"
-#include "utilities/Sound.h"
-#include "utilities/Environment.h"
-#include "utilities/BezierSurface.h"
-#include "utilities/Bezier.h"
-#include "utilities/Point.h"
+#include "Camera.h"
+#include "Sound.h"
+#include "Environment.h"
+#include "BezierSurface.h"
+#include "Bezier.h"
+#include "Point.h"
 
-#include "utilities/Sound.h"
-#include "jacwilso/Board.h"
-#include "jacwilso/Bomberman.h"
+#include "Sound.h"
+#include "Board.h"
+#include "Bomberman.h"
 
-#include "kentokamoto/EricCartman.h"
-#include "kentokamoto/FairyEric.h"
+#include "EricCartman.h"
+#include "FairyEric.h"
 
-#include "zhemingdeng/Donkey.h"
-#include "zhemingdeng/Fairy.h"
+#include "Donkey.h"
+#include "Fairy.h"
 
 // Namespaces
 

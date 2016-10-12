@@ -13,7 +13,7 @@
 #endif
 
 #include "FairyEric.h"
-#include "../../NC_files/Hero.h"
+#include "Hero.h"
 
 class EricCartman : public Hero{
 private:
