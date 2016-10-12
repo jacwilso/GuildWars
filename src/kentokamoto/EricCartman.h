@@ -20,7 +20,8 @@ private:
 	// Angle is specified for foot and hand swing angle. Change variable name later.
 	float swingAngle;
 	float ericHeadBobAngle;
-
+	float rotAxisX;
+	float rotAxisZ;
 public:
 	/*
 	 * Constructor
@@ -33,11 +34,13 @@ public:
 	// Getters
 	float getSwingAngle();
 	float getEricHeadBobAngle();
-
+	float getRotAxisX();
+	float getRotAxisZ();
 	// Setters
 	void setSwingAngle(float item);
 	void setEricHeadBobAngle(float item);
-
+	void setRotAxisX(float item);
+	void setRotAxisZ(float item);
 	// Drawing Functions
 	/*
 	 * Draws the entire Character

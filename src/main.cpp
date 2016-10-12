@@ -509,37 +509,12 @@ void normalKeys(){
 	int bezierListIndex = 2*((int)floor(vVector)) + (int)floor(uVector);
 	//std::cout << uVector << " " << bezierListIndex << " " << vVector << std::endl;
 	surfPos = surf[bezierListIndex].evaluateSurface(uVector - floor(uVector) ,vVector - floor(vVector)); 
-	/*if(ericCartman.getHeroPositionX() >= 0 && ericCartman.getHeroPositionZ() < 0){//1
-			uVector = (-0.01)*ericCartman.getHeroPositionX() + 1;
-			 vVector = (0.01)*ericCartman.getHeroPositionZ() + 1;
-
-			surfPos = surf[0].evaluateSurface(uVector/100, vVector/100);
-	}else if(ericCartman.getHeroPositionX() >= 0 && ericCartman.getHeroPositionZ() >= 0){//2
-			uVector = (-0.01)*ericCartman.getHeroPositionX() + 1;
-			 vVector = (0.01)*ericCartman.getHeroPositionZ();
-
-			surfPos = surf[1].evaluateSurface(uVector/100, vVector/100);
-	}else if(ericCartman.getHeroPositionX() < 0 && ericCartman.getHeroPositionZ() < 0){//3
-			uVector = (-0.01)*ericCartman.getHeroPositionX() ;
-			 vVector = (0.01)*ericCartman.getHeroPositionZ()+1;
-
-			surfPos = surf[2].evaluateSurface(uVector/100, vVector/100);
-	}else{
-			 uVector = (0.01)*ericCartman.getHeroPositionX() + 1;
-			 vVector = (0.01)*ericCartman.getHeroPositionZ();
-
-			surfPos = surf[3].evaluateSurface(uVector/100, vVector/100);
-	}
-	
-	*/	
-	 //uVector = (0.01)*ericCartman.getHeroPositionX() + 1;
-	 //vVector = (0.01)*ericCartman.getHeroPositionZ();
-
-	//surfPos = surf[0].evaluateSurface(uVector/100, vVector/100)
+	Point axis=surf[bezierListIndex].rotationAxis(uVector - floor(uVector) ,vVector - floor(vVector));
+    float surfAngle=surf[bezierListIndex].rotationAngle(uVector - floor(uVector) ,vVector - floor(vVector));
+ 	ericCartman.setRotAxisX(axis.getX());
+   	ericCartman.setRotAxisZ(axis.getZ());	
 	//std::cout << ericCartman.getHeroPositionX() << " "<< "" << " " << ericCartman.getHeroPositionZ() << std::endl;
-	ericCartman.setHeroPos(ericCartman.getHeroPositionX(), (surfPos.getY()-1.59)*100.0/12  , ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta(), ericCartman.getHeroPhi());
-
-
+	ericCartman.setHeroPos(ericCartman.getHeroPositionX(), (surfPos.getY()-1.59)*100.0/12  , ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta(), surfAngle);
 }
 
 // Special key being pressed like arrowkeys
@@ -764,8 +739,11 @@ void renderScene(void)  {
 		glutSolidTeapot(1);
 		glPopMatrix();
 
-
-		ericCartman.drawHero();
+		glPushMatrix();
+		{
+				ericCartman.drawHero();
+		}
+		glPopMatrix();
 		drawCharacters();
 		glCallList( env.environmentDL );
 
