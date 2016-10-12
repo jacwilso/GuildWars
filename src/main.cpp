@@ -185,23 +185,36 @@ void drawFPS(){
 
 void animationTrack(bool parametric){
 		Point tmpC, tmpD;
+	Point surfPos;
+	float uVector, vVector;
 		if(parametric){
 				tmpC=track.parametricCurve(param);
-
+	uVector = (0.01)* tmpC.getX() +  1;
+	vVector = (-0.01) * tmpC.getZ() + 1;
+	int bezierListIndex = 2*((int)floor(vVector)) + (int)floor(uVector);
+	surfPos = surf[bezierListIndex].evaluateSurface(uVector - floor(uVector) ,vVector - floor(vVector)); 
+        //cout<<surfPos.getY()<<endl;
+        Point tmp(tmpC.getX(),(surfPos.getY()-2),tmpC.getZ());
 				tmpD=track.paramDerivative(param);
 				donkeyTheta=atan2(tmpD.getX(),tmpD.getZ())*180/3.1415;
 				param++;
 				if(param+1>track.resSize()) param=0;
-				paramPos=tmpC;
+				paramPos=tmp;
 		}else{
 				tmpC=track.arcLengthCurve(arc);
 				//cout<<"TEMP: "<<temp.getX()<<", "<<temp.getZ()<<endl<<"ARC++ "<<arc<<endl;
+	uVector = (0.01)* tmpC.getX() +  1;
+	vVector = (-0.01) * tmpC.getZ() + 1;
+	int bezierListIndex = 2*((int)floor(vVector)) + (int)floor(uVector);
+	surfPos = surf[bezierListIndex].evaluateSurface(uVector - floor(uVector) ,vVector - floor(vVector)); 
+        Point tmp(tmpC.getX(),(surfPos.getY()-2),tmpC.getZ());
 				tmpD=track.arcDerivative(arc);
 				boardTheta=atan2(tmpD.getX(),tmpD.getZ())*180/3.1415;
 				arc++;
 				if(arc+1>track.resSize()) arc=0;
 				arcPos=tmpC;
 		}
+
 }
 
 float nameAngle(Point pos){
@@ -509,34 +522,6 @@ void normalKeys(){
 	int bezierListIndex = 2*((int)floor(vVector)) + (int)floor(uVector);
 	//std::cout << uVector << " " << bezierListIndex << " " << vVector << std::endl;
 	surfPos = surf[bezierListIndex].evaluateSurface(uVector - floor(uVector) ,vVector - floor(vVector)); 
-	/*if(ericCartman.getHeroPositionX() >= 0 && ericCartman.getHeroPositionZ() < 0){//1
-			uVector = (-0.01)*ericCartman.getHeroPositionX() + 1;
-			 vVector = (0.01)*ericCartman.getHeroPositionZ() + 1;
-
-			surfPos = surf[0].evaluateSurface(uVector/100, vVector/100);
-	}else if(ericCartman.getHeroPositionX() >= 0 && ericCartman.getHeroPositionZ() >= 0){//2
-			uVector = (-0.01)*ericCartman.getHeroPositionX() + 1;
-			 vVector = (0.01)*ericCartman.getHeroPositionZ();
-
-			surfPos = surf[1].evaluateSurface(uVector/100, vVector/100);
-	}else if(ericCartman.getHeroPositionX() < 0 && ericCartman.getHeroPositionZ() < 0){//3
-			uVector = (-0.01)*ericCartman.getHeroPositionX() ;
-			 vVector = (0.01)*ericCartman.getHeroPositionZ()+1;
-
-			surfPos = surf[2].evaluateSurface(uVector/100, vVector/100);
-	}else{
-			 uVector = (0.01)*ericCartman.getHeroPositionX() + 1;
-			 vVector = (0.01)*ericCartman.getHeroPositionZ();
-
-			surfPos = surf[3].evaluateSurface(uVector/100, vVector/100);
-	}
-	
-	*/	
-	 //uVector = (0.01)*ericCartman.getHeroPositionX() + 1;
-	 //vVector = (0.01)*ericCartman.getHeroPositionZ();
-
-	//surfPos = surf[0].evaluateSurface(uVector/100, vVector/100)
-	//std::cout << ericCartman.getHeroPositionX() << " "<< "" << " " << ericCartman.getHeroPositionZ() << std::endl;
 	ericCartman.setHeroPos(ericCartman.getHeroPositionX(), (surfPos.getY()-1.59)*100.0/12  , ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta(), ericCartman.getHeroPhi());
 
 
@@ -765,7 +750,8 @@ void renderScene(void)  {
 		glPopMatrix();
 
 
-		ericCartman.drawHero();
+		
+                ericCartman.drawHero();
 		drawCharacters();
 		glCallList( env.environmentDL );
 

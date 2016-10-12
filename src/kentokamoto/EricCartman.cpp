@@ -82,6 +82,18 @@ void EricCartman::drawHero(){
 				glTranslatef(heroPosX, heroPosY, heroPosZ);
 				glRotatef(heroTheta, 0,1,0);
 				glScalef(0.8,0.8,0.8);
+                                void *StrFont = GLUT_STROKE_ROMAN;
+		                const char* c;
+		                glDisable(GL_LIGHTING);
+		                  glPushMatrix();
+		                  glColor3f(1,1,1);
+		                  glTranslatef(-1,8,3.5);
+                                  glRotatef(90,0,1,0);
+		                  glScalef(.01,.01,.01);
+		                  for(c="kentokomoto"; *c!='\0'; c++)
+		                		glutStrokeCharacter(StrFont,*c);
+		                glPopMatrix();
+		                glEnable(GL_LIGHTING);
 				drawBody();
 		}
 		glPopMatrix();
