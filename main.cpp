@@ -352,14 +352,14 @@ void processMainMenu(int value){
 						screen3On = !screen3On;
 						if(screen3On == false){
 								glutChangeToMenuEntry(1,"Turn SplitScreen ON",1);
-								glutChangeToSubMenu(5,"Eric Cartman", ericMenu);
-								glutChangeToSubMenu(6,"Board", boardMenu);
-								glutChangeToSubMenu(7,"Donkey", donkeyMenu);
+								glutChangeToSubMenu(6,"Eric Cartman", ericMenu);
+								glutChangeToSubMenu(7,"Board", boardMenu);
+								glutChangeToSubMenu(8,"Donkey", donkeyMenu);
 						}else{
 								glutChangeToMenuEntry(1,"Turn SplitScreen OFF",1);
-								glutChangeToSubMenu(5,"Main Screen", screen1Menu );
-								glutChangeToSubMenu(6, "Screen 2", screen2Menu);
-								glutChangeToSubMenu(7, "Screen 3", screen3Menu);
+								glutChangeToSubMenu(6,"Main Screen", screen1Menu );
+								glutChangeToSubMenu(7, "Screen 2", screen2Menu);
+								glutChangeToSubMenu(8, "Screen 3", screen3Menu);
 
 						}
 						break;
@@ -742,6 +742,9 @@ void renderScene(void)  {
 		//First Viewport: Take up the entire screen
 		glViewport(0,0,windowWidth,windowHeight);
 		//update the modelview matrix based on the camera's position
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		gluPerspective(45.0,aspectRatio,0.1,100000);
 		glMatrixMode(GL_MODELVIEW);              //make sure we aren't changing the projection matrix!
 		glLoadIdentity();
 		wav.positionListener(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(),cam.getDirX(),cam.getDirY(),cam.getDirZ(),0,1,0);		
@@ -750,8 +753,14 @@ void renderScene(void)  {
 		if(screen1SubjectNumber == 0){
 				cam.setSubjectPosition(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta());
 		}else if(screen1SubjectNumber == 1){
+				if(cam.getViewMode() == 2){
+					boardTheta -= 90;
+				}
 				cam.setSubjectPosition(arcPos.getX(), arcPos.getY() + 10, arcPos.getZ(), boardTheta);
 		}else if(screen1SubjectNumber == 2){
+				if(cam.getViewMode() == 2){
+					donkeyTheta -= 90;
+				}
 				cam.setSubjectPosition(paramPos.getX(),paramPos.getY() +10, paramPos.getZ(), donkeyTheta);
 		}
 
@@ -774,8 +783,14 @@ void renderScene(void)  {
 				if(screen2SubjectNumber == 0){
 						cam2.setSubjectPosition(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta());
 				}else if(screen2SubjectNumber == 1){
+						if(cam2.getViewMode() == 2){
+							boardTheta -= 90;
+						}
 						cam2.setSubjectPosition(arcPos.getX(), arcPos.getY() + 10, arcPos.getZ(), boardTheta);
 				}else if(screen2SubjectNumber == 2){
+						if(cam2.getViewMode() == 2){
+							donkeyTheta -= 90;
+						}
 						cam2.setSubjectPosition(paramPos.getX(),paramPos.getY() + 10, paramPos.getZ(), donkeyTheta);
 				}
 				/*** Viewport 2 ***/
@@ -795,8 +810,14 @@ void renderScene(void)  {
 				if(screen3SubjectNumber == 0){
 						cam3.setSubjectPosition(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta());
 				}else if(screen2SubjectNumber == 1){
+						if(cam3.getViewMode() == 2){
+							boardTheta -= 90;
+						}
 						cam3.setSubjectPosition(arcPos.getX(), arcPos.getY()+10, arcPos.getZ(), boardTheta);
 				}else if(screen2SubjectNumber == 2){
+						if(cam3.getViewMode() == 2){
+							donkeyTheta -= 90;
+						}
 						cam3.setSubjectPosition(paramPos.getX(),paramPos.getY() + 10, paramPos.getZ(), donkeyTheta);
 				}
 				/*** Viewport 3 ***/
