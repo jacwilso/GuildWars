@@ -334,12 +334,7 @@ void Environment::trackBox(){
 void Environment::trackRoad(){
                               Point tmpC, tmpD, surfPos;
                               float uVector, vVector, theta;
-                              glPushMatrix();
-                              glTranslatef(0,5,0);
-                              glDisable(GL_LIGHTING);
-                              glColor3f(1,0,0);
-                              glBegin(GL_QUAD_STRIP);
-                              for(int arc=0; arc<track.resSize(); arc+=3){
+                              for(int arc=0; arc<track.resSize(); arc++){
 				tmpC=track.arcLengthCurve(arc);
 	                        uVector = (0.01)* tmpC.getX() +  1;
 	                        vVector = (-0.01) * tmpC.getZ() + 1;
@@ -348,13 +343,18 @@ void Environment::trackRoad(){
 	                        surfPos = surf[bezierListIndex].evaluateSurface(uVector - floor(uVector) ,vVector - floor(vVector)); 
                                 //Point tmp(surfPos.getX()*100.0/12,(surfPos.getY()-2)*20.0,surfPos.getZ()*100.0/12);
                                 Point tmp(surfPos.getX()*100.0/12,(surfPos.getY())*10.0,surfPos.getZ()*100.0/12);
+		                Point axis=surf[bezierListIndex].rotationAxis(uVector - floor(uVector) ,vVector - floor(vVector));
+		                float surfAngle=surf[bezierListIndex].rotationAngle(uVector - floor(uVector) ,vVector - floor(vVector));
 				tmpD=track.arcDerivative(arc);
 				theta=atan2(tmpD.getX(),tmpD.getZ())*180/3.1415;
-                                
-                                glVertex3f(tmp.getX(),tmp.getY(),tmp.getZ()+5);
-                                glVertex3f(tmp.getX(),tmp.getY(),tmp.getZ()-5);
+                                glPushMatrix();
+                                  glColor3f(rand()%10/100.0,rand()%10/100.0,rand()%10/100.0);
+                                  glTranslatef(0,8,0);
+                                  glTranslatef(tmp.getX(),(tmp.getY()-2),tmp.getZ());
+                                  glRotatef(surfAngle,axis.getX(),axis.getY(),axis.getZ());
+                                  glRotatef(90+theta,0,1,0);
+                                  glScalef(1,.1,5);
+                                  glutSolidCube(1);
+                                glPopMatrix();
                               }
-                              glEnd();
-                              glEnable(GL_LIGHTING);
-                              glPopMatrix();
 }
