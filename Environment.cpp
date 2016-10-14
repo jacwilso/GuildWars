@@ -332,7 +332,6 @@ void Environment::trackBox(){
 }
 
 void Environment::trackRoad(){
-<<<<<<< HEAD
                               Point tmpC, tmpD, surfPos;
                               float uVector, vVector, theta;
                               for(int arc=0; arc<track.resSize(); arc++){
