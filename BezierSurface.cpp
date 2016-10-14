@@ -1,14 +1,20 @@
 #include "BezierSurface.h"
-
+/*
+ * Constructor
+ */
 BezierSurface::BezierSurface(){}
-
+/*
+ * Sets another Constructor
+ */
 BezierSurface::BezierSurface(Bezier b1,Bezier b2,Bezier b3,Bezier b4){
 	bez.push_back(b1);
 	bez.push_back(b2);
 	bez.push_back(b3);
 	bez.push_back(b4);
 }
-
+/*
+ * Yet another Constructor
+ */
 BezierSurface::BezierSurface(
 		Point p0,Point p1,Point p2,Point p3,
 		Point p4,Point p5,Point p6,Point p7,
@@ -19,7 +25,9 @@ BezierSurface::BezierSurface(
 	bez.push_back(Bezier(p4,p5,p6,p7));
 	bez.push_back(Bezier(p4,p5,p6,p7));
 }
-
+/*
+ * Creates the bezier surface
+ */
 void BezierSurface::createSurface(Bezier b1,Bezier b2,Bezier b3,Bezier b4){
         bez.clear();
 	bez.push_back(b1);
@@ -27,6 +35,9 @@ void BezierSurface::createSurface(Bezier b1,Bezier b2,Bezier b3,Bezier b4){
 	bez.push_back(b3);
 	bez.push_back(b4);
 }
+/*
+ * Createst the surface given 16 different points
+ */
 void BezierSurface::createSurface(
 		Point p0,Point p1,Point p2,Point p3,
 		Point p4,Point p5,Point p6,Point p7,
@@ -38,7 +49,9 @@ void BezierSurface::createSurface(
 	bez.push_back(Bezier(p4,p5,p6,p7));
 	bez.push_back(Bezier(p4,p5,p6,p7));
 }
-
+/*
+ * Gets the x, y, z coordinates at the surface.
+ */
 Point BezierSurface::evaluateSurface(float u,float v){
 	return (
 			pow(1-v,3)*bez[0].evaluateCurve(0,u)+
@@ -47,7 +60,9 @@ Point BezierSurface::evaluateSurface(float u,float v){
 			pow(v,3)*bez[3].evaluateCurve(0,u));
 
 }
-
+/*
+ * Creates the grid graphics
+ */
 void BezierSurface::renderGrid(){
 	//renderPoints();
 	glDisable(GL_LIGHTING);
@@ -71,7 +86,9 @@ void BezierSurface::renderGrid(){
 	}
 	glEnable(GL_LIGHTING);
 }
-
+/*
+ * Creates the solid surface
+ */
 void BezierSurface::renderSurface(){
 	Point temp;
 	glColor3f(1.0f,0,0);
@@ -91,7 +108,9 @@ void BezierSurface::renderSurface(){
 		glEnd();
 	}
 }
-
+/*
+ * Calculates the normal at the surface
+ */
 Point BezierSurface::normal(float u,float v){
 	Point du=
 		pow(1-v,3)*bez[0].derivative(0,u)+
@@ -115,11 +134,16 @@ Point BezierSurface::normal(float u,float v){
 	Nx/=mag; Ny/=mag; Nz/=mag;
 	return Point(Nx,Ny,Nz); 
 }
-
+/*
+ * Returns the amount or rotation from the y axis
+ */
 float BezierSurface::rotationAngle(float u,float v){
         Point N=normal(u,v);
         return acos(N.getY())*float(180)/3.14159;
 }
+/*
+ * Returns the rotation axis
+ */
 Point BezierSurface::rotationAxis(float u,float v){
 	Point N=normal(u,v);
 	float Rx,Rz,mag;

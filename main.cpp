@@ -574,6 +574,8 @@ void normalKeys(){
 		float surfAngle=surf[bezierListIndex].rotationAngle(uVector - floor(uVector) ,vVector - floor(vVector));
 		ericCartman.setRotAxisX(axis.getX());
 		ericCartman.setRotAxisZ(axis.getZ());	
+		cam.setRotAxis(axis);
+		cam.setSubjectPosPhi(surfAngle);
 		//std::cout << axis.getX() << " "<< axis.getZ() << " " << surfAngle << std::endl;
 		ericCartman.setHeroPos(ericCartman.getHeroPositionX(), (surfPos.getY()-1.59)*100.0/12  , ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta(), surfAngle);
 }
@@ -782,6 +784,8 @@ void renderScene(void)  {
 		if(screen2On == true){
 				if(screen2SubjectNumber == 0){
 						cam2.setSubjectPosition(ericCartman.getHeroPositionX(),ericCartman.getHeroPositionY(), ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta());
+						cam2.setSubjectPosPhi(cam.getSubjectPosPhi());
+						cam2.setRotAxis(cam.getRotAxis());
 				}else if(screen2SubjectNumber == 1){
 						if(cam2.getViewMode() == 2){
 							boardTheta -= 90;

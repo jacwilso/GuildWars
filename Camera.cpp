@@ -86,6 +86,10 @@ void Camera::setCameraPitch(float item){
 void Camera::setCameraRoll(float item){
 		cameraRoll = item;
 }
+
+void Camera::setRotAxis(Point item){
+		rotAxis = item;
+}
 void Camera::moveForward(){
 	switch(viewMode){
 		case 0: //Free Cam Mode
@@ -167,14 +171,24 @@ void Camera::ThirdPersonPOV(  ){
 			0,1,0);
 }
 void Camera::FirstPersonPOV( ){
-	gluLookAt( subjectPosX + 4.2*cos(subjectPosTheta*(M_PI/180)), 
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		glTranslatef(4.2,-Y_OFFSET,4.2);
+
+		glRotatef(subjectPosPhi,rotAxis.getX(), 0, rotAxis.getZ());
+		glRotatef(-subjectPosTheta,0,1,0);
+				
+		gluLookAt(subjectPosX,subjectPosY, subjectPosZ,
+						subjectPosX + 30, subjectPosY, subjectPosZ,
+						0,1,0);
+			/*gluLookAt( subjectPosX + 4.2*cos(subjectPosTheta*(M_PI/180)), 
 			Y_OFFSET + subjectPosY, 
 			subjectPosZ - 4.2*sin(subjectPosTheta*(M_PI/180)),
 			20*cos(subjectPosTheta*(M_PI/180)) + subjectPosX, 
 			3.3+ subjectPosY,
 			-20*sin(subjectPosTheta*(M_PI/180)) + subjectPosZ,
-			0,1,0);
-	
+			0,1,0)*/
+
 }
 void Camera::ReversePOV( ){
 gluLookAt( 15*cos(subjectPosTheta*(M_PI/180)) + subjectPosX,

@@ -14,7 +14,7 @@ Bezier::Bezier(Point p0, Point p1, Point p2, Point p3){
 Point Bezier::evaluateCurve(int bez,float t) {
   return pow(1-t,3)*p[bez]+3*pow(1-t,2)*t*p[bez+1]+3*(1-t)*pow(t,2)*p[bez+2]+pow(t,3)*p[bez+3];
 }
-
+// Calculates the slope of at that specific point
 Point Bezier::derivative(int bez,float t) {
   return( -3*pow(1-t,2)*p[bez]+
           -6*(1-t)*t*p[bez+1]+
@@ -23,13 +23,15 @@ Point Bezier::derivative(int bez,float t) {
             -3*pow(t,2)*p[bez+2]+
           3*pow(t,2)*p[bez+3]);
 }
-
+// Takes derivative given a parameter
 Point Bezier::paramDerivative(int pos) {
   int bez=4*(pos/RESOLUTION);
   float t=(float)(pos%RESOLUTION)/RESOLUTION;
   return derivative(bez,t);
 }
-
+/*
+ * Calculates the arc Derivative
+ */
 Point Bezier::arcDerivative(int arcStep){
   float arc=(float)(arcStep)*(float)(arcSize())/resSize();
   if(arc!=0 || arc!=p.size()/4)
@@ -88,7 +90,9 @@ void Bezier::bezierConnect(Bezier bez){
 Point Bezier::parametricCurve(int pos){
   return evaluateCurve(4*(pos/RESOLUTION),(float)(pos%RESOLUTION)/RESOLUTION);
 }
-
+/*
+ * Populates a table to be used for parameter coordiantes
+ */
 void Bezier::populateTable(){
   float dist=0;
   arcParam.clear(); paramArc.clear();
@@ -107,6 +111,9 @@ void Bezier::populateTable(){
     }
 }
 
+/*
+ * Populate the table
+ */
 void Bezier::popTab(float arc){
   float left=0,right=paramArc[p.size()/4], leftT=0, rightT=p.size()/4;
   map<float,float>::iterator it=arcParam.begin();
@@ -130,7 +137,9 @@ void Bezier::popTab(float arc){
   arcParam[arc]=tmp;
   paramArc[tmp]=arc;
 }
-
+/*
+ * Evaluates the curve for the arc length
+ */
 Point Bezier::arcLengthCurve(int arcStep){
   float arc=(float)(arcStep)*(float)(arcSize())/resSize();
   //cout<<"ARC "<<arc<<" SIZE "<<arcSize()<<endl;
@@ -140,7 +149,9 @@ Point Bezier::arcLengthCurve(int arcStep){
   //cout<<"BEZ "<<bez<<" T "<<arcParam[arc]<<endl;
   return evaluateCurve(4*bez,arcParam[arc]-bez);
 }
-
+/*
+ * Operator Overloading equal check
+ */
 void Bezier::operator=(Bezier bez){
   p.clear();
   for(unsigned int i=0; i<bez.p.size(); i++)

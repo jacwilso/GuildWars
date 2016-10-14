@@ -27,7 +27,7 @@ private:
 	float subjectPosPhi;
 	float cameraPitch;
 	float cameraRoll;
-
+	Point rotAxis;
 public:
     Camera();
 
@@ -142,6 +142,9 @@ public:
 
 	float getCameraRoll()
 	{return cameraRoll;}
+	
+	Point getRotAxis()
+	{return rotAxis;}
 	// Setters
     void setViewMode(int);
     void setCameraX(float);
@@ -160,4 +163,5 @@ public:
 	void setSubjectPosPhi(float item);
 	void setCameraPitch(float item);
 	void setCameraRoll(float item);
+	void setRotAxis(Point item);
 };
