@@ -105,6 +105,7 @@ it is important to note the following:
 For Bezier surface, there must be N\*16 points in total otherwise the program will close.  
 In addition, the bezier surface must be placed in the following orders in order for the heroes to know which bezier surface they are on at any time. The control points also must be at max -12 to 12 in both the x and z axis.  
 The bezier surface must be input in the following order:
+
 ------------------------
 |          |           |
 |    4     |     2     |
@@ -116,6 +117,7 @@ The bezier surface must be input in the following order:
 |          |           |
 |          |           |
 -----------------------
+
 For Bezier curves, there must be exactly N\*4 points in total otherwise the program will close.  
 For Object types, use the following numbers to clasify a type:  
  * 0: Draw a tree
@@ -126,15 +128,15 @@ The orientation of the object is read in degrees rather than radians.
 To keep it easy to read, break up the bezier surface/curves into block of 4 points for readability. The program will automatically skip empty lines without causing issues.
 
 The input files for compiling are:
- * track1.csv
- * track2.csv
- 
-Each file contains the same 4 bezier surfaces and the bezier curve which comprises the track because they were hand crafted and really emphasize our programs abilities. However, each file differs in the number of objects and location, rotation, and size of those objects. 
+ * fileIO1.csv
+ * fileIO2.csv
 
 ## OpenAL ##
 Two wav files are used to generate sound: a bird chirping and Cartman singing poker-face. The bird chirping is tied to the teapot location (teapot used for visualization) and Carman's singing is tied to his movement.
 
 ## Contributions ##
+Contributions were done anonomously.
+
 Name          | Contribution %       
 --------------|----------------------
 Kento Okamoto | See Personal README         
@@ -143,6 +145,6 @@ Zheming Deng  | See Personal README
 
 
 ## Other Things ##
-* Time spent on Assignment: Too long .............................
-* Help from lab: \<INSERT RATING HERE \>
-* Funness of lab: \<INSERT FUNNESS LEVEL HERE\> I'm aware funness is not a word
+* Time spent on Assignment: Too long ... approximately 160 man-hours
+* Help from lab: 9
+* Funness of lab: 3
