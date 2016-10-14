@@ -105,6 +105,7 @@ it is important to note the following:
 For Bezier surface, there must be N\*16 points in total otherwise the program will close.  
 In addition, the bezier surface must be placed in the following orders in order for the heroes to know which bezier surface they are on at any time. The control points also must be at max -12 to 12 in both the x and z axis.  
 The bezier surface must be input in the following order:
+
 ------------------------
 |          |           |
 |    4     |     2     |
@@ -116,6 +117,7 @@ The bezier surface must be input in the following order:
 |          |           |
 |          |           |
 -----------------------
+
 For Bezier curves, there must be exactly N\*4 points in total otherwise the program will close.  
 For Object types, use the following numbers to clasify a type:  
  * 0: Draw a tree
@@ -134,6 +136,7 @@ Two wav files are used to generate sound: a bird chirping and Cartman singing po
 
 ## Contributions ##
 Contributions were done anonomously.
+
 Name          | Contribution %       
 --------------|----------------------
 Kento Okamoto | CONTRIBUTION PERC         
