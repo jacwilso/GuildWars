@@ -126,15 +126,14 @@ The orientation of the object is read in degrees rather than radians.
 To keep it easy to read, break up the bezier surface/curves into block of 4 points for readability. The program will automatically skip empty lines without causing issues.
 
 The input files for compiling are:
- * track1.csv
- * track2.csv
- 
-Each file contains the same 4 bezier surfaces and the bezier curve which comprises the track because they were hand crafted and really emphasize our programs abilities. However, each file differs in the number of objects and location, rotation, and size of those objects. 
+ * fileIO1.csv
+ * fileIO2.csv
 
 ## OpenAL ##
 Two wav files are used to generate sound: a bird chirping and Cartman singing poker-face. The bird chirping is tied to the teapot location (teapot used for visualization) and Carman's singing is tied to his movement.
 
 ## Contributions ##
+Contributions were done anonomously.
 Name          | Contribution %       
 --------------|----------------------
 Kento Okamoto | CONTRIBUTION PERC         
@@ -143,6 +142,6 @@ Zheming Deng  | CONTRIBUTION PERC
 
 
 ## Other Things ##
-* Time spent on Assignment: Too long .............................
-* Help from lab: \<INSERT RATING HERE \>
-* Funness of lab: \<INSERT FUNNESS LEVEL HERE\> I'm aware funness is not a word
+* Time spent on Assignment: Too long ... approximately 160 man-hours
+* Help from lab: 9
+* Funness of lab: 3
