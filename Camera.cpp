@@ -4,11 +4,11 @@
  * Constructor
  */
 Camera::Camera(){
-	    viewMode = 5;
+	  viewMode = 5;
 
 
-        cameraTheta = -M_PI / 3.0f;
-        cameraPhi = M_PI/2;
+        cameraTheta = M_PI;
+        cameraPhi = 5*M_PI/8;
 
         recomputeOrientation();
         cameraX = 0;
@@ -20,8 +20,8 @@ Camera::Camera(){
         subjectPosY = 0;
         subjectPosZ = 0;
         subjectPosTheta = 0;
-		cameraPitch = 0;
-		cameraRoll = 0;
+	cameraPitch = 0;
+	cameraRoll = 0;
 }
 
 

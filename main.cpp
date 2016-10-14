@@ -441,7 +441,7 @@ void createMenus() {
 		mainMenu = glutCreateMenu(processMainMenu);
 		glutAddMenuEntry( "Turn SplitScreen ON", 1 );
 		glutAddMenuEntry("Free Cam", 2);
-		glutAddMenuEntry("Turn FPS ON", 3);
+		glutAddMenuEntry("Turn FPS OFF", 3);
 		glutAddMenuEntry( "Show MiniWindow",4);
 		glutAddMenuEntry("Quit", 5);
 		glutAddSubMenu("Eric Cartman", ericMenu);
