@@ -44,7 +44,6 @@
 #include "EricCartman.h"
 
 #include "Donkey.h"
-#include "Fairy.h"
 
 // Namespaces
 
