@@ -259,7 +259,6 @@ void processEricMenu( int value ) {
 				case 2: // SkyCam
 						cam.setViewMode(4);
 						break;
-						break;
 				default:
 						cam.setViewMode(5);	
 						break;
@@ -363,12 +362,11 @@ void processScreen3Menu(int value){
 
 //set main menu
 void processMainMenu(int value){
-	if(status == GLUT_MENU_NOT_IN_USE)
 		switch (value){
 				case 1:
 						screen2On = !screen3On;
 						screen3On = !screen3On;
-						if(screen3On == false){
+						/*if(screen3On == false){
 								glutChangeToMenuEntry(1,"Turn SplitScreen ON",1);
 								glutChangeToSubMenu(6,"Eric Cartman", ericMenu);
 								glutChangeToSubMenu(7,"Board", boardMenu);
@@ -379,26 +377,16 @@ void processMainMenu(int value){
 								glutChangeToSubMenu(7, "Screen 2", screen2Menu);
 								glutChangeToSubMenu(8, "Screen 3", screen3Menu);
 
-						}
+						}*/
 						break;
 				case 2:
 						cam.setViewMode(0);
 						break;
 				case 3:
 						fpsOn = !fpsOn;
-						if(fpsOn == false){
-								glutChangeToMenuEntry(3,"Turn FPS ON",3);
-						}else{
-								glutChangeToMenuEntry(3,"Turn FPS OFF",3);
-						}
 						break;
 				case 4:
 						screen2On = !screen2On;
-						if(screen2On == false){
-							glutChangeToMenuEntry(4,"Show MiniWindow",4);
-						}else{
-							glutChangeToMenuEntry(4,"Hide MiniWindow",4);
-						}
 						screen2SubjectNumber = screen1SubjectNumber;
 						cam2.setViewMode(2);	
 						break;
@@ -459,14 +447,17 @@ void createMenus() {
 		glutAddMenuEntry( "Donkey: SkyCam", 8);	
 
 		mainMenu = glutCreateMenu(processMainMenu);
-		glutAddMenuEntry( "Turn SplitScreen ON", 1 );
+		glutAddMenuEntry( "Toggle SplitScreen", 1 );
 		glutAddMenuEntry("Free Cam", 2);
-		glutAddMenuEntry("Turn FPS OFF", 3);
-		glutAddMenuEntry( "Show MiniWindow",4);
+		glutAddMenuEntry("Toggle FPS", 3);
+		glutAddMenuEntry( "Toggle MiniWindow",4);
 		glutAddMenuEntry("Quit", 5);
 		glutAddSubMenu("Eric Cartman", ericMenu);
 		glutAddSubMenu("Board", boardMenu);
 		glutAddSubMenu("Donkey", donkeyMenu);
+		glutAddSubMenu("Main Screen", screen1Menu );
+		glutAddSubMenu("Screen 2", screen2Menu);
+		glutAddSubMenu("Screen 3", screen3Menu);
 
 		glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
