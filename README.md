@@ -137,9 +137,9 @@ Two wav files are used to generate sound: a bird chirping and Cartman singing po
 ## Contributions ##
 Name          | Contribution %       
 --------------|----------------------
-Kento Okamoto | CONTRIBUTION PERC         
-Jacob Wilson  | CONTRIBUTION PERC  
-Zheming Deng  | CONTRIBUTION PERC    
+Kento Okamoto | See Personal README         
+Jacob Wilson  | See Personal README
+Zheming Deng  | See Personal README    
 
 
 ## Other Things ##
