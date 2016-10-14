@@ -118,6 +118,7 @@ void recomputeOrientation() {
 
 }
 
+//resize window
 void resizeWindow(int w, int h) {
 		aspectRatio = w / (float)h;
 
@@ -133,6 +134,7 @@ void resizeWindow(int w, int h) {
 		gluPerspective(45.0,aspectRatio,0.1,100000);
 }
 
+//calculate fps
 void calculateFPS(){
 		frameCount++;
 		currentTime = glutGet(GLUT_ELAPSED_TIME);
@@ -144,6 +146,7 @@ void calculateFPS(){
 		}
 }
 
+//bitmap text
 void bitmapText(const char *string,float x,float y,float z){
 		const char* c;
 		glRasterPos3f(x,y,z);
@@ -152,6 +155,7 @@ void bitmapText(const char *string,float x,float y,float z){
 		}
 }
 
+//convert float to char
 char* floatToChar(float i){
 		ostringstream ss;
 		ss << i;
@@ -161,6 +165,7 @@ char* floatToChar(float i){
 		return cstr;
 } 
 
+//draw the FPS text
 void drawFPS(){
 		glDisable(GL_LIGHTING);
 		glDisable(GL_TEXTURE_2D);
@@ -184,6 +189,7 @@ void drawFPS(){
 		glEnable(GL_LIGHTING);
 }
 
+//draw the animation track
 void animationTrack(bool parametric){
 		Point tmpC, tmpD;
 		Point surfPos;
@@ -218,6 +224,7 @@ void animationTrack(bool parametric){
 
 }
 
+//angle for name rotation
 float nameAngle(Point pos){
 		Point dif=pos-cam.getCameraPos();
 		dif.normalize();
@@ -227,6 +234,7 @@ float nameAngle(Point pos){
 		return 180-acos(dot)*180/3.1415;
 }
 
+//mouse call back func
 void mouseCallback(int button, int state, int thisX, int thisY) {
 		// update the left mouse button states, if applicable
 		if(button == GLUT_LEFT_BUTTON){
@@ -238,6 +246,8 @@ void mouseCallback(int button, int state, int thisX, int thisY) {
 		}
 
 }
+
+//menu for Eric
 void processEricMenu( int value ) {
 		screen1SubjectNumber = 0;
 		switch (value){
@@ -256,6 +266,8 @@ void processEricMenu( int value ) {
 						break;
 		}
 }
+
+//menu for Board
 void processBoardMenu( int value ) {
 		screen1SubjectNumber = 1;
 		switch (value){
@@ -273,6 +285,8 @@ void processBoardMenu( int value ) {
 						break;
 		}
 }
+
+//menu for Donkey
 void processDonkeyMenu( int value ) {
 		screen1SubjectNumber = 2;
 		switch (value){
@@ -291,6 +305,7 @@ void processDonkeyMenu( int value ) {
 		}
 }
 
+//set screen 1 menu
 void processScreen1Menu(int value){
 		screen1SubjectNumber = value/3;
 		switch(value%3){
@@ -309,6 +324,7 @@ void processScreen1Menu(int value){
 		}
 }
 
+//set screen 2 menu
 void processScreen2Menu(int value){
 		screen2SubjectNumber = value/3;
 		switch(value%3){
@@ -327,6 +343,7 @@ void processScreen2Menu(int value){
 		}
 }
 
+//set screen 3 menu
 void processScreen3Menu(int value){
 		screen3SubjectNumber = value/3;
 		switch(value%3){
@@ -345,6 +362,7 @@ void processScreen3Menu(int value){
 		}
 }
 
+//set main menu
 void processMainMenu(int value){
 		switch (value){
 				case 1:
@@ -391,6 +409,8 @@ void processMainMenu(int value){
 						break;
 		}
 }
+
+//build menu
 void createMenus() {
 		ericMenu = glutCreateMenu( processEricMenu );
 		glutAddMenuEntry( "Eric: ArcBall", 0);
@@ -441,7 +461,7 @@ void createMenus() {
 		mainMenu = glutCreateMenu(processMainMenu);
 		glutAddMenuEntry( "Turn SplitScreen ON", 1 );
 		glutAddMenuEntry("Free Cam", 2);
-		glutAddMenuEntry("Turn FPS ON", 3);
+		glutAddMenuEntry("Turn FPS OFF", 3);
 		glutAddMenuEntry( "Show MiniWindow",4);
 		glutAddMenuEntry("Quit", 5);
 		glutAddSubMenu("Eric Cartman", ericMenu);
@@ -451,7 +471,7 @@ void createMenus() {
 		glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
-
+//mouse motion func
 void mouseMotion(int x, int y) {
 		if(leftMouseButton == GLUT_DOWN) {
 				if(screen2On == false || screen3On == false){
@@ -495,7 +515,7 @@ void mouseMotion(int x, int y) {
 		glutPostRedisplay();	    // redraw our scene from our new camera POV
 }
 
-
+//normal keys down func
 void normalKeysDown(unsigned char key, int x, int y) {
 		keyState[key]=true;
 		if(key <= 57 && key >= 48){
@@ -507,6 +527,7 @@ void normalKeysDown(unsigned char key, int x, int y) {
 		}		glutPostRedisplay();		// redraw our scene from our new camera POV
 }
 
+//normal keys up func
 void normalKeysUp(unsigned char key, int x, int y){
 		keyState[key]=false;
 		if( !keyState['w'] || !keyState['W'] ||
@@ -516,6 +537,7 @@ void normalKeysUp(unsigned char key, int x, int y){
 				alSourcePause( wav.sources[1] );
 }
 
+//normal keys func
 void normalKeys(){
 		if( keyState['w'] || keyState['W']){
 				ericCartman.moveEricForward();
@@ -615,6 +637,7 @@ void myTimer( int value ){
 		glutTimerFunc( 1000/60, myTimer, 0);
 }
 
+//intiate scene
 void initScene()  {
 		glEnable(GL_DEPTH_TEST);
 
@@ -642,6 +665,8 @@ void initScene()  {
 		srand( time(NULL) );	// seed our random number generator
 		env.generateEnvironmentDL(file);
 }
+
+//making windows 2
 void View2(){
 		glViewport(0,0,windowWidth/2, windowHeight/SPLITSCREEN_HEIGHT_RATIO );
 
@@ -661,6 +686,7 @@ void View2(){
 		glLoadIdentity();
 }
 
+//making windows 3
 void View3(){
 		glViewport(windowWidth/2, 0, windowWidth/2, windowHeight/SPLITSCREEN_HEIGHT_RATIO );
 
@@ -681,6 +707,7 @@ void View3(){
 		glLoadIdentity();
 }
 
+//draw heros
 void drawCharacters(){
 		const char* c;
 		/*
@@ -889,6 +916,7 @@ bool loadControlPoints( char* filename ) {
 		return true; // was able to read the file
 }
 
+//clean up the sound
 void cleanSound(){
 		wav.cleanupOpenAL();
 }

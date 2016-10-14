@@ -8,12 +8,14 @@ using namespace std;
 const float PI = 3.14159;
 const float RAD = PI/180;
 
+//constructor
 EricCartman::EricCartman(){
 		swingAngle=0;
 		ericHeadBobAngle=0;
 		heroPosY = 3.3;		
 }
 
+//draw hemisphere
 void drawHemiSphere(float radx,float rady,float radz)
 {
 		float i,j;
@@ -87,7 +89,7 @@ void EricCartman::setRotAxisZ(float item){
 	rotAxisZ = item;
 }
 
-
+//draw the hero
 void EricCartman::drawHero(){
 		glPushMatrix();
 		{
@@ -115,7 +117,7 @@ void EricCartman::drawHero(){
 
 }
 
-
+//draw body
 void EricCartman::drawBody(){
 
 		// Draw the Fairy
@@ -214,6 +216,7 @@ void EricCartman::drawBody(){
 		glPopMatrix();
 }
 
+//draw feet
 void EricCartman::drawFeet(){
 		glPushMatrix();
 		glColor3f(0.35 , 0.16 , 0.14);
@@ -234,6 +237,7 @@ void EricCartman::drawFeet(){
 
 }
 
+//draw hands
 void EricCartman::drawHands(){
 		glPushMatrix();
 		glColor3f(1,0,0);
@@ -253,6 +257,7 @@ void EricCartman::drawHands(){
 
 }
 
+//draw head
 void EricCartman::drawHead(){
 		glPushMatrix();
 		glColor3f(0,0,0);
@@ -337,6 +342,7 @@ void EricCartman::drawHead(){
 		glEnable( GL_LIGHTING );
 }
 
+//move forward
 void EricCartman::moveEricForward(){
 		heroPosX += cos(heroTheta*RAD);
 		heroPosZ -= sin(heroTheta*RAD);
@@ -355,6 +361,8 @@ void EricCartman::moveEricForward(){
 				heroPosZ = -99;
 		}
 }
+
+//move backward
 void EricCartman::moveEricBackward(){
 		heroPosX -= cos(heroTheta*RAD);
 		heroPosZ += sin(heroTheta*RAD);
@@ -373,14 +381,19 @@ void EricCartman::moveEricBackward(){
 				heroPosZ = -99;
 		}
 }
+
+//turn left
 void EricCartman::turnEricLeft(){
 		heroTheta += 5;
 
 }
+
+//turn right
 void EricCartman::turnEricRight(){
 		heroTheta -= 5;
 }
 
+//animation
 void EricCartman::animate(){
 		setEricHeadBobAngle(getEricHeadBobAngle() + 10);
 }
