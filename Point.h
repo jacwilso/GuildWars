@@ -8,21 +8,29 @@ class Point{
     float x,y,z;
 
   public:
+
+    //constructors
     Point();
     Point(float x,float y,float z);
 
+	//getter
     float getX();
     float getY();
     float getZ();
 
+	//distance
     float distance(Point p);
+
+	//normalize
     void normalize();
 
+	//operators
     void operator=(Point p);
     void operator+=(Point p);
     void operator-=(Point p);
 };
 
+//operators
 Point operator*(Point p,float f);
 Point operator*(float f,Point p);
 Point operator/(Point p,float f);

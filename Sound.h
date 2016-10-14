@@ -22,17 +22,25 @@ private:
     ALCdevice *device; 
     ALCcontext *context;
     ALuint buffers[ NUM_BUFFERS ];
-    
-    void PrintOpenALInfo(); // print the information
+
+	// print the information
+    void PrintOpenALInfo(); 
 public:
 
-    ALuint sources[ NUM_SOURCES ]; // wavs in source array
+	// wavs in source array
+    ALuint sources[ NUM_SOURCES ]; 
     
-    void initializeOpenAL( int argc, char *argv[] ); // initializer of the sound -- called in main
-    void cleanupOpenAL(); // clean the sound up
+	// initializer of the sound -- called in main
+    void initializeOpenAL( int argc, char *argv[] ); 
+
+	// clean the sound up
+    void cleanupOpenAL(); 
     
-    void positionListener(float posX,float posY,float posZ,float dirX,float dirY,float dirZ,float upX=0,float upY=1,float upZ=0); // position the listener with proper variables
-    void positionSource( ALuint src, float posX, float posY, float posZ ); // postion the source with proper variables
+	// position the listener with proper variables
+    void positionListener(float posX,float posY,float posZ,float dirX,float dirY,float dirZ,float upX=0,float upY=1,float upZ=0); 
+    
+	// postion the source with proper variables
+	void positionSource( ALuint src, float posX, float posY, float posZ ); 
 };
 
 #endif
