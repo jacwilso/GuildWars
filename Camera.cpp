@@ -176,18 +176,18 @@ void Camera::FirstPersonPOV( ){
 		glTranslatef(4.2,-Y_OFFSET,4.2);
 
 		glRotatef(subjectPosPhi,rotAxis.getX(), 0, rotAxis.getZ());
-		glRotatef(-subjectPosTheta,0,1,0);
+	//	glRotatef(-subjectPosTheta,0,1,0);
 				
-		gluLookAt(subjectPosX,subjectPosY, subjectPosZ,
-						subjectPosX + 30, subjectPosY, subjectPosZ,
-						0,1,0);
-			/*gluLookAt( subjectPosX + 4.2*cos(subjectPosTheta*(M_PI/180)), 
+	//	gluLookAt(subjectPosX,subjectPosY, subjectPosZ,
+	//					subjectPosX + 30, subjectPosY, subjectPosZ,
+	//					0,1,0);
+			gluLookAt( subjectPosX + 4.2*cos(subjectPosTheta*(M_PI/180)), 
 			Y_OFFSET + subjectPosY, 
 			subjectPosZ - 4.2*sin(subjectPosTheta*(M_PI/180)),
 			20*cos(subjectPosTheta*(M_PI/180)) + subjectPosX, 
-			3.3+ subjectPosY,
+			Y_OFFSET+ subjectPosY,
 			-20*sin(subjectPosTheta*(M_PI/180)) + subjectPosZ,
-			0,1,0)*/
+			0,1,0);
 
 }
 void Camera::ReversePOV( ){

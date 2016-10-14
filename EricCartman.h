@@ -11,8 +11,6 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #endif
-
-#include "FairyEric.h"
 #include "Hero.h"
 
 class EricCartman : public Hero{

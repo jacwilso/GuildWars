@@ -40,10 +40,8 @@
 
 #include "Sound.h"
 #include "Board.h"
-#include "Bomberman.h"
 
 #include "EricCartman.h"
-#include "FairyEric.h"
 
 #include "Donkey.h"
 #include "Fairy.h"
@@ -90,8 +88,6 @@ GLUquadric* Environment::qobj;
 Board board;
 GLUquadric* Board::qobj;
 
-Bomberman bomberman;
-GLUquadric* Bomberman::qobj;
 
 Donkey donkey;
 
@@ -461,7 +457,7 @@ void createMenus() {
 		mainMenu = glutCreateMenu(processMainMenu);
 		glutAddMenuEntry( "Turn SplitScreen ON", 1 );
 		glutAddMenuEntry("Free Cam", 2);
-		glutAddMenuEntry("Turn FPS OFF", 3);
+		glutAddMenuEntry("Turn FPS ON", 3);
 		glutAddMenuEntry( "Show MiniWindow",4);
 		glutAddMenuEntry("Quit", 5);
 		glutAddSubMenu("Eric Cartman", ericMenu);

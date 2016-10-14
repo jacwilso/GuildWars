@@ -209,10 +209,6 @@ void EricCartman::drawBody(){
 		glPushMatrix();
 		glTranslatef(0,0.2*sin(getEricHeadBobAngle()*RAD)+3.3,0);
 		drawHead();
-		glPushMatrix();
-		glScalef(20,1,1);
-		glutSolidCube(1);
-		glPopMatrix();
 		glPopMatrix();
 }
 
