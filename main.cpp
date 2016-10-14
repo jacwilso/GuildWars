@@ -567,7 +567,7 @@ void normalKeys(){
 		//std::cout << uVector << " " << bezierListIndex << " " << vVector << std::endl;
 		surfPos = surf[bezierListIndex].evaluateSurface(uVector - floor(uVector) ,vVector - floor(vVector)); 
 		//cout << ericCartman.getHeroPositionX() << " " << (surfPos.getY()-1.59)*100.0/12 << " " << ericCartman.getHeroPositionZ() << std::endl;
-		ericCartman.setHeroPos(ericCartman.getHeroPositionX(), (surfPos.getY()-1.59)*100.0/12  , ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta(), ericCartman.getHeroPhi());
+		ericCartman.setHeroPos(ericCartman.getHeroPositionX(), (surfPos.getY()-1.58)*100.0/12  , ericCartman.getHeroPositionZ(), ericCartman.getHeroTheta(), ericCartman.getHeroPhi());
 
 
 		Point axis=surf[bezierListIndex].rotationAxis(uVector - floor(uVector) ,vVector - floor(vVector));

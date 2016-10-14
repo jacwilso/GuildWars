@@ -96,13 +96,26 @@ The file format is set in the following way
  < M Number of Control Points for Bezier Curve>
  <1 control points x>,<1 control point y>, <1 control point z>
  ...
- <(M*4) control points x > ,<(M*4) control points y > ,<(M*4) control points z > 
+ <M control points x > ,<M control points y > ,<M control points z > 
 
  <number of Objects >
  <object type>, <object position x>, <object position y>, <object position z>, <object orientation x>, <object orientation y> ,<object orientation z>, <object size>
 ```
 it is important to note the following:
 For Bezier surface, there must be N\*16 points in total otherwise the program will close.  
+In addition, the bezier surface must be placed in the following orders in order for the heroes to know which bezier surface they are on at any time. The control points also must be at max -12 to 12 in both the x and z axis.  
+The bezier surface must be input in the following order:
+------------------------
+|          |           |
+|    4     |     2     |
+|          |           |
+|          |           |
+------------------------
+|          |           |
+|    3     |     1     |
+|          |           |
+|          |           |
+-----------------------
 For Bezier curves, there must be exactly N\*4 points in total otherwise the program will close.  
 For Object types, use the following numbers to clasify a type:  
  * 0: Draw a tree
