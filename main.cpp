@@ -63,6 +63,9 @@ float pipTheta, pipPhi;		// Theta and Phi values for PIP
 bool isPip = false;
 bool ctrlIsPressed = false;
 
+int status;
+
+
 /*** FPS ***/
 int frameCount = 0, currentTime = 0, previousTime = 0;
 float fps = 0;
@@ -360,6 +363,7 @@ void processScreen3Menu(int value){
 
 //set main menu
 void processMainMenu(int value){
+	if(status == GLUT_MENU_NOT_IN_USE)
 		switch (value){
 				case 1:
 						screen2On = !screen3On;
@@ -457,7 +461,7 @@ void createMenus() {
 		mainMenu = glutCreateMenu(processMainMenu);
 		glutAddMenuEntry( "Turn SplitScreen ON", 1 );
 		glutAddMenuEntry("Free Cam", 2);
-		glutAddMenuEntry("Turn FPS ON", 3);
+		glutAddMenuEntry("Turn FPS OFF", 3);
 		glutAddMenuEntry( "Show MiniWindow",4);
 		glutAddMenuEntry("Quit", 5);
 		glutAddSubMenu("Eric Cartman", ericMenu);
@@ -467,6 +471,9 @@ void createMenus() {
 		glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
+void menuStatus(int stat,int x, int y){
+	status = stat;	
+}
 //mouse motion func
 void mouseMotion(int x, int y) {
 		if(leftMouseButton == GLUT_DOWN) {
@@ -948,6 +955,7 @@ int main(int argc, char **argv) {
 		glutMouseFunc(mouseCallback);
 		glutMotionFunc(mouseMotion);
 		glutTimerFunc( 1000/60, myTimer, 0);
+		glutMenuStatusFunc(menuStatus);
 		// Special Function for Arrow Keys
 		glutSpecialFunc(SpecialKeys);
 
